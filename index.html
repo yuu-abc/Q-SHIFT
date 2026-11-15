@@ -120,6 +120,8 @@ legend{padding:0;margin-bottom:.42rem;font-size:.9rem;color:var(--muted)}
 .source-tab,.source-note{font-size:.82rem;color:var(--muted);font-weight:550}
 .source-link #source-name{text-decoration:underline;text-decoration-thickness:.1em;text-underline-offset:.22em}
 .source-ref .source-note{margin-top:.2rem}
+.source-ref .source-return{margin:.5rem 0 0;color:var(--muted);font-size:.82rem;line-height:1.5}
+.resume-notice{padding:.4rem .7rem;border:1px solid var(--line);border-radius:.42rem;color:var(--text);background:var(--panel);font-size:.88rem}
 .small{font-size:.82rem}
 .footer{padding-block:.9rem 1rem;display:flex;flex-wrap:wrap;gap:.2rem 1rem;justify-content:space-between;border-top:1px solid var(--faint);color:var(--muted)}
 .settings{border:1px solid var(--line);padding:1rem;background:var(--panel);margin-top:.78rem;border-radius:.6rem}
@@ -192,6 +194,7 @@ legend{padding:0;margin-bottom:.42rem;font-size:.9rem;color:var(--muted)}
     </div>
   </section>
   <section class="screen" id="play" aria-labelledby="question" hidden>
+    <p class="resume-notice" id="resume-notice" role="status" hidden>中断した問題から再開しました。</p>
     <div class="quiz-header"><div class="progress"><p id="step-caption"></p><p class="meta" id="topic"></p></div>
     <progress id="progress" aria-label="クイズの進み具合" value="0" max="1"></progress></div>
     <h2 id="question" class="question" tabindex="-1" aria-describedby="step-caption topic"></h2>
@@ -205,10 +208,11 @@ legend{padding:0;margin-bottom:.42rem;font-size:.9rem;color:var(--muted)}
       <p id="correct-answer"></p><p id="explanation"></p>
       <div class="source-ref" id="source-ref" hidden>
         <h4 id="source-title">根拠資料</h4>
-        <a class="source-link" id="source-link" target="_blank" rel="noopener noreferrer">
+        <a class="source-link" id="source-link" target="_blank" rel="noopener noreferrer" aria-describedby="source-return">
           <span id="source-name"></span><span class="source-tab">別タブで開く <span aria-hidden="true">↗</span></span>
         </a>
         <p class="source-note" id="source-note" hidden></p>
+        <p class="source-return" id="source-return">資料を読み終えたら、ブラウザーのタブ一覧から「Q SHIFT」に戻ってください。</p>
       </div>
       <button type="button" class="button" id="listen-explanation" style="margin-top:.7rem" hidden>正解と解説を読み上げる</button>
     </section>
@@ -985,7 +989,8 @@ const configHint = $('settings').querySelector('.hint');
 function warnStorage() {
   if (!storageNotice) {
     storageNotice = true;
-    configHint.textContent = 'ブラウザーの拡大操作も使えます。このブラウザーでは保存できないため、設定や間違えた問題は、この画面を開いている間だけ保持されます。';
+    configHint.textContent = 'ブラウザーの拡大操作も使えます。この環境では、進み具合や設定を保存できません。クイズはこのタブを閉じずにお楽しみください。';
+    $('source-return').textContent = 'この環境では進み具合を保存できません。資料は別タブで開き、クイズの元のタブを閉じずに戻ってください。';
   }
 }
 function read(key, fallback) {
@@ -999,6 +1004,123 @@ const prefs = savedPrefs && typeof savedPrefs === 'object' && !Array.isArray(sav
 const storedMisses = read(missesKey, []);
 const misses = new Set(Array.isArray(storedMisses) ? storedMisses.filter(id => queryById.has(id)) : []);
 let shown = 'home', queue = [], pos = 0, correct = 0, selected = null, committed = false, roundMisses = [], choiceControls = [], mode = 'normal', speaking = null, speechId = 0;
+const activeRoundKey = 'qshift-solo-v1:active-round';
+const activeRoundVersion = 1;
+let roundToken = null, roundRevision = 0, lastRoundData = '', roundAnswers = [];
+const allowedRoundSizes = new Set(['10','20','50','100','all']);
+function readActiveRound() {
+  try {
+    const raw = window.localStorage.getItem(activeRoundKey);
+    if (!raw || raw.length > 100000) return null;
+    return JSON.parse(raw);
+  } catch (e) {
+    if (!(e instanceof SyntaxError)) warnStorage();
+    return null;
+  }
+}
+function encodeRound() {
+  return {
+    mode, category:category.value, size:desiredRoundSize, pos, selected,
+    answers:roundAnswers.slice(),
+    queue:queue.map(({q,items})=>[q.id,...items.map(item=>item.i)])
+  };
+}
+function saveActiveRound(replace = false) {
+  if (shown !== 'play' || !roundToken) return;
+  try {
+    const previousRaw = window.localStorage.getItem(activeRoundKey);
+    let previous = null;
+    if (previousRaw && previousRaw.length <= 100000) {
+      try { previous = JSON.parse(previousRaw); } catch (e) {}
+    }
+    if (!replace && (previous?.token !== roundToken || previous?.rev !== roundRevision)) return;
+    const data = encodeRound(), signature = JSON.stringify(data);
+    if (!replace && signature === lastRoundData) return;
+    const rev = roundRevision + 1;
+    window.localStorage.setItem(activeRoundKey, JSON.stringify({
+      v:activeRoundVersion, token:roundToken, rev, data
+    }));
+    roundRevision = rev;
+    lastRoundData = signature;
+  } catch (e) { warnStorage(); }
+}
+function beginActiveRound() {
+  roundToken = Date.now().toString(36) + '-' + Math.random().toString(36).slice(2);
+  roundRevision = 0;
+  lastRoundData = '';
+  roundAnswers = [];
+}
+function clearActiveRound() {
+  if (!roundToken) return;
+  const oldToken = roundToken, oldRevision = roundRevision;
+  roundToken = null;
+  roundRevision = 0;
+  lastRoundData = '';
+  try {
+    const current = readActiveRound();
+    if (current?.token === oldToken && current?.rev === oldRevision) {
+      window.localStorage.removeItem(activeRoundKey);
+    }
+  } catch (e) { warnStorage(); }
+}
+function optionIndex(i) { return Number.isInteger(i) && i >= 0 && i <= 3; }
+function reconstructRound(record) {
+  if (!record || record.v !== activeRoundVersion || typeof record.token !== 'string' ||
+      !/^[a-z0-9\-]{3,100}$/.test(record.token) || !Number.isSafeInteger(record.rev) ||
+      record.rev < 1 || record.rev >= Number.MAX_SAFE_INTEGER) return null;
+  const data = record.data;
+  if (!data || !['normal','retry'].includes(data.mode) || typeof data.category !== 'string' ||
+      (data.category !== '' && !deck.some(q => q.category === data.category)) ||
+      !allowedRoundSizes.has(data.size) || !Array.isArray(data.queue) || data.queue.length < 1 ||
+      data.queue.length > deck.length || !Number.isInteger(data.pos) || data.pos < 0 ||
+      data.pos >= data.queue.length || !Array.isArray(data.answers) ||
+      ![data.pos,data.pos + 1].includes(data.answers.length) || !data.answers.every(optionIndex) ||
+      (data.selected !== null && !optionIndex(data.selected))) return null;
+  if (data.answers.length === data.pos + 1 && data.answers[data.pos] !== data.selected) return null;
+  const used = new Set(), restored = [];
+  for (const entry of data.queue) {
+    if (!Array.isArray(entry) || entry.length !== 5) return null;
+    const [id,...order] = entry, q = queryById.get(id);
+    if (!q || used.has(id) || order.length !== 4 || !order.every(optionIndex) || new Set(order).size !== 4) return null;
+    if (data.mode === 'normal' && data.category && q.category !== data.category) return null;
+    used.add(id);
+    restored.push({q,items:order.map(i=>({label:q.choices[i],i}))});
+  }
+  return restored;
+}
+function resumeActiveRound() {
+  const record = readActiveRound(), restored = reconstructRound(record);
+  if (!restored) return false;
+  const data = record.data;
+  roundToken = record.token;
+  roundRevision = record.rev;
+  lastRoundData = JSON.stringify(data);
+  queue = restored;
+  pos = data.pos;
+  mode = data.mode;
+  category.value = data.category;
+  desiredRoundSize = data.size;
+  refreshHome();
+  roundAnswers = data.answers.slice();
+  correct = 0; roundMisses = [];
+  roundAnswers.forEach((pick,index)=>{
+    const row=queue[index];
+    if (row.items[pick].i === row.q.answer) correct++;
+    else roundMisses.push(row.q);
+  });
+  $('resume-notice').hidden = false;
+  display('play');
+  drawQuestion(false);
+  if (data.selected !== null) markSelection(data.selected);
+  if (roundAnswers.length === pos + 1) {
+    committed = true;
+    renderFeedback();
+  } else {
+    $('question').focus();
+  }
+  return true;
+}
+
 function applyPrefs() {
   const sizes = ['normal','large','xlarge','max'];
   const text = sizes.includes(prefs.text) ? prefs.text : 'normal';
@@ -1133,6 +1255,7 @@ function refreshHome() {
   homeButton.textContent = '間違えた問題を解き直す（' + misses.size + '問）';
 }
 function openHome() {
+  clearActiveRound();
   stopSpeech(); refreshHome(); display('home','home-title');
 }
 function initCategory() {
@@ -1145,13 +1268,16 @@ function initCategory() {
 }
 function start(questions, nextMode) {
   if (!questions.length) return;
+  beginActiveRound();
+  $('resume-notice').hidden = true;
   mode = nextMode; pos = 0; correct = 0; roundMisses = [];
   const chosen = shuffled(questions);
   queue = (mode === 'normal' ? chosen.slice(0, selectedCount(chosen.length)) : chosen).map(q => ({q,items:shuffled(q.choices.map((label,i)=>({label,i})))}));
   display('play');
   drawQuestion();
+  saveActiveRound(true);
 }
-function drawQuestion() {
+function drawQuestion(focus = true) {
   stopSpeech();
   const {q,items} = queue[pos];
   const stem = $('question');
@@ -1181,13 +1307,20 @@ function drawQuestion() {
     row.append(radio, value);
     radio.addEventListener('change', () => {
       if (committed) return;
-      selected = index; go.disabled = false;
-      choiceControls.forEach(({row:r}, i) => r.classList.toggle('selected', i === selected));
+      markSelection(index);
+      saveActiveRound();
     });
     list.append(row);
     return {row, radio, tag};
   });
-  stem.focus();
+  if (focus) stem.focus();
+}
+function markSelection(index) {
+  selected = index; go.disabled = false;
+  choiceControls.forEach(({row,radio},i)=>{
+    radio.checked = i === selected;
+    row.classList.toggle('selected', i === selected);
+  });
 }
 function commit(event) {
   event.preventDefault();
@@ -1197,9 +1330,17 @@ function commit(event) {
   const {q,items} = queue[pos];
   const correctIndex = items.findIndex(c => c.i === q.answer);
   const isCorrect = selected === correctIndex;
+  roundAnswers.push(selected);
   if(isCorrect) {correct++; misses.delete(q.id);}
   else {roundMisses.push(q); misses.add(q.id);}
   write(missesKey, Array.from(misses));
+  saveActiveRound();
+  renderFeedback();
+}
+function renderFeedback() {
+  const {q,items} = queue[pos];
+  const correctIndex = items.findIndex(c => c.i === q.answer);
+  const isCorrect = selected === correctIndex;
   choiceControls.forEach(({tag}, i) => {
     tag.hidden = i !== selected && i !== correctIndex;
     tag.classList.toggle('user-wrong', i === selected && !isCorrect);
@@ -1221,6 +1362,7 @@ function commit(event) {
   $('feedback-title').focus();
 }
 function showResult() {
+  clearActiveRound();
   const line = $('result-main');
   const score = document.createElement('strong'); score.textContent = String(correct);
   line.replaceChildren(score, document.createTextNode(' / ' + queue.length + ' 問 正解'));
@@ -1239,15 +1381,25 @@ $('result-home').addEventListener('click', openHome);
 $('leave').addEventListener('click', openHome);
 next.addEventListener('click', () => {
   if(shown !== 'play' || !committed) return;
-  if(pos + 1 < queue.length) {pos++; drawQuestion();} else {showResult();}
+  if(pos + 1 < queue.length) {
+    pos++; $('resume-notice').hidden = true; drawQuestion(); saveActiveRound();
+  } else {showResult();}
 });
-window.addEventListener('pagehide', stopSpeech);
+// Catch taps, keyboard activation, opening in a background tab and mobile long press.
+for (const event of ['pointerdown','touchstart','contextmenu','click','auxclick']) {
+  sourceLink.addEventListener(event, () => saveActiveRound(), {passive:true});
+}
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'hidden') saveActiveRound();
+});
+window.addEventListener('pagehide', () => { saveActiveRound(); stopSpeech(); });
 $('settings').addEventListener('keydown', e => {
   if (e.key === 'Escape') { e.preventDefault(); settingsOpen(false,true); }
 });
 applyPrefs();
 initCategory();
 refreshHome();
+resumeActiveRound();
 </script>
 </body>
 </html>
