@@ -1,0 +1,1253 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0a0c14">
+<title>Q SHIFT（キューシフト）｜ひとりクイズ</title>
+<meta name="description" content="Q SHIFT（キューシフト）。時間制限なしのひとり用4択クイズ。解説と根拠資料で、答えの先まで。">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2048%2048%22%20color%3D%22%23bffbff%22%3E%3Crect%20x%3D%223%22%20y%3D%223%22%20width%3D%2242%22%20height%3D%2242%22%20rx%3D%2210%22%20fill%3D%22%23171532%22%2F%3E%3Cg%20transform%3D%22translate%283%20-1%29%22%3E%3Cpath%20d%3D%22M20%2035a10%2010%200%201%201%208.6-4.9%22%20fill%3D%22none%22%20stroke%3D%22currentColor%22%20stroke-width%3D%223.5%22%20stroke-linecap%3D%22square%22%2F%3E%3Cpath%20d%3D%22m21%2026%2011%2011%22%20fill%3D%22none%22%20stroke%3D%22currentColor%22%20stroke-width%3D%223.5%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E">
+<style>
+:root{
+  color-scheme:dark;--bg:#0d0b18;--panel:#17162a;--panel2:#23213a;
+  --text:#f6f7ff;--muted:#c7cee1;--line:#8290af;--faint:#455577;
+  --accent:#bffbff;--ink:#101729;--focus:#dcc7ff;
+  --correct:#bffbff;--wrong:#ffd3dc;--skin:#1a2135;--accent-line:#99dce5;
+  --brand:#c9c1e9;--muted-accent:#ded8f4;--panel-highlight:#292448;--helix:#9c83ee;
+  font-size:100%;
+}
+:root[data-contrast="high"]{--bg:#000;--panel:#000;--panel2:#141414;--text:#fff;--muted:#fff;--line:#fff;--faint:#fff;--accent:#ffea00;--ink:#000;--focus:#78f5ff;--correct:#fff;--wrong:#fff;--skin:#000;--accent-line:#ffea00;--brand:#fff;--muted-accent:#fff;--panel-highlight:#000}
+:root[data-text="large"]{font-size:125%}
+:root[data-text="xlarge"]{font-size:150%}
+:root[data-text="max"]{font-size:200%}
+*,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none!important}
+body{
+  margin:0;background:var(--bg);color:var(--text);
+  background-image:radial-gradient(ellipse at 50% -8rem, #282248 0, transparent 31rem);
+  font-family:system-ui,"Yu Gothic UI","Hiragino Sans",Meiryo,sans-serif;line-height:1.64;
+  overflow-wrap:anywhere;font-weight:480;min-height:100vh;
+}
+:root[data-contrast="high"] body{background-image:none}
+button,select{font:inherit}
+button,select,summary{touch-action:manipulation}
+button{color:inherit;cursor:pointer}
+select{color:var(--text);background:var(--panel2)}
+a{color:var(--accent);text-decoration-thickness:.1em;text-underline-offset:.22em}
+:focus-visible{outline:3px solid var(--focus);outline-offset:4px}
+h1,h2,h3,p{margin:0}
+h1,h2,h3{line-height:1.3}
+h1{font-size:clamp(1.62rem,5.8vw,2.96rem);font-weight:890;letter-spacing:-.06em}
+h2{font-size:1.42rem}
+h3{font-size:1.14rem}
+.shell{width:100%;max-width:49rem;margin-inline:auto;padding-inline:clamp(.9rem,4vw,2.05rem)}
+.site-header{margin-top:env(safe-area-inset-top,0px);border-bottom:1px solid var(--faint);background:var(--bg)}
+.nav{min-height:4.2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.4rem 1rem;padding-block:.56rem}
+.brand{display:flex;gap:.53rem;align-items:center;font-size:.84rem;font-weight:830;letter-spacing:.035em}
+.brand svg{flex:none}
+.brand > span{min-inline-size:0}
+.brand small{display:block;font-family:ui-monospace,monospace;letter-spacing:.14em;font-size:.66em;color:var(--brand);line-height:1.3}
+.icon-mark{color:var(--accent)}
+.nav .button{font-size:.83rem;margin-left:auto}
+.skip{position:fixed;z-index:5;top:.5rem;left:.5rem;transform:translateY(-150%);background:var(--accent);color:var(--ink);padding:.6em}
+.skip:focus{transform:none}
+main{padding-block:1.3rem 1.75rem}
+.screen{display:grid;gap:1rem}
+.hero{padding:1.25rem;border:1px solid var(--line);background:var(--panel);position:relative;border-radius:.72rem;min-inline-size:0}
+.hero-home{isolation:isolate;overflow:hidden;border-color:var(--faint);padding:clamp(1.05rem,4.6vw,2.45rem);background:linear-gradient(122deg,var(--panel) 0 44%,var(--panel-highlight) 100%)}
+.hero-home::before{content:"";position:absolute;inset:0;border-top:2px solid var(--accent);border-radius:inherit;pointer-events:none;z-index:-1}
+.signature{display:grid;grid-template-columns:minmax(0,1fr) minmax(70px,39%);gap:.45rem;align-items:center;min-height:7.05rem;margin-bottom:.75rem}
+.signature-wordmark{color:var(--text);font-size:clamp(1.6rem,6.8vw,4.1rem);font-weight:920;line-height:.94;letter-spacing:-.075em;font-family:system-ui,sans-serif;align-self:center;white-space:normal;word-break:normal;margin:0}
+.signature-wordmark .slash{display:inline-block;margin-inline:.12em .08em;font-weight:560}
+.hero-tagline{font-size:clamp(1.28rem,4.8vw,2.35rem);font-weight:850;letter-spacing:-.045em;line-height:1.35}
+.hero .pronunciation{font-size:.78rem;letter-spacing:.1em;color:var(--brand);margin-top:.52rem}
+.signature-wordmark span{color:var(--accent)}
+.signature-mark{display:block;width:100%;max-height:12.8rem;justify-self:end;overflow:visible}
+.signature-mark .ray{stroke:var(--line);stroke-opacity:.62;fill:none;stroke-width:1}
+.signature-mark .halo{fill:none;stroke:var(--accent);stroke-opacity:.63;stroke-width:1.2}
+.signature-mark .ruler{stroke:var(--line);stroke-opacity:.52;stroke-width:1;fill:none;vector-effect:non-scaling-stroke}
+.signature-mark .flash{fill:var(--accent)}
+.signature-mark .fold{fill:var(--helix);fill-opacity:.74}
+.signature-mark .slice{fill:var(--helix);fill-opacity:.29}
+.kicker,.meta{color:var(--accent);font-size:.79rem;font-weight:850;letter-spacing:.065em}
+.hero .kicker{margin:0 0 .38rem}
+.hero .sub{margin-top:.55rem;max-width:28rem}
+.sub{color:var(--muted)}
+.panel{border:1px solid var(--line);background:var(--panel);padding:1rem;border-radius:.72rem;min-inline-size:0}
+.launch{border-color:var(--faint)}
+.stage-title{display:flex;align-items:center;gap:.52rem;font-size:.83rem;letter-spacing:.06em;color:var(--muted-accent);font-weight:770}
+.stage-title span{color:var(--accent);font-family:ui-monospace,monospace}
+.stage-title::after{content:"";height:1px;background:var(--faint);flex:1;min-width:.6rem}
+.stack{display:grid;gap:.68rem}
+label.title{display:block;font-weight:800;margin-bottom:.23rem}
+select{display:block;width:100%;min-width:0;min-height:3.05rem;padding:.45rem .65rem;border:1px solid var(--line);border-radius:.42rem}
+.button{border:1px solid var(--line);background:var(--panel2);color:var(--text);border-radius:.42rem;padding:.55em .86em;min-height:48px;font-weight:770;text-align:center;min-width:0}
+.button.primary{background:var(--accent);border-color:var(--accent);color:var(--ink);font-weight:880}
+.button.primary.action-arrow{display:grid;grid-template-columns:1fr auto;gap:.6rem;align-items:center}
+.action-arrow span[aria-hidden]{justify-self:end;font-weight:920;font-size:1.12em;line-height:1}
+.button:hover:not(:disabled){text-decoration:underline;text-underline-offset:.23em}
+.button:disabled{cursor:not-allowed;color:var(--muted);background:var(--panel2);border-color:var(--line)}
+.actions{display:flex;flex-wrap:wrap;gap:.55rem}
+.actions>.button{flex:1 1 10rem}
+button.back{justify-self:start}
+.quiz-header{display:grid;gap:.48rem}
+.progress{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.38rem .7rem;color:var(--muted);font-weight:730;font-variant-numeric:tabular-nums}
+.progress .meta{display:inline-block;border:1px solid var(--line);background:var(--panel2);padding:.1em .46em;border-radius:.35rem}
+progress{display:block;width:100%;height:.65rem;accent-color:var(--accent)}
+.question{font-weight:870;overflow-wrap:anywhere;letter-spacing:-.027em}
+fieldset{min-inline-size:0;margin:0;padding:0;border:0}
+legend{padding:0;margin-bottom:.42rem;font-size:.9rem;color:var(--muted)}
+.option-list{display:grid;gap:.53rem}
+.choice{position:relative;display:grid;grid-template-columns:auto minmax(0,1fr);gap:.66rem;align-items:start;min-height:3.23rem;padding:.64rem .72rem;border:1px solid var(--line);background:var(--panel2);border-radius:.52rem;cursor:pointer}
+.choice:focus-within{outline:3px solid var(--focus);outline-offset:3px}
+.choice.selected{border:2px solid var(--accent);padding:calc(.64rem - 1px) calc(.72rem - 1px)}
+.choice input{width:1.15em;height:1.15em;margin:.22em 0 0;accent-color:var(--accent)}
+.choice input:focus-visible{outline:none}
+.choice:has(input:disabled){cursor:default}
+.choice-text{display:block;font-weight:630}
+.choice-code{font-family:ui-monospace,monospace;color:var(--accent);font-weight:870;margin-inline-end:.37em;display:inline-block}
+.answer-tag{display:block;font-size:.86em;font-weight:830;color:var(--correct)}
+.answer-tag.user-wrong{color:var(--wrong)}
+.feedback{border:2px solid var(--accent-line);padding:1rem;background:var(--skin);border-radius:.6rem}
+.feedback[data-result="wrong"]{border-style:dashed;border-color:var(--wrong)}
+.feedback p{margin-top:.42rem}
+.feedback .result-title{color:var(--correct)}
+.feedback[data-result="wrong"] .result-title{color:var(--wrong)}
+/* Evidence links stay legible without relying on color, and wrap at 200%. */
+.source-ref{margin-top:.95rem;padding-top:.72rem;border-top:1px solid var(--line)}
+.source-ref h4{margin:0;font-size:.9rem;color:var(--muted);font-weight:800;line-height:1.4}
+.source-link{display:grid;gap:.08rem;padding:.2rem 0;min-height:48px;align-content:center;line-height:1.5;font-weight:750;overflow-wrap:anywhere;text-decoration:none}
+.source-tab,.source-note{font-size:.82rem;color:var(--muted);font-weight:550}
+.source-link #source-name{text-decoration:underline;text-decoration-thickness:.1em;text-underline-offset:.22em}
+.source-ref .source-note{margin-top:.2rem}
+.small{font-size:.82rem}
+.footer{padding-block:.9rem 1rem;display:flex;flex-wrap:wrap;gap:.2rem 1rem;justify-content:space-between;border-top:1px solid var(--faint);color:var(--muted)}
+.settings{border:1px solid var(--line);padding:1rem;background:var(--panel);margin-top:.78rem;border-radius:.6rem}
+.settings h2{font-size:1.22rem}
+.contrast-choice{display:flex;gap:.55em;align-items:center;min-height:48px;font-weight:760;cursor:pointer}
+.contrast-choice input{width:1.15em;height:1.15em;flex:none;margin:0;accent-color:var(--accent)}
+.pair{display:grid;gap:.7rem;grid-template-columns:repeat(auto-fit,minmax(min(100%,12rem),1fr))}
+#result-main{font-variant-numeric:tabular-nums;font-size:1.65rem;font-weight:870}
+#result-main strong{color:var(--accent)}
+.hint{font-size:.84rem;color:var(--muted)}
+@media (max-width:380px){.shell{padding-inline:14px}.hero,.panel,.settings,.feedback{padding:14px}.nav .button{margin-left:0}.choice{gap:.43rem;padding-inline:.45rem}.choice.selected{padding-inline:calc(.45rem - 1px)}}
+@media (max-width:600px){:root[data-text="max"] .signature{grid-template-columns:1fr;min-height:0}:root[data-text="max"] .signature-mark{display:none}:root[data-text="max"] .signature-wordmark{font-size:1.34rem}}
+@media (min-width:42em){main{padding-block-start:2rem}.screen{gap:1.3rem}.panel{padding:1.25rem}.hero-home .signature{margin-bottom:1rem}}
+:root[data-contrast="high"] .hero-home{background:var(--panel);border-color:var(--line)}
+:root[data-contrast="high"] .signature-mark{visibility:hidden}
+@media (forced-colors:active){.button,.choice,.feedback,select,.panel,.hero-home{border-color:CanvasText}.choice.selected{border-color:Highlight}.choice:focus-within,:focus-visible{outline-color:Highlight}.signature-mark{visibility:hidden}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">本文へ移動</a>
+<header class="site-header">
+  <div class="shell nav">
+    <div class="brand"><svg class="icon-mark" width="26" height="26" viewBox="0 0 43 43" aria-hidden="true" focusable="false"><path d="M20 35a10 10 0 1 1 8.6-4.9" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="square"/><path d="m21 26 11 11" fill="none" stroke="currentColor" stroke-width="3.5"/></svg><span>Q SHIFT<small aria-hidden="true">SOLO QUIZ</small></span></div>
+    <button class="button" id="settings-toggle" type="button" aria-expanded="false" aria-controls="settings">表示設定</button>
+  </div>
+</header>
+<div class="shell">
+  <section class="settings stack" id="settings" aria-labelledby="settings-title" hidden>
+    <h2 id="settings-title">読みやすさの設定</h2>
+    <div class="pair">
+      <div><label class="title" for="text-size">文字の大きさ</label><select id="text-size"><option value="normal">標準</option><option value="large">大きい</option><option value="xlarge">特大（150%）</option><option value="max">最大（200%）</option></select></div>
+      <label class="contrast-choice" for="contrast"><input type="checkbox" id="contrast"> <span>高コントラストにする</span></label>
+    </div>
+    <p class="hint">ブラウザーの拡大操作も使えます。設定は、このブラウザーに保存されます。</p>
+    <button type="button" class="button back" id="settings-close">設定を閉じる</button>
+  </section>
+</div>
+<main id="main" class="shell" tabindex="-1">
+  <section class="screen" id="home" aria-labelledby="home-title">
+    <div class="hero hero-home">
+      <div class="signature">
+        <div>
+          <h1 id="home-title" class="signature-wordmark" tabindex="-1">Q<span class="slash" aria-hidden="true">/</span> SHIFT</h1>
+          <p class="pronunciation">キューシフト</p>
+        </div>
+        <svg class="signature-mark" viewBox="0 0 260 204" focusable="false" aria-hidden="true">
+          <path class="ruler" d="M8 30h26m-13-13v26M225 174h26m-13-13v26M37 158h12m-6-6v12M222 44h12m-6-6v12M14 102h232m-116-90v180M52 176l155-150"/>
+          <circle class="ray" cx="130" cy="102" r="79"/>
+          <circle class="ray" cx="130" cy="102" r="92" stroke-dasharray="2 6"/>
+          <path class="slice" d="m77 171 102-146h37L112 171Z"/>
+          <path class="fold" d="M128 155a53 53 0 1 1 45-24l-14-10a36 36 0 1 0-31 17Z" transform="translate(7 5)"/>
+          <path class="flash" d="M128 155a53 53 0 1 1 45-24l-14-10a36 36 0 1 0-31 17Zm-4-43 12-13 62 58-12 13Z"/>
+          <ellipse class="halo" cx="130" cy="102" rx="113" ry="28" transform="rotate(-32 130 102)"/>
+          <circle class="flash" cx="46" cy="135" r="3.5"/>
+          <circle class="flash" cx="212" cy="65" r="3"/>
+          <path class="ruler" d="M12 183h68m102 0h65M12 190h25m183 0h27"/>
+        </svg>
+      </div>
+      <p class="kicker">ひとり用・４択クイズ</p>
+      <p class="hero-tagline">答えの先まで、面白い。</p>
+      <p class="sub">時間も、勝ち負けも気にせず。気になった答えは解説と資料で深掘り。</p>
+    </div>
+    <div class="panel stack launch">
+      <p class="stage-title" aria-hidden="true"><span>01</span> SELECT A TOPIC</p>
+      <div><label for="category" class="title">ジャンルを選ぶ</label><select id="category"></select></div>
+      <div><label for="round-size" class="title">1回に解く問題数</label><select id="round-size"></select></div>
+      <p class="hint" id="pool-summary" role="status">問題を準備しています。</p>
+      <button class="button primary action-arrow" id="start" type="button"><span>クイズを始める</span><span aria-hidden="true">↗</span></button>
+      <button class="button" id="retry-home" type="button" hidden>間違えた問題を解き直す</button>
+    </div>
+  </section>
+  <section class="screen" id="play" aria-labelledby="question" hidden>
+    <div class="quiz-header"><div class="progress"><p id="step-caption"></p><p class="meta" id="topic"></p></div>
+    <progress id="progress" aria-label="クイズの進み具合" value="0" max="1"></progress></div>
+    <h2 id="question" class="question" tabindex="-1" aria-describedby="step-caption topic"></h2>
+    <button type="button" class="button back" id="listen" hidden>問題と選択肢を読み上げる</button>
+    <form class="stack" id="answer-form" novalidate>
+      <fieldset id="choice-field" aria-describedby="question"><legend>選択肢を１つ選んでください</legend><div class="option-list" id="choices"></div></fieldset>
+      <button class="button primary" id="submit-answer" type="submit" disabled>答えを確認する</button>
+    </form>
+    <section id="feedback" class="feedback" aria-labelledby="feedback-title" hidden>
+      <h3 id="feedback-title" class="result-title" tabindex="-1" aria-describedby="correct-answer explanation"></h3>
+      <p id="correct-answer"></p><p id="explanation"></p>
+      <div class="source-ref" id="source-ref" hidden>
+        <h4 id="source-title">根拠資料</h4>
+        <a class="source-link" id="source-link" target="_blank" rel="noopener noreferrer">
+          <span id="source-name"></span><span class="source-tab">別タブで開く <span aria-hidden="true">↗</span></span>
+        </a>
+        <p class="source-note" id="source-note" hidden></p>
+      </div>
+      <button type="button" class="button" id="listen-explanation" style="margin-top:.7rem" hidden>正解と解説を読み上げる</button>
+    </section>
+    <button type="button" class="button primary" id="next" hidden>次の問題へ</button>
+    <button type="button" class="button back" id="leave">ホームに戻る</button>
+  </section>
+  <section class="screen" id="result" aria-labelledby="result-title" hidden>
+    <div class="hero"><p class="kicker">結果</p><h2 id="result-title" tabindex="-1" aria-describedby="result-main">おつかれさま！</h2><p id="result-main"></p><p class="sub" id="result-summary"></p></div>
+    <div class="actions">
+      <button type="button" class="button primary" id="retry-result" hidden>間違えた問題を解き直す</button>
+      <button type="button" class="button" id="replay">同じジャンルでもう一度</button>
+      <button type="button" class="button" id="result-home">ホームに戻る</button>
+    </div>
+  </section>
+  <noscript><p class="panel">クイズを遊ぶには、ブラウザーの JavaScript を有効にしてください。</p></noscript>
+</main>
+<footer class="shell footer small"><span>Q SHIFT｜ひとりクイズ</span><span>クイズは通信・ログイン不要</span></footer>
+<script>
+'use strict';
+const QUESTIONS = /* QUESTIONS */ [
+  {"id":"select-043","question":"1871年、藩を廃止して府県を置き、中央政府が地方官を任命する体制へ進めた改革は？","choices":["版籍奉還","大政奉還","廃藩置県","地租改正"],"answer":2,"explanation":"廃藩置県では藩知事が免ぜられ、府県の長官を中央政府が任命するようになりました。地方支配の中央集権化を進めた改革です。","category":"歴史"},
+  {"id":"select-045","question":"1885年、太政官制度に代わって内閣制度が発足した際、初代内閣総理大臣となった人物は？","choices":["伊藤博文","山県有朋","黒田清隆","松方正義"],"answer":0,"explanation":"内閣制度の発足時に首相となったのは伊藤博文です。太政官を中心とした仕組みから、内閣へ移行しました。","category":"歴史"},
+  {"id":"select-048","question":"粘土板に葦の筆を押し当てて記録した、シュメール人が発達させた文字は何？","choices":["甲骨文字","ヒエログリフ","ハングル","楔形文字"],"answer":3,"explanation":"楔形文字はメソポタミアで用いられ、会計記録だけでなく法律や文学も記された。","category":"歴史"},
+  {"id":"select-050","question":"1215年、ジョン王が貴族らの要求を受けて認めた、王権を制限する文書は？","choices":["権利の請願","マグナ・カルタ","権利の章典","独立宣言"],"answer":1,"explanation":"マグナ・カルタは大憲章とも呼ばれ、後の立憲政治の歴史で重要視された。","category":"歴史"},
+  {"id":"select-118","question":"兵馬俑で知られる巨大な陵墓が造られた、中国を統一した秦の皇帝は？","choices":["漢の武帝","始皇帝","隋の煬帝","唐の玄宗"],"answer":1,"explanation":"秦の始皇帝の陵墓の近くには、兵士や馬をかたどった多数の陶像が埋められていました。","category":"歴史"},
+  {"id":"hist-001","question":"710年に遷都し、奈良時代の政治の中心となった都は？","choices":["長岡京","平城京","平安京","藤原京"],"answer":1,"explanation":"平城京は現在の奈良市を中心とする地域に造られた都です。","category":"歴史"},
+  {"id":"hist-002","question":"794年、現在の京都に置かれた都は？","choices":["難波宮","恭仁京","平安京","長岡京"],"answer":2,"explanation":"794年に平安京へ遷都し、京都は長く天皇の都となりました。","category":"歴史"},
+  {"id":"hist-003","question":"日本に伝わった初期の仏教建築を今に伝える、斑鳩の寺院は？","choices":["高野山金剛峯寺","比叡山延暦寺","鎌倉建長寺","法隆寺"],"answer":3,"explanation":"法隆寺地域には、日本への仏教伝来直後の時代にさかのぼる木造建築が残ります。","category":"歴史"},
+  {"id":"hist-004","question":"鎌倉に武家政権を築き、鶴岡八幡宮を現在の位置に移した人物は？","choices":["源頼朝","源義経","北条時宗","足利尊氏"],"answer":0,"explanation":"頼朝は鎌倉入りした1180年に八幡宮を現在地に移しました。","category":"歴史"},
+  {"id":"hist-005","question":"1274年、元の軍が博多湾に来襲した最初の戦いは？","choices":["弘安の役","文永の役","承久の乱","応仁の乱"],"answer":1,"explanation":"最初の襲来を文永の役、1281年の二度目の襲来を弘安の役と呼びます。","category":"歴史"},
+  {"id":"hist-006","question":"最初の元の襲来後、鎌倉幕府が石積みの防塁を築かせたのはどこ？","choices":["伊勢湾沿岸","東京湾沿岸","博多湾沿岸","富山湾沿岸"],"answer":2,"explanation":"鎌倉幕府は再来襲に備え、博多湾の海岸沿いに石積みの防塁を築かせました。","category":"歴史"},
+  {"id":"hist-007","question":"1600年、徳川家康方と石田三成方の軍勢が対峙した場所は？","choices":["長篠","桶狭間","小牧","関ヶ原"],"answer":3,"explanation":"家康方と三成方は現在の岐阜県にある関ヶ原で対峙しました。","category":"歴史"},
+  {"id":"hist-008","question":"徳川家康が征夷大将軍に任じられ、江戸に幕府を開いたのは何年？","choices":["1603年","1560年","1582年","1615年"],"answer":0,"explanation":"関ヶ原の戦いの3年後、1603年に家康は将軍に任じられました。","category":"歴史"},
+  {"id":"hist-009","question":"1615年に将軍徳川秀忠の名で出された、諸大名など武家が守る基本法は？","choices":["公事方御定書","武家諸法度","御成敗式目","禁中並公家中諸法度"],"answer":1,"explanation":"武家諸法度は1615年、伏見城に集められた諸大名に読み聞かされました。","category":"歴史"},
+  {"id":"hist-010","question":"「禁中並公家中諸法度」が主に規律の対象としたのは？","choices":["外国商人","諸国の農民","天皇や公家","各藩の足軽"],"answer":2,"explanation":"江戸幕府はこの法令を1615年に制定し、朝廷と公家のあり方を規定しました。","category":"歴史"},
+  {"id":"hist-011","question":"徳川家康が東南アジアへ渡航する商船に朱印状を出して進めた貿易は？","choices":["勘合貿易","南蛮貿易","朝貢貿易","朱印船貿易"],"answer":3,"explanation":"家康は朱印状を持つ商船を通じて海外貿易を統制しました。","category":"歴史"},
+  {"id":"hist-012","question":"1853年、アメリカ大統領の国書を携え、艦隊を率いて来航した人物は？","choices":["マシュー・ペリー","ジョン・万次郎","タウンゼント・ハリス","アーネスト・サトウ"],"answer":0,"explanation":"ペリーが携えた国書は久里浜で日本側の代表に渡されました。","category":"歴史"},
+  {"id":"hist-013","question":"ペリーが再来航した1854年、横浜で日本とアメリカが結んだ条約は？","choices":["日米修好通商条約","日米和親条約","下関条約","ポーツマス条約"],"answer":1,"explanation":"1854年に日米和親条約、1858年に日米修好通商条約が結ばれました。","category":"歴史"},
+  {"id":"hist-014","question":"1867年に大政奉還を申し出た、江戸幕府最後の将軍は？","choices":["徳川家茂","徳川家定","徳川慶喜","徳川家光"],"answer":2,"explanation":"徳川慶喜は1867年に朝廷に大政奉還を申し出ました。","category":"歴史"},
+  {"id":"hist-015","question":"1869年、諸藩主が土地と人民を朝廷に返す措置を何という？","choices":["王政復古","廃藩置県","大政奉還","版籍奉還"],"answer":3,"explanation":"版は版図（土地）、籍は戸籍（人民）を指します。薩長土肥の藩主らが返上を願い出ました。","category":"歴史"},
+  {"id":"hist-016","question":"明治政府の新貨条例で、銭の100倍とされた貨幣単位は？","choices":["円","両","文","厘"],"answer":0,"explanation":"1871年の新貨条例は十進法を採り、1円を100銭、1銭を10厘と定めました。","category":"歴史"},
+  {"id":"hist-017","question":"1871年に派遣が決まった欧米使節団で、特命全権大使を務めたのは？","choices":["木戸孝允","岩倉具視","大久保利通","伊藤博文"],"answer":1,"explanation":"岩倉具視が大使となり、木戸孝允や大久保利通らが副使を務めました。","category":"歴史"},
+  {"id":"hist-018","question":"1872年、全国に大学区・中学区・小学区を設ける構想を示した制度は？","choices":["教育令","小学校令","学制","教育基本法"],"answer":2,"explanation":"学制は全国を8つの大学区に分け、その下に中学区と小学区を設ける構想でした。","category":"歴史"},
+  {"id":"hist-019","question":"フランス人技師ブリューナを招き、1872年に操業を始めた官営模範工場は？","choices":["八幡製鐵所","長崎造船所","高島炭鉱","富岡製糸場"],"answer":3,"explanation":"群馬県に設けられた富岡製糸場は、明治初期の官営模範工場の一つです。","category":"歴史"},
+  {"id":"hist-020","question":"1877年の西南戦争で、鹿児島の士族を率いた人物は？","choices":["西郷隆盛","板垣退助","木戸孝允","江藤新平"],"answer":0,"explanation":"鹿児島の士族が西郷隆盛を擁して明治政府に対して起こした戦いです。","category":"歴史"},
+  {"id":"hist-021","question":"1879年、明治政府が琉球藩を廃止して設置した県は？","choices":["鹿児島県","沖縄県","宮崎県","長崎県"],"answer":1,"explanation":"琉球藩の廃止と沖縄県の設置は、一般に「琉球処分」と呼ばれる過程の一部です。","category":"歴史"},
+  {"id":"hist-022","question":"1889年に発布された、明治憲法とも呼ばれる憲法は？","choices":["日本国憲法","五箇条の御誓文","大日本帝国憲法","十七条憲法"],"answer":2,"explanation":"大日本帝国憲法は1889年2月に発布されました。","category":"歴史"},
+  {"id":"hist-023","question":"第1回帝国議会が開会したのは何年？","choices":["1877年","1885年","1905年","1890年"],"answer":3,"explanation":"第1回帝国議会は、大日本帝国憲法が発布された翌年の1890年11月に開会しました。","category":"歴史"},
+  {"id":"hist-024","question":"1923年9月に発生し、東京や横浜などが大きな被害を受けた震災は？","choices":["関東大震災","濃尾地震","阪神・淡路大震災","東日本大震災"],"answer":0,"explanation":"関東大震災は1923年9月に発生し、首都圏に甚大な被害をもたらしました。","category":"歴史"},
+  {"id":"hist-025","question":"1689年のイングランドで、議会の同意を得ない課税などを禁じた文書は？","choices":["マグナ・カルタ","権利の章典","人民憲章","アメリカ独立宣言"],"answer":1,"explanation":"1689年の権利の章典は、課税に議会の同意が必要であることなどを定めました。","category":"歴史"},
+  {"id":"hist-026","question":"1707年の合同法で、イングランドと一つの王国になったのは？","choices":["フランス","アイルランド","スコットランド","デンマーク"],"answer":2,"explanation":"イングランドとスコットランドの合同により、グレートブリテン王国が成立しました。","category":"歴史"},
+  {"id":"hist-027","question":"1872年のイギリスの投票法が、選挙に導入したのは？","choices":["インターネット投票","比例代表制","16歳からの投票","秘密投票"],"answer":3,"explanation":"それまでは誰に投票したかが人に知られ得ました。投票法は選挙で秘密投票を導入しました。","category":"歴史"},
+  {"id":"hist-028","question":"イギリスで女性が男性と同じ条件で投票できるようになったのは何年？","choices":["1928年","1832年","1872年","1918年"],"answer":0,"explanation":"1918年に一部の女性に選挙権が認められ、1928年には男女とも21歳で投票できるようになりました。","category":"歴史"},
+  {"id":"hist-029","question":"1776年のアメリカ独立宣言で、植民地が独立を宣言した相手国は？","choices":["スペイン","イギリス","フランス","オランダ"],"answer":1,"explanation":"北アメリカの13植民地は、イギリス王権との政治的な結び付きを断つと宣言しました。","category":"歴史"},
+  {"id":"hist-030","question":"1863年1月、反乱州の奴隷とされた人々を解放する宣言を発したアメリカ大統領は？","choices":["ジョージ・ワシントン","ユリシーズ・グラント","エイブラハム・リンカーン","トマス・ジェファソン"],"answer":2,"explanation":"リンカーンの奴隷解放宣言が対象としたのは、南北戦争で反乱状態にあった地域です。","category":"歴史"},
+  {"id":"hist-031","question":"1803年、アメリカ合衆国はルイジアナの広大な領土をどの国から購入した？","choices":["イギリス","ロシア","スペイン","フランス"],"answer":3,"explanation":"米仏間の条約によって、ミシシッピ川の西に広がる大きな領土がアメリカ側に移りました。","category":"歴史"},
+  {"id":"hist-032","question":"1920年、アメリカ合衆国憲法の第19修正が禁じたのは？","choices":["性別を理由とする選挙権の否定","大統領の再選","信教の自由の制限","政党の結成"],"answer":0,"explanation":"第19修正は、性別を理由に合衆国市民の選挙権を否定・制限できないと定めました。","category":"歴史"},
+  {"id":"hist-033","question":"1789年7月14日、フランス革命の初期にパリで襲撃された要塞は？","choices":["ヴェルサイユ宮殿","バスティーユ","アンヴァリッド","テュイルリー宮殿"],"answer":1,"explanation":"1789年7月14日のバスティーユ襲撃は、フランス革命初期の象徴的な出来事です。","category":"歴史"},
+  {"id":"hist-034","question":"1789年、フランスで自由や法の下の平等を掲げた「人間と市民の権利の宣言」の通称は？","choices":["権利の章典","ナントの勅令","フランス人権宣言","世界人権宣言"],"answer":2,"explanation":"フランス人権宣言は、自由と権利の平等などを掲げたフランス革命期の文書です。","category":"歴史"},
+  {"id":"hist-035","question":"ナポレオン1世の1804年の戴冠式が行われた場所は？","choices":["ヴェルサイユ宮殿","ランス大聖堂","サン・ピエトロ大聖堂","パリのノートルダム大聖堂"],"answer":3,"explanation":"1804年12月2日の式典は、画家ジャック＝ルイ・ダヴィッドの大作にもなりました。","category":"歴史"},
+  {"id":"hist-036","question":"ギザの三大ピラミッドと結び付くエジプトの王の組み合わせは？","choices":["クフ・カフラー・メンカウラー","アクエンアテン・ツタンカーメン・ラムセス2世","クフ・ジョセル・ラムセス2世","メンカウラー・ジョセル・ツタンカーメン"],"answer":0,"explanation":"3人は古王国時代の第4王朝の王です。ギザのピラミッドはそれぞれの王の墓として造られました。","category":"歴史"},
+  {"id":"hist-037","question":"古代エジプトの新王国時代に、女性でファラオとなった人物は？","choices":["クレオパトラ7世","ハトシェプスト","ツタンカーメン","カフラー"],"answer":1,"explanation":"ハトシェプストは新王国時代のファラオです。メトロポリタン美術館には王として表現した像が収蔵されています。","category":"歴史"},
+  {"id":"hist-038","question":"古代エジプトのロゼッタ・ストーンの文字は、ヒエログリフ、デモティックと、あと一つは？","choices":["ラテン文字","アラム文字","ギリシャ文字","楔形文字"],"answer":2,"explanation":"同じ布告が3種類の文字で刻まれたため、古代エジプトの文字の解読の手がかりになりました。","category":"歴史"},
+  {"id":"hist-039","question":"万里の長城は時代をまたいで築かれました。大規模な建設が続いた最後の王朝は？","choices":["元","唐","宋","明"],"answer":3,"explanation":"ユネスコの解説では、長城の建設は明の時代まで続き、巨大な軍事施設になりました。","category":"歴史"},
+  {"id":"hist-040","question":"北京の紫禁城を皇帝の居城とした中国王朝の組み合わせは？","choices":["明と清","秦と漢","隋と唐","宋と元"],"answer":0,"explanation":"北京の紫禁城は、明から清にかけて皇帝と宮廷の中心でした。","category":"歴史"},
+  {"id":"hist-041","question":"タージ・マハルを妻のために建てさせたムガル帝国の皇帝は？","choices":["アクバル","シャー・ジャハーン","バーブル","アウラングゼーブ"],"answer":1,"explanation":"シャー・ジャハーンは妻ムムターズ・マハルをしのび、アグラにこの霊廟を造らせました。","category":"歴史"},
+  {"id":"hist-042","question":"アンコール・ワットは、どの帝国の都の遺跡群に含まれる？","choices":["ムガル帝国","マウリヤ朝","クメール帝国","オスマン帝国"],"answer":2,"explanation":"カンボジアのアンコール遺跡には、クメール帝国の歴代の都の跡があります。","category":"歴史"},
+  {"id":"hist-043","question":"1957年にソ連が打ち上げた、世界初の人工衛星の名前は？","choices":["エクスプローラー1号","ボストーク1号","ボイジャー1号","スプートニク1号"],"answer":3,"explanation":"スプートニク1号は1957年に打ち上げられ、地球を周回しました。","category":"歴史"},
+  {"id":"hist-044","question":"1961年、人類で最初に地球を周回した宇宙飛行士は？","choices":["ユーリイ・ガガーリン","ジョン・グレン","アラン・シェパード","ニール・アームストロング"],"answer":0,"explanation":"ソ連のガガーリンは1961年4月12日に地球を周回しました。","category":"歴史"},
+  {"id":"hist-045","question":"1969年に人類初の月面着陸を成功させたアポロ計画のミッションは？","choices":["アポロ8号","アポロ11号","アポロ13号","アポロ17号"],"answer":1,"explanation":"アポロ11号で、ニール・アームストロングとバズ・オルドリンが月面に降りました。","category":"歴史"},
+  {"id":"select-062","question":"オーストラリアの首都は？","choices":["シドニー","キャンベラ","メルボルン","ブリスベン"],"answer":1,"explanation":"首都はキャンベラです。シドニーやメルボルンも主要都市ですが、首都ではありません。","category":"地理"},
+  {"id":"select-069","question":"ブラジルで主に使われる公用語は？","choices":["ポルトガル語","スペイン語","イタリア語","ドイツ語"],"answer":0,"explanation":"ブラジル連邦共和国憲法第13条は、ポルトガル語を国の公用語と定めています。","category":"地理"},
+  {"id":"select-122","question":"エジプトのスエズ運河が直接結ぶ二つの海は？","choices":["地中海と黒海","地中海と紅海","紅海とペルシャ湾","黒海とカスピ海"],"answer":1,"explanation":"スエズ運河は地中海と紅海を結びます。","category":"地理"},
+  {"id":"geo-001","question":"カナダの首都はどの都市？","choices":["バンクーバー","モントリオール","オタワ","トロント"],"answer":2,"explanation":"カナダの首都はオタワです。トロントやバンクーバーも大都市ですが、首都ではありません。","category":"地理"},
+  {"id":"geo-002","question":"オークランドではなく、ニュージーランドの首都にあたる都市は？","choices":["ダニーデン","ハミルトン","クライストチャーチ","ウェリントン"],"answer":3,"explanation":"ニュージーランドの首都はウェリントンです。","category":"地理"},
+  {"id":"geo-003","question":"「ウランバートル」を首都とする国は？","choices":["キルギス","モンゴル","ウズベキスタン","カザフスタン"],"answer":1,"explanation":"ウランバートルはモンゴルの首都です。","category":"地理"},
+  {"id":"geo-004","question":"ナイロビを首都とする国はどこ？","choices":["ケニア","タンザニア","ウガンダ","エチオピア"],"answer":0,"explanation":"ナイロビはケニアの首都です。","category":"地理"},
+  {"id":"geo-005","question":"モロッコの首都はどこ？","choices":["ラバト","カサブランカ","マラケシュ","フェズ"],"answer":0,"explanation":"モロッコの首都はラバトです。カサブランカは別の都市です。","category":"地理"},
+  {"id":"geo-006","question":"リスボンはどの国の首都？","choices":["スペイン","フランス","ポルトガル","アンドラ"],"answer":2,"explanation":"リスボンはポルトガルの首都です。","category":"地理"},
+  {"id":"geo-007","question":"都市「リマ」を首都とする国は？","choices":["ペルー","エクアドル","パラグアイ","ウルグアイ"],"answer":0,"explanation":"リマはペルーの首都です。","category":"地理"},
+  {"id":"geo-008","question":"アイスランドの首都はどこ？","choices":["レイキャビク","ヘルシンキ","オスロ","コペンハーゲン"],"answer":0,"explanation":"アイスランドの首都はレイキャビクです。北欧の他国にも、それぞれ別の首都があります。","category":"地理"},
+  {"id":"geo-009","question":"国連統計の地理区分で、フィジーはオセアニアのどの地域に入る？","choices":["オーストラリア・ニュージーランド","ポリネシア","ミクロネシア","メラネシア"],"answer":3,"explanation":"M49ではフィジーをメラネシアに分類しています。","category":"地理"},
+  {"id":"geo-010","question":"国連統計の地理区分で、ベリーズが入る地域はどれ？","choices":["南アメリカ","中央アメリカ","北部アメリカ","カリブ海地域"],"answer":1,"explanation":"ベリーズはM49の中央アメリカ（Central America）に分類されています。","category":"地理"},
+  {"id":"geo-011","question":"国連が統計上用いる区分で、ウガンダが属するのはアフリカのどの地域？","choices":["東アフリカ","南部アフリカ","西アフリカ","北アフリカ"],"answer":0,"explanation":"M49ではウガンダを東アフリカに分類しています。","category":"地理"},
+  {"id":"geo-012","question":"次のうち、国連統計の地域分類で中央アジアに入る国はどれ？","choices":["カザフスタン","モンゴル","ベトナム","ネパール"],"answer":0,"explanation":"カザフスタンはM49の中央アジアに分類されています。","category":"地理"},
+  {"id":"geo-013","question":"インド洋の島国モルディブは、国連統計でどのアジア地域に分類される？","choices":["南アジア","西アジア","東アジア","中央アジア"],"answer":0,"explanation":"モルディブのM49での分類は南アジア（Southern Asia）です。","category":"地理"},
+  {"id":"geo-014","question":"バルト三国の一つ、エストニアは国連統計でどの地域に分類される？","choices":["北ヨーロッパ","南ヨーロッパ","西ヨーロッパ","東ヨーロッパ"],"answer":0,"explanation":"M49ではエストニアを北ヨーロッパに分類しています。他の地域区分では呼び方が異なる場合があります。","category":"地理"},
+  {"id":"geo-015","question":"アフリカの国ガーナは、国連統計のどの地域に分類される？","choices":["南部アフリカ","北アフリカ","西アフリカ","東アフリカ"],"answer":2,"explanation":"M49でガーナは西アフリカ（Western Africa）に入ります。","category":"地理"},
+  {"id":"geo-016","question":"国連統計の地理区分で北アフリカに属する国はどれ？","choices":["チュニジア","ケニア","ウガンダ","ガーナ"],"answer":0,"explanation":"チュニジアはM49の北アフリカに位置づけられています。","category":"地理"},
+  {"id":"geo-017","question":"国連統計の地理区分で、次のうち南アメリカに属する国は？","choices":["パナマ","キューバ","グアテマラ","ウルグアイ"],"answer":3,"explanation":"ウルグアイはM49で南アメリカに分類されます。","category":"地理"},
+  {"id":"geo-018","question":"冬の流氷や火山地形、海に切り立つ崖が特徴の国立公園は？","choices":["知床国立公園","日光国立公園","南アルプス国立公園","尾瀬国立公園"],"answer":0,"explanation":"環境省は知床の景観を、流氷と、火山が形づくった山や海岸の崖を特徴として紹介しています。","category":"地理"},
+  {"id":"geo-019","question":"大きな湿原を川が蛇行する北海道の国立公園はどこ？","choices":["白山国立公園","釧路湿原国立公園","瀬戸内海国立公園","伊勢志摩国立公園"],"answer":1,"explanation":"釧路湿原国立公園では、広い湿原の中を川が曲がりくねって流れます。","category":"地理"},
+  {"id":"geo-020","question":"環境省が日本最大の山岳湿地を保護する公園として紹介するのは？","choices":["雲仙天草国立公園","尾瀬国立公園","南アルプス国立公園","伊勢志摩国立公園"],"answer":1,"explanation":"尾瀬は山々に囲まれた山岳湿地を中心とする国立公園です。","category":"地理"},
+  {"id":"geo-021","question":"亜熱帯の海洋島で、独自に進化した固有種の多さが特徴の国立公園は？","choices":["白山国立公園","日高山脈襟裳十勝国立公園","小笠原国立公園","十和田八幡平国立公園"],"answer":2,"explanation":"小笠原の島々には、海で隔てられた島ならではの固有種が見られます。","category":"地理"},
+  {"id":"geo-022","question":"京都府・兵庫県・鳥取県にまたがり、日本海側の海岸地形を保護する国立公園は？","choices":["三陸復興国立公園","山陰海岸国立公園","足摺宇和海国立公園","瀬戸内海国立公園"],"answer":1,"explanation":"山陰海岸国立公園の区域には京都府、兵庫県、鳥取県が含まれます。","category":"地理"},
+  {"id":"geo-023","question":"桜島の火山と錦江湾を含む国立公園はどれ？","choices":["阿蘇くじゅう国立公園","雲仙天草国立公園","霧島錦江湾国立公園","吉野熊野国立公園"],"answer":2,"explanation":"霧島錦江湾国立公園には、霧島の山々、錦江湾、桜島が含まれます。","category":"地理"},
+  {"id":"geo-024","question":"かつての「陸中海岸国立公園」の区域を広げてできた国立公園は？","choices":["三河湾国定公園","三陸復興国立公園","山陰海岸国立公園","大山隠岐国立公園"],"answer":1,"explanation":"陸中海岸国立公園の区域を拡張し、2013年に三陸復興国立公園として指定されました。","category":"地理"},
+  {"id":"geo-025","question":"区域が三重県・奈良県・和歌山県にまたがる国立公園はどこ？","choices":["吉野熊野国立公園","南アルプス国立公園","白山国立公園","伊勢志摩国立公園"],"answer":0,"explanation":"吉野熊野国立公園の指定区域は三重県、奈良県、和歌山県の3県にまたがります。","category":"地理"},
+  {"id":"geo-026","question":"「ケラマブルー」で知られる海はどの国立公園にある？","choices":["支笏洞爺国立公園","日光国立公園","西海国立公園","慶良間諸島国立公園"],"answer":3,"explanation":"環境省が「ケラマブルー」と呼ぶ澄んだ青い海は、慶良間諸島国立公園の特徴です。","category":"地理"},
+  {"id":"geo-027","question":"愛媛県と高知県に区域を持つ四国南西部の国立公園はどこ？","choices":["足摺宇和海国立公園","雲仙天草国立公園","西海国立公園","大山隠岐国立公園"],"answer":0,"explanation":"足摺宇和海国立公園の指定区域は愛媛県と高知県です。","category":"地理"},
+  {"id":"geo-028","question":"東京都の最高地点はどの山にある？","choices":["高尾山","御岳山","雲取山","三頭山"],"answer":2,"explanation":"東京都の最高地点は雲取山で、標高は2,017メートルです。","category":"地理"},
+  {"id":"geo-029","question":"標高408メートルの千葉県最高地点は？","choices":["富山","清澄山","鋸山","愛宕山"],"answer":3,"explanation":"千葉県の最高地点は愛宕山です。","category":"地理"},
+  {"id":"geo-030","question":"大雪山系にある北海道の最高峰は？","choices":["羅臼岳","十勝岳","利尻山","旭岳"],"answer":3,"explanation":"北海道の最高地点は大雪山の旭岳で、標高は2,291メートルです。","category":"地理"},
+  {"id":"geo-031","question":"愛媛県の最高地点はどの山にある？","choices":["皿ヶ嶺","瓶ヶ森","石鎚山","剣山"],"answer":2,"explanation":"愛媛県の最高地点は石鎚山の天狗岳で、標高は1,982メートルです。","category":"地理"},
+  {"id":"geo-032","question":"「平成新山」が最高地点として記載される都道府県はどこ？","choices":["大分県","宮崎県","熊本県","長崎県"],"answer":3,"explanation":"平成新山は雲仙岳にあり、標高1,483メートルの長崎県最高地点です。","category":"地理"},
+  {"id":"geo-033","question":"屋久島にある鹿児島県の最高峰はどれ？","choices":["霧島山","開聞岳","桜島","宮之浦岳"],"answer":3,"explanation":"鹿児島県の最高地点は屋久島の宮之浦岳で、標高は1,936メートルです。","category":"地理"},
+  {"id":"geo-034","question":"「山梨県と静岡県の最高地点」に共通する山は？","choices":["間ノ岳","富士山","北岳","赤石岳"],"answer":1,"explanation":"両県の最高地点として掲載されるのは、富士山の剣ヶ峰（3,776メートル）です。","category":"地理"},
+  {"id":"geo-035","question":"長野県内では千曲川と呼ばれ、新潟県で名前が変わる川はどれ？","choices":["木曽川","信濃川","阿賀野川","天竜川"],"answer":1,"explanation":"長野・新潟県境で、千曲川は信濃川と名前を変えます。","category":"地理"},
+  {"id":"geo-036","question":"「川の長さ」ではなく「流域面積」が日本一の川はどれ？","choices":["信濃川","北上川","石狩川","利根川"],"answer":3,"explanation":"利根川は支流などの水が集まる範囲が16,840平方キロメートルあり、流域面積で全国1位です。","category":"地理"},
+  {"id":"geo-037","question":"国土交通省の比較表で、北海道内を流れる最大の幹線流路延長を持つ川は？","choices":["十勝川","石狩川","天塩川","釧路川"],"answer":1,"explanation":"石狩川は268キロメートル、天塩川は256キロメートルです。","category":"地理"},
+  {"id":"geo-038","question":"日本の河川の長さ上位10本のうち、河口が山形県内にある川はどれ？","choices":["最上川","北上川","阿武隈川","木曽川"],"answer":0,"explanation":"資料の比較表では最上川の河口は山形県と示されています。","category":"地理"},
+  {"id":"geo-039","question":"次のうち、幹線流路延長が国土交通省資料で230キロメートルを超える川は？","choices":["最上川","阿賀野川","天竜川","阿武隈川"],"answer":3,"explanation":"阿武隈川は239キロメートルです。残る3つは229キロメートル以下です。","category":"地理"},
+  {"id":"geo-040","question":"河川の「流域」が指すのはどんな範囲？","choices":["降った雨や雪がその川に集まる範囲","行政上で川の名前がついた市町村の範囲","河口から沖に向かって広がる海域","川岸から一律100メートル以内の範囲"],"answer":0,"explanation":"流域は、地上に降った雨や雪がその河川に流れ込む集水区域です。","category":"地理"},
+  {"id":"geo-041","question":"国土地理院の湖沼面積調で、面積が日本最大の湖はどれ？","choices":["琵琶湖","猪苗代湖","霞ヶ浦","サロマ湖"],"answer":0,"explanation":"面積調では、滋賀県の琵琶湖が日本最大です。","category":"地理"},
+  {"id":"geo-042","question":"面積が琵琶湖、霞ヶ浦に次ぐサロマ湖はどこにある？","choices":["秋田県","北海道","新潟県","青森県"],"answer":1,"explanation":"サロマ湖は北海道にあり、湖沼の面積では全国3位です。","category":"地理"},
+  {"id":"geo-043","question":"青森県と秋田県の両方にまたがる湖はどれ？","choices":["猪苗代湖","小川原湖","十和田湖","田沢湖"],"answer":2,"explanation":"国土地理院の調査一覧では、十和田湖の都道府県欄に青森・秋田が記載されています。","category":"地理"},
+  {"id":"geo-044","question":"国土地理院の一覧によると、支笏湖と洞爺湖はどちらが深い？","choices":["支笏湖","洞爺湖","両方同じ深さ","調査一覧には深さが記載されていない"],"answer":0,"explanation":"同一覧の深度は、支笏湖が360.1メートル、洞爺湖が179.7メートルです。","category":"地理"},
+  {"id":"geo-045","question":"中禅寺湖がある都道府県はどこ？","choices":["福島県","長野県","群馬県","栃木県"],"answer":3,"explanation":"中禅寺湖は栃木県にあります。","category":"地理"},
+  {"id":"geo-046","question":"国土地理院の基準水面が標高700メートル以上で、神奈川県にある湖はどれ？","choices":["屈斜路湖","猪苗代湖","芦ノ湖","浜名湖"],"answer":2,"explanation":"神奈川県の芦ノ湖は、調査実施湖沼一覧で基準水面が724.5メートルです。","category":"地理"},
+  {"id":"geo-047","question":"猪苗代湖がある都道府県はどこ？","choices":["山形県","岩手県","福島県","滋賀県"],"answer":2,"explanation":"猪苗代湖は福島県にあり、調査実施湖沼一覧の県欄にも福島と記載されています。","category":"地理"},
+  {"id":"geo-048","question":"南米大陸から約1,000キロ離れた太平洋上にあり、ダーウィンの進化論に影響した生き物で知られる諸島は？","choices":["マデイラ諸島","ガラパゴス諸島","カナリア諸島","アゾレス諸島"],"answer":1,"explanation":"ガラパゴス諸島はエクアドル沖の太平洋にあり、独自の生き物が観察されました。","category":"地理"},
+  {"id":"geo-049","question":"シベリア南東部にある、世界で最も深い湖はどれ？","choices":["チチカカ湖","バイカル湖","スペリオル湖","ビクトリア湖"],"answer":1,"explanation":"ユネスコは、シベリア南東部のバイカル湖を世界で最も深い湖と紹介しています。","category":"地理"},
+  {"id":"geo-050","question":"グレート・バリア・リーフは、どの国の北東岸に沿って広がる？","choices":["オーストラリア","ニュージーランド","メキシコ","南アフリカ"],"answer":0,"explanation":"広大なサンゴ礁群のグレート・バリア・リーフは、オーストラリア北東岸の沖にあります。","category":"地理"},
+  {"id":"geo-051","question":"アメリカのグランド・キャニオンの谷を刻んだ川は？","choices":["リオグランデ川","コロラド川","ミシシッピ川","コロンビア川"],"answer":1,"explanation":"アリゾナ州のグランド・キャニオンは、コロラド川の侵食によって形成された峡谷です。","category":"地理"},
+  {"id":"geo-052","question":"イエローストーン国立公園の面積の大部分を占める州は？","choices":["モンタナ州","ワイオミング州","アイダホ州","ユタ州"],"answer":1,"explanation":"登録地の大半はワイオミング州にあり、一部はモンタナ州とアイダホ州に及びます。","category":"地理"},
+  {"id":"geo-053","question":"カリフォルニア州にあるヨセミテのU字谷や丸みを帯びた岩の地形に、大きく作用したものは？","choices":["潮の満ち引き","海底火山の噴火","砂漠の砂嵐","氷河"],"answer":3,"explanation":"ヨセミテでは氷河が花こう岩の地形を削り、U字谷などをつくりました。","category":"地理"},
+  {"id":"geo-054","question":"次のうち、世界遺産「カナディアン・ロッキー山脈自然公園群」の一部をなすのは？","choices":["バンフ国立公園","グランド・キャニオン国立公園","イエローストーン国立公園","ヨセミテ国立公園"],"answer":0,"explanation":"バンフ国立公園は、ジャスパーやヨーホーなどを含む登録地の一部です。","category":"地理"},
+  {"id":"geo-055","question":"アフリカのビクトリアの滝を流れ落ちる川は？","choices":["コンゴ川","ナイル川","ザンベジ川","ニジェール川"],"answer":2,"explanation":"ビクトリアの滝では、ザンベジ川が谷へ流れ落ちます。","category":"地理"},
+  {"id":"geo-056","question":"半円状に滝が連なるイグアスの滝は、どの2か国の国境にある？","choices":["アルゼンチンとブラジル","チリとペルー","コロンビアとエクアドル","ウルグアイとパラグアイ"],"answer":0,"explanation":"イグアスの滝は、アルゼンチンとブラジルの国境にまたがります。","category":"地理"},
+  {"id":"geo-057","question":"ロス・グラシアレス国立公園にあり、氷河が流れ込む長い湖はどれ？","choices":["アルヘンティーノ湖","チチカカ湖","マラカイボ湖","ナウエル・ウアピ湖"],"answer":0,"explanation":"国立公園にある氷河湖の一つがアルヘンティーノ湖です。","category":"地理"},
+  {"id":"geo-058","question":"氷河がつくったフィヨルドや岩の海岸が見られる世界遺産「テ・ワヒポウナム」は、どの国の南西部？","choices":["ノルウェー","ニュージーランド","アメリカ合衆国","チリ"],"answer":1,"explanation":"テ・ワヒポウナムはニュージーランド南西部の登録地で、繰り返された氷河作用の跡が見られます。","category":"地理"},
+  {"id":"geo-059","question":"巨大なコモドオオトカゲがすむコモド国立公園の島々は、どのようにできた島？","choices":["河口に土砂がたまった島","人工的に埋め立てた島","火山活動でできた島","氷河が運んだ石だけでできた島"],"answer":2,"explanation":"コモド国立公園には火山活動で形成された島々があります。","category":"地理"},
+  {"id":"geo-060","question":"トゥバタハ岩礁自然公園で保護される代表的な地形は？","choices":["環礁","河岸段丘","砂漠の砂丘","氷河湖"],"answer":0,"explanation":"登録地には北と南の環礁など、海のサンゴ礁の地形が含まれます。","category":"地理"},
+  {"id":"geo-061","question":"ベトナムのハロン湾とカットバー諸島で海から立ち上がる島々をつくる主な岩石は？","choices":["石灰岩","玄武岩","軽石","花こう岩"],"answer":0,"explanation":"湾には石灰岩からなる島々が多数あり、塔のようなカルスト地形が見られます。","category":"地理"},
+  {"id":"geo-062","question":"フォンニャ・ケバンとヒンナムノーの洞窟や地下河川を含む遺産は、どの2か国にまたがる？","choices":["ベトナムとラオス","ベトナムとカンボジア","ミャンマーとバングラデシュ","タイとマレーシア"],"answer":0,"explanation":"石灰岩のカルスト地形が、ベトナムとラオスの国境を越えて広がっています。","category":"地理"},
+  {"id":"geo-063","question":"氷河のある「ユングフラウ・アレッチ」は、どの山脈の世界自然遺産？","choices":["カルパチア山脈","ピレネー山脈","アペニン山脈","アルプス山脈"],"answer":3,"explanation":"ユングフラウ・アレッチには、スイスのアルプス高山帯とその氷河地形が含まれます。","category":"地理"},
+  {"id":"geo-064","question":"ガイランゲルフィヨルドとネーロイフィヨルドがある国は？","choices":["デンマーク","ノルウェー","フィンランド","スウェーデン"],"answer":1,"explanation":"この二つはノルウェー南西部のフィヨルドで、「西ノルウェーフィヨルド群」として登録されています。","category":"地理"},
+  {"id":"geo-065","question":"プリトヴィツェ湖群の階段状の湖ができた主なしくみは？","choices":["水が運んだ炭酸カルシウムの堆積で天然の堰ができた","海水面が下がり、海から切り離された","大規模な人工ダムを一度に建てた","噴火で吹き飛んだ山頂に水がたまった"],"answer":0,"explanation":"石灰質が水から沈殿してできた天然の堰が、水の流れを区切って湖や滝をつくっています。","category":"地理"},
+  {"id":"geo-066","question":"ドナウ川が三角州をつくって流れ込む海はどれ？","choices":["アドリア海","北海","バルト海","黒海"],"answer":3,"explanation":"ドナウ川の河口は黒海沿岸にあり、その付近に三角州が広がります。","category":"地理"},
+  {"id":"geo-067","question":"ヴァトナヨークトル国立公園の景観を特徴づける組み合わせは？","choices":["広大な砂丘とヤシの林","サンゴ礁とマングローブ","氾濫原とサバンナ","氷河と火山"],"answer":3,"explanation":"アイスランドのこの公園には氷帽と火山があり、氷の下での火山活動などが地形に影響します。","category":"地理"},
+  {"id":"geo-068","question":"オランダ、ドイツ、デンマークにまたがる「ワッデン海」に広がる代表的な地形は？","choices":["環礁","氷床","干潟","カルデラ"],"answer":2,"explanation":"ワッデン海は、潮の満ち引きにより砂や泥の地面が現れる広大な干潟で知られています。","category":"地理"},
+  {"id":"geo-069","question":"ナミブ砂海で、乾燥した砂丘の生き物にとって重要な水分の供給源は？","choices":["大河の氾濫","氷河の融け水","毎日の夕立","海岸から入る霧"],"answer":3,"explanation":"海岸砂漠のナミブ砂海では、霧が水分の主な供給源になります。","category":"地理"},
+  {"id":"geo-070","question":"ボツワナにあるオカバンゴ・デルタは、一般的な河口の三角州と何が違う？","choices":["海水からできた氷床である","海底だけに存在する","全体が火山の火口にある","内陸に広がり海へ流れ込まない"],"answer":3,"explanation":"オカバンゴ川が海へ流れず、ボツワナ北西部の内陸に湿地をつくっています。","category":"地理"},
+  {"id":"geo-071","question":"砂漠の峡谷や岩のアーチがあるワディ・ラム保護地域はどの国にある？","choices":["モロッコ","オマーン","エジプト","ヨルダン"],"answer":3,"explanation":"ワディ・ラムはヨルダン南部に位置する、岩の地形が特徴的な砂漠の登録地です。","category":"地理"},
+  {"id":"geo-072","question":"固有種の多いソコトラ諸島がある海域はどれ？","choices":["北大西洋の中部","アデン湾に近いインド洋北西部","カリブ海の西部","南シナ海の北部"],"answer":1,"explanation":"ソコトラ諸島は、アフリカの角の東側、アデン湾に近いインド洋北西部にあります。","category":"地理"},
+  {"id":"geo-073","question":"滝やカルストの地形で知られる九寨溝が位置する中国の省は？","choices":["四川省","山東省","福建省","広東省"],"answer":0,"explanation":"九寨溝は四川省北部に位置し、細長い円すい形のカルスト地形や滝が見られます。","category":"地理"},
+  {"id":"geo-074","question":"国土地理院の2万5千分の1地形図では、通常の等高線は何メートルの標高差ごとに引かれる？","choices":["10メートル","20メートル","1メートル","50メートル"],"answer":0,"explanation":"2万5千分の1地形図の通常の等高線間隔は10メートルです。","category":"地理"},
+  {"id":"geo-075","question":"縮尺2万5千分の1の地図上で、まっすぐ測った4センチメートルは実際の何キロメートル？","choices":["4キロメートル","2.5キロメートル","0.1キロメートル","1キロメートル"],"answer":3,"explanation":"地図上の1センチメートルは250メートルなので、4センチメートルは1,000メートルです。","category":"地理"},
+  {"id":"geo-076","question":"国土地理院の地形図で海岸線を示すとき、基本になる海面の状態は？","choices":["潮位に関係なく水深5メートルのとき","満潮時","一年で最大の高潮のとき","干潮時"],"answer":1,"explanation":"地形図の海岸線は満潮時の海岸線を表示します。","category":"地理"},
+  {"id":"geo-077","question":"一部の離島などを除き、日本の測量で標高0メートルの基準となるのは？","choices":["琵琶湖の基準水面","日本海の最低潮位","大阪湾の満潮時の海面","東京湾の平均海面"],"answer":3,"explanation":"日本の標高の基準は原則として東京湾の平均海面です。","category":"地理"},
+  {"id":"geo-078","question":"日本の中央標準時の基準になる経線は？","choices":["東経150度","東経135度","東経120度","経度0度"],"answer":1,"explanation":"中央標準時は、東経135度における時刻として定められました。","category":"地理"},
+  {"id":"geo-079","question":"測量で使われる「日本経緯度原点」は何を定めるための基準点？","choices":["河川の流量","緯度と経度","海底の水温","標高のみ"],"answer":1,"explanation":"日本経緯度原点は、日本における地理学的な緯度・経度を定める基準点です。","category":"地理"},
+  {"id":"geo-080","question":"海で最も深い地点「チャレンジャー海淵」はどの海溝にある？","choices":["プエルトリコ海溝","日本海溝","マリアナ海溝","ペルー・チリ海溝"],"answer":2,"explanation":"チャレンジャー海淵は西太平洋のマリアナ海溝南部にあります。","category":"地理"},
+  {"id":"geo-081","question":"新しい海底が生まれる「中央海嶺」では、プレートはどう動く？","choices":["互いに離れる","接したまま全く動かない","互いにぶつかって折り重なる","片方が他方の下に沈み込む"],"answer":0,"explanation":"プレートが離れる境界では、割れ目から溶けた岩石が上がり、新しい海底をつくります。","category":"地理"},
+  {"id":"geo-082","question":"海に面した河口で、川の淡水と海水が混ざった水を何と呼ぶ？","choices":["硬水","真水","軟水","汽水"],"answer":3,"explanation":"淡水と海水の混合水は汽水です。塩分濃度は川からの流入や潮位で変わります。","category":"地理"},
+  {"id":"geo-083","question":"海面が周期的に上下する潮汐を主に起こす二つの天体は？","choices":["天王星と海王星","月と太陽","木星と土星","火星と金星"],"answer":1,"explanation":"潮汐を生む主な力は月と太陽の引力です。","category":"地理"},
+  {"id":"geo-084","question":"米国海洋大気庁の区分で「南大洋」は、どの大陸を取り囲む海域？","choices":["オーストラリア大陸","アフリカ大陸","南アメリカ大陸","南極大陸"],"answer":3,"explanation":"南大洋は南極大陸を取り囲む海域です。","category":"地理"},
+  {"id":"geo-085","question":"「熱塩循環」を生む、海水の密度差に関わる主な組み合わせは？","choices":["水深と海底の岩の硬さ","水面の色と波の向き","水温と塩分","気温と海岸線の長さ"],"answer":2,"explanation":"水温や塩分が場所によって異なると海水の密度に差ができ、海の循環に関わります。","category":"地理"},
+  {"id":"geo-086","question":"パナマ運河で船を海面から内陸のガトゥン湖の高さまで上げる設備は？","choices":["水車","橋脚","閘門（こうもん）","防波堤"],"answer":2,"explanation":"閘門は区画内の水位を変え、船を異なる高さの水面へ移動させる設備です。","category":"地理"},
+  {"id":"geo-087","question":"川が山地の谷から平地に出たあたりで土砂を広げ、扇の形につくる地形は？","choices":["海食崖","扇状地","モレーン","三角州"],"answer":1,"explanation":"山地の谷口で川が運んだ土砂がたまると、谷口を頂点とする扇状の地形になることがあります。","category":"地理"},
+  {"id":"geo-088","question":"川が海に注ぐ河口付近に砂や泥を積もらせてできる低く平らな地形は？","choices":["三角州","海食台","カルデラ","カール"],"answer":0,"explanation":"三角州は、河口付近で川が運んだ砂や泥がたまってできる堆積地形です。","category":"地理"},
+  {"id":"geo-089","question":"氷河が運んだ石や細かい土が、氷河の末端や側面などにたまった地形は？","choices":["モレーン","扇状地","鍾乳洞","砂嘴"],"answer":0,"explanation":"氷河が運んだ岩や土砂がたまった地形をモレーンといいます。","category":"地理"},
+  {"id":"geo-090","question":"大量のマグマが抜けて上の地面が崩れ、大きなくぼ地ができたとき、その地形は？","choices":["三角州","砂丘","リアス海岸","カルデラ"],"answer":3,"explanation":"火山活動に伴う地面の崩壊で形成される大きなくぼ地がカルデラです。","category":"地理"},
+  {"id":"geo-091","question":"石灰岩などが地下の水に溶け、地下の空洞の上が崩れて地面がへこんだものは？","choices":["シンクホール（陥没穴）","溶岩ドーム","砂嘴","モレーン"],"answer":0,"explanation":"石灰岩などが溶けてできた地下の空洞の上で地面が崩れると、陥没穴ができることがあります。","category":"地理"},
+  {"id":"geo-092","question":"山の斜面が氷河に削られてできた、三方を急な壁に囲まれた半円形の谷は？","choices":["カール（圏谷）","三角州","リアス海岸","砂州"],"answer":0,"explanation":"カールは氷河作用でできる椅子のような形の谷です。国土地理院は、涸沢カールなどを例に挙げています。","category":"地理"},
+  {"id":"geo-093","question":"川が刻んだ谷を海が浸し、枝分かれした入り江が連なる海岸は？","choices":["干潟海岸","サンゴ礁海岸","砂浜海岸","リアス海岸"],"answer":3,"explanation":"河川が削った谷の一部が海に水没して、入り江が複雑に入り込む地形になります。","category":"地理"},
+  {"id":"geo-094","question":"中国からミャンマー、タイ、ラオス、カンボジア、ベトナムへ続くメコン川の源は？","choices":["デカン高原","モンゴル高原","チベット高原","シベリア低地"],"answer":2,"explanation":"メコン川はチベット高原を源とし、下流を含め6か国にまたがります。","category":"地理"},
+  {"id":"geo-095","question":"琵琶湖から瀬田川、宇治川へ流れる水は、下流の淀川としてどこに注ぐ？","choices":["東京湾","駿河湾","伊勢湾","大阪湾"],"answer":3,"explanation":"琵琶湖からの流れは桂川・木津川などと合わさって淀川となり、大阪湾へ注ぎます。","category":"地理"},
+  {"id":"geo-096","question":"北上川の本流は、岩手県からどの県に入って旧北上川と分かれる？","choices":["宮城県","福島県","山形県","秋田県"],"answer":0,"explanation":"北上川は岩手県から宮城県へ流れ、宮城県登米市で旧北上川に分かれます。","category":"地理"},
+  {"id":"geo-097","question":"阿蘇郡の瀬の本高原付近に始まり、筑紫平野を通って有明海に注ぐ川は？","choices":["球磨川","筑後川","大淀川","遠賀川"],"answer":1,"explanation":"筑後川は九州北部の川で、瀬の本高原を水源とし、有明海に流れ込みます。","category":"地理"},
+  {"id":"select-163","question":"丸みのある車体と緑色の塗装で親しまれた、東急の初代5000系の愛称は？","choices":["赤い彗星","白いかもめ","青ガエル","青いソニック"],"answer":2,"explanation":"初代5000系は、その姿と塗装から「青ガエル」と呼ばれました。","category":"鉄道"},
+  {"id":"select-165","question":"田園都市線の渋谷とは反対側の終点で、小田急江ノ島線に乗り換えられる駅は？","choices":["中央林間駅","南林間駅","相模大野駅","大和駅"],"answer":0,"explanation":"中央林間駅では東急田園都市線と小田急江ノ島線が接続しています。","category":"鉄道"},
+  {"id":"rail-001","question":"1872年に正式開業した日本初の鉄道は、どの区間を結んだ？","choices":["東京〜品川","新橋〜横浜","神戸〜大阪","横浜〜小田原"],"answer":1,"explanation":"1872年に新橋〜横浜間が正式開業しました。それに先立ち、品川〜横浜間では仮営業が行われていました。","category":"鉄道"},
+  {"id":"rail-002","question":"1964年、東海道新幹線の開業時に使われた車両は？","choices":["200系","100系","0系","300系"],"answer":2,"explanation":"開業当初は0系が東京と新大阪を結び、最速で4時間かかりました。","category":"鉄道"},
+  {"id":"rail-003","question":"1927年に営業を始めた日本初の地下鉄は、どの区間を走った？","choices":["銀座〜新橋","浅草〜上野","新宿〜池袋","渋谷〜表参道"],"answer":1,"explanation":"東京地下鉄道の浅草〜上野間が始まりです。この区間は現在の銀座線の一部です。","category":"鉄道"},
+  {"id":"rail-004","question":"2016年に開業した北海道新幹線の最初の区間は？","choices":["新青森〜新函館北斗","盛岡〜新青森","新函館北斗〜札幌","八戸〜新青森"],"answer":0,"explanation":"北海道新幹線は2016年3月26日に新青森〜新函館北斗間で開業しました。","category":"鉄道"},
+  {"id":"rail-005","question":"箱根登山電車の「スイッチバック」では、列車はどうやって坂を登る？","choices":["途中で歯車に連結して登る","ケーブルに引かれて登る","進行方向を変えながらジグザグに登る","車両を分割して別々に登る"],"answer":2,"explanation":"進行方向を反転して山の斜面をジグザグに登ります。箱根では出山信号場、大平台駅、上大平台信号場の3か所で行います。","category":"鉄道"},
+  {"id":"rail-006","question":"西九州新幹線「かもめ」と在来線特急「リレーかもめ」の乗り換え駅は？","choices":["長崎駅","諫早駅","新鳥栖駅","武雄温泉駅"],"answer":3,"explanation":"武雄温泉駅では、新幹線と在来線特急を同じホームで乗り継ぐリレー方式を採用しています。","category":"鉄道"},
+  {"id":"rail-007","question":"新幹線の黄色い検査車両「ドクターイエロー」の主な役割は？","choices":["故障車両をけん引する","線路や電気設備を測定する","積もった雪を押しのける","夜間に荷物を輸送する"],"answer":1,"explanation":"ドクターイエローは軌道や電気設備の状態を走りながら測定し、点検や保守に役立てる車両です。","category":"鉄道"},
+  {"id":"rail-008","question":"超電導リニアが高速で走るとき、車体を浮かせる力は？","choices":["圧縮空気の力","車輪の遠心力","磁石とコイルの間に働く磁力","軌道の下を流れる水の浮力"],"answer":2,"explanation":"車両側の超電導磁石と、ガイドウェイ側の浮上・案内コイルとの間に働く磁力で浮上します。","category":"鉄道"},
+  {"id":"select-082","question":"『モナ・リザ』を描いた芸術家は？","choices":["ミケランジェロ","レオナルド・ダ・ヴィンチ","ラファエロ","ボッティチェリ"],"answer":1,"explanation":"レオナルド・ダ・ヴィンチが描いた肖像画で、ルーヴル美術館に所蔵されています。","category":"美術"},
+  {"id":"select-083","question":"『睡蓮』の連作で知られる画家は？","choices":["フィンセント・ファン・ゴッホ","パブロ・ピカソ","クロード・モネ","エドヴァルド・ムンク"],"answer":2,"explanation":"モネは自らの庭の池を繰り返し描きました。","category":"美術"},
+  {"id":"select-084","question":"大きな波の向こうに富士山が見える『神奈川沖浪裏』を描いたのは？","choices":["歌川広重","喜多川歌麿","東洲斎写楽","葛飾北斎"],"answer":3,"explanation":"『神奈川沖浪裏』は北斎の『冨嶽三十六景』の一図です。","category":"美術"},
+  {"id":"select-251","question":"青いターバンを巻いて振り向く少女を描いた『真珠の耳飾りの少女』の画家は？","choices":["レンブラント","ルーベンス","フェルメール","ブリューゲル"],"answer":2,"explanation":"『真珠の耳飾りの少女』はフェルメールの代表作の一つです。","category":"美術"},
+  {"id":"select-317","question":"セザンヌが故郷エクス＝アン＝プロヴァンスの近郊で、繰り返し絵の主題にした山は？","choices":["サント＝ヴィクトワール山","モンブラン","エトナ山","ヴェスヴィオ山"],"answer":0,"explanation":"サント＝ヴィクトワール山はセザンヌにとって身近な主題。異なる位置や構成から繰り返し描きました。","category":"美術"},
+  {"id":"art-001","question":"レンブラントの《夜警》は、どんな集団を描いた絵？","choices":["宮廷楽団","市民自警団","商船の乗組員","大学の学生"],"answer":1,"explanation":"《夜警》は、隊長フランス・バニング・コック率いる市民自警団の群像です。","category":"美術"},
+  {"id":"art-002","question":"渦を巻くような夜空と糸杉で知られる《星月夜》を描いた画家は？","choices":["ポール・ゴーギャン","クロード・モネ","ジョルジュ・スーラ","フィンセント・ファン・ゴッホ"],"answer":3,"explanation":"ゴッホは南フランスのサン＝レミで窓から見た景色を着想源に、夜空や糸杉の形を絵の中でアレンジしました。","category":"美術"},
+  {"id":"art-003","question":"サルバドール・ダリの《記憶の固執》で、溶けたようにたれ下がるものは？","choices":["本","靴","時計","鍵"],"answer":2,"explanation":"絵には、柔らかくなって木の枝や台の端に垂れた時計が描かれています。","category":"美術"},
+  {"id":"art-004","question":"ルノワールの《ムーラン・ド・ラ・ギャレットの舞踏会》の舞台は、パリのどの地区？","choices":["モンマルトル","マレ","モンパルナス","サン＝ジェルマン＝デ＝プレ"],"answer":0,"explanation":"ルノワールはモンマルトルの人気のダンス場に集まる人々を描きました。","category":"美術"},
+  {"id":"art-005","question":"もとは《地獄の門》の一部として構想された彫刻《考える人》を制作したのは？","choices":["エドガー・ドガ","オーギュスト・ロダン","コンスタンティン・ブランクーシ","アルベルト・ジャコメッティ"],"answer":1,"explanation":"ロダンの《考える人》は《地獄の門》のために制作された人物像から、独立した作品になりました。","category":"美術"},
+  {"id":"art-006","question":"古代ギリシャの彫刻《サモトラケのニケ》で、翼を広げた女神を載せる台座は何の形？","choices":["馬車","階段","橋","船のへさき"],"answer":3,"explanation":"台座は船のへさきをかたどり、その上に翼を広げた勝利の女神ニケが立っています。","category":"美術"},
+  {"id":"art-007","question":"ラファエロの壁画《アテネの学堂》で、画面中央に並んでいる二人は？","choices":["プラトンとアリストテレス","ピタゴラスとエウクレイデス","ディオゲネスとヘラクレイトス","プトレマイオスとゾロアスター"],"answer":0,"explanation":"中央ではプラトンが指を上に向け、その隣でアリストテレスが『倫理学』を手にしています。","category":"美術"},
+  {"id":"art-008","question":"ボッティチェリの《ヴィーナスの誕生》で、ヴィーナスが立っているのは？","choices":["岩","布","大きな貝殻","花かご"],"answer":2,"explanation":"ヴィーナスは海から陸に向かう場面で、大きなホタテ貝の殻の上に立っています。","category":"美術"},
+  {"id":"art-009","question":"ピカソが《ゲルニカ》を描く直接のきっかけになったのは？","choices":["大地震の報道","船の遭難の報道","大規模な洪水の報道","町への空爆の報道"],"answer":3,"explanation":"ピカソはスペインのバスク地方の町ゲルニカが空爆されたニュースを知り、同じ名の絵を描きました。","category":"美術"},
+  {"id":"art-010","question":"顔の両側に手を当てた人物で知られる《叫び》を制作したのは？","choices":["ジェームズ・アンソール","エドヴァルド・ムンク","グスタフ・クリムト","エゴン・シーレ"],"answer":1,"explanation":"ムンクは同じ構図を繰り返し制作しました。《叫び》には絵画や素描、版画など、複数のバージョンがあります。","category":"美術"},
+  {"id":"art-011","question":"建仁寺に伝わる国宝《風神雷神図屏風》は、一般に誰の作とされる？","choices":["長谷川等伯","尾形光琳","俵屋宗達","伊藤若冲"],"answer":2,"explanation":"建仁寺に伝わる金地の屏風は俵屋宗達の作とされています。尾形光琳は後にこれをもとに別の屏風を制作しました。","category":"美術"},
+  {"id":"art-012","question":"尾形光琳の《燕子花図（かきつばたず）》の背景にあるとされる古典は？","choices":["伊勢物語","源氏物語","平家物語","竹取物語"],"answer":0,"explanation":"《燕子花図》は、『伊勢物語』第9段「東下り」に登場する八つ橋の場面と結び付けられています。","category":"美術"},
+  {"id":"art-013","question":"役者を大きく描いた浮世絵《三代目大谷鬼次の奴江戸兵衛》の作者は？","choices":["葛飾北斎","喜多川歌麿","歌川広重","東洲斎写楽"],"answer":3,"explanation":"東洲斎写楽が、三代目大谷鬼次の演じた奴・江戸兵衛を描いた役者絵です。","category":"美術"},
+  {"id":"art-014","question":"長谷川等伯の国宝の屏風に、墨の濃淡で描かれているのは何の木が並ぶ景色？","choices":["竹","松","桜","杉"],"answer":1,"explanation":"等伯の《松林図屏風》では、墨の強弱や余白によって、松林の湿った空気まで感じさせる景色を表現しています。","category":"美術"},
+  {"id":"art-015","question":"ミケランジェロの《アダムの創造》が描かれたのはどこ？","choices":["サン・マルコ大聖堂の祭壇","サンタ・マリア・ノヴェッラ教会の壁","システィーナ礼拝堂の天井","サン・ピエトロ大聖堂のドーム"],"answer":2,"explanation":"《アダムの創造》はシスティーナ礼拝堂の天井にある、『創世記』を題材にした一連の絵の一つです。","category":"美術"},
+  {"id":"nii-001","question":"新潟高校の前身が創立されたのは何年？","choices":["1892年（明治25年）","1922年（大正11年）","1912年（明治45年）","1872年（明治5年）"],"answer":0,"explanation":"創立日は1892年7月1日です。学校はまだ旧制中学校でした。","category":"新潟高校"},
+  {"id":"nii-002","question":"開校時、仮校舎が置かれたのは新潟市のどの町？","choices":["西大畑町","東堀通","沼垂東","万代"],"answer":0,"explanation":"開校当初は西大畑町の曹洞宗中学林を仮校舎として使いました。","category":"新潟高校"},
+  {"id":"nii-003","question":"創立時の学校名はどれ？","choices":["新潟県立新潟中学校","新潟県新潟中学校","新潟県尋常中学校","新潟県立新潟高等学校"],"answer":2,"explanation":"沿革によると創立時は新潟県尋常中学校で、1901年に新潟県立新潟中学校となりました。","category":"新潟高校"},
+  {"id":"nii-004","question":"仮校舎から移った1893年の本校舎は、どこに建てられた？","choices":["鳥屋野","古町","関屋","寺尾"],"answer":2,"explanation":"開校翌年、新潟市関屋に本校舎が完成し、学校が移りました。","category":"新潟高校"},
+  {"id":"nii-005","question":"第1回の卒業証書授与式を行ったのは、創立からおよそ何年後？","choices":["約5年後","約20年後","約2年後","約10年後"],"answer":2,"explanation":"創立は1892年7月、第1回授与式は1894年3月で、間は約1年9か月です。","category":"新潟高校"},
+  {"id":"nii-006","question":"1902年の創立10周年記念式とあわせて行われたのは？","choices":["校舎落成式","図書館開館式","新体育館竣工式","校旗樹立式"],"answer":3,"explanation":"1902年7月1日の記念式では、校旗を立てる式も行われました。","category":"新潟高校"},
+  {"id":"nii-007","question":"創立30周年を迎えた1922年、記念式と同時に祝ったのは？","choices":["新しい理数科の設置","校舎改築の完成","旧制中学から高校への改称","青山会館の開館"],"answer":1,"explanation":"1920年に始まった校舎改築が1922年に完成し、節目の記念式と同日に祝われました。","category":"新潟高校"},
+  {"id":"nii-008","question":"現在の「新潟県立新潟高等学校」という校名は何年から？","choices":["1901年（明治34年）","1945年（昭和20年）","1952年（昭和27年）","1948年（昭和23年）"],"answer":3,"explanation":"学制改革期の1948年4月1日に旧制中学から現在の校名に改められ、校章も制定されました。","category":"新潟高校"},
+  {"id":"nii-009","question":"1950年4月、同校に初めて入学した女子生徒は何人？","choices":["20人","40人","7人","2人"],"answer":2,"explanation":"1950年4月に女子生徒7人が初めて入学したと記録されています。","category":"新潟高校"},
+  {"id":"nii-010","question":"新しい校歌と校旗が制定された1952年は、創立何周年の年？","choices":["80周年","60周年","70周年","50周年"],"answer":1,"explanation":"創立60周年の記念式が1952年10月にあり、その節目に校歌と校旗が新しくなりました。","category":"新潟高校"},
+  {"id":"nii-011","question":"1954年の火災直後、授業再開のため教室に転用された施設の一つは？","choices":["第1体育館","白山駅の待合室","青山会館","現在の視聴覚ホール"],"answer":0,"explanation":"火災後は第1体育館などを利用して11教室を確保し、二部授業を始めました。","category":"新潟高校"},
+  {"id":"nii-012","question":"1954年に第1回が行われた「校区一周」の競技は？","choices":["ロード自転車","駅伝","競歩","マラソン"],"answer":1,"explanation":"1954年11月に、第1回の校区一周駅伝競走が行われました。","category":"新潟高校"},
+  {"id":"nii-013","question":"火災後、1955年に起工した新校舎の構造は？","choices":["木造","石造","鉄筋コンクリート造","れんが造"],"answer":2,"explanation":"1955年に鉄筋コンクリートの校舎の建設が始まり、その後段階的に教室が完成しました。","category":"新潟高校"},
+  {"id":"nii-014","question":"1962年に初めて正課として行われた雪上の講習は？","choices":["スノーボード","カーリング","スノーシュー","スキー"],"answer":3,"explanation":"沿革には1962年1月にスキー講習を正式な授業として初めて実施した記録があります。","category":"新潟高校"},
+  {"id":"nii-015","question":"1964年の国民体育大会で新潟高校が会場になった競技は？","choices":["レスリング","ラグビー","卓球","フェンシング"],"answer":0,"explanation":"新潟国体のレスリング競技が開かれた会場の一つです。","category":"新潟高校"},
+  {"id":"nii-016","question":"1964年6月、新潟高校の校舎に被害をもたらした災害は？","choices":["高潮","台風","大雪","地震"],"answer":3,"explanation":"6月16日の激しい地震で校舎などが被災し、一時的な休校や短縮授業が行われました。","category":"新潟高校"},
+  {"id":"nii-017","question":"1968年に除幕式が行われた、学校にゆかりのある像の名前は？","choices":["雪国の学徒像","白山の若人像","越後の学びの像","青陵健児の像"],"answer":3,"explanation":"1968年7月、青陵健児の像が建てられ、除幕式が行われました。","category":"新潟高校"},
+  {"id":"nii-018","question":"1972年、新潟高校に歌碑が建てられた人物は？","choices":["石川啄木","会津八一","小林一茶","良寛"],"answer":1,"explanation":"学校の沿革には、1972年10月に会津八一の歌碑が建てられたとあります。","category":"新潟高校"},
+  {"id":"nii-019","question":"1985年に第65回の全国高校大会に出場し、翌年も連続出場した競技は？","choices":["バスケットボール","野球","ラグビー","剣道"],"answer":2,"explanation":"1985年と1986年に全国高等学校ラグビーフットボール大会へ出場した記録があります。","category":"新潟高校"},
+  {"id":"nii-020","question":"1988年に新潟高校で講演した、フィールズ賞受賞者は誰？","choices":["広中平祐","秋山仁","岡潔","小平邦彦"],"answer":3,"explanation":"フィールズ賞や文化勲章を受けた数学者、小平邦彦が1988年6月2日に講演しました。","category":"新潟高校"},
+  {"id":"nii-021","question":"創立100周年記念式が行われたのは？","choices":["1992年","2012年","1982年","2002年"],"answer":0,"explanation":"1892年の創立から100年にあたる1992年10月、新潟高校は記念式を行いました。","category":"新潟高校"},
+  {"id":"nii-022","question":"1995年度に普通科に加えて設けられた学科は？","choices":["理数科","商業科","国際教養科","工業科"],"answer":0,"explanation":"1995年4月、理数科が1学級新設されました。","category":"新潟高校"},
+  {"id":"nii-023","question":"1998年に完成した新潟高校のセミナーハウスの名前は？","choices":["白山会館","青山会館","信濃会館","越後会館"],"answer":1,"explanation":"学校の沿革では、セミナーハウス青山会館の完成日は1998年3月20日です。","category":"新潟高校"},
+  {"id":"nii-024","question":"校舎の全面改築に伴い、仮校舎から新校舎へ移ったのは何年？","choices":["1999年","1989年","2009年","2019年"],"answer":0,"explanation":"1997年に仮校舎へ移り、第1期工事を経て1999年2月に新校舎へ移りました。","category":"新潟高校"},
+  {"id":"nii-025","question":"2006年3月末に新潟高校で終了した課程は？","choices":["通信制課程","夜間定時制課程","全日制課程","別科専修課程"],"answer":0,"explanation":"沿革では2005年に閉課程式典、翌2006年3月末に通信制課程を閉じています。","category":"新潟高校"},
+  {"id":"nii-026","question":"県立新潟高校の旧通信制課程は、どの学校の設立につながった？","choices":["新潟南高校","新潟翠江高校","新潟中央高校","新潟向陽高校"],"answer":1,"explanation":"新潟翠江高校は、新潟高校通信制と船江高校夜間定時制、黒埼高校全日制を統合して発足しました。","category":"新潟高校"},
+  {"id":"nii-027","question":"新潟高校の校歌の作詞者は？","choices":["北原白秋","堀口大学","西條八十","会津八一"],"answer":1,"explanation":"学校の校歌紹介では、堀口大学が作詞、大和田愛羅が作曲とされています。","category":"新潟高校"},
+  {"id":"nii-028","question":"新潟高校の校歌を作曲したのは？","choices":["大和田愛羅","山田耕筰","瀧廉太郎","團伊玖磨"],"answer":0,"explanation":"校歌の作曲者の欄には大和田愛羅とあります。","category":"新潟高校"},
+  {"id":"nii-029","question":"新潟高校の校章で、校歌にも登場するモチーフは？","choices":["稲穂","松葉","笹の葉","桜の花"],"answer":1,"explanation":"校歌の2番で、校章が松葉をかたどっていることに触れています。","category":"新潟高校"},
+  {"id":"nii-030","question":"新潟高校の校歌の冒頭に登場する川は？","choices":["阿賀野川","関川","信濃川","魚野川"],"answer":2,"explanation":"第1節では、流れてきた信濃川が海に注ぐ風景が歌われます。","category":"新潟高校"},
+  {"id":"nii-031","question":"新潟高校の公式サイトに載っている応援歌の題名は？","choices":["青陵健児","丈夫","赤き旗","理想の星"],"answer":1,"explanation":"学校公式サイトの応援歌欄に「丈夫」の歌詞と音源が掲載されています。","category":"新潟高校"},
+  {"id":"nii-032","question":"新潟高校の学校生活のモットーとして、学校概要に挙げられているのは？","choices":["文武不岐","自主自律","質実剛健","至誠一貫"],"answer":1,"explanation":"学校概要では、生徒が自主自律を大切に勉学・行事・部活動に参加すると紹介しています。","category":"新潟高校"},
+  {"id":"nii-033","question":"新潟高校の所在地は新潟市の何区？","choices":["江南区","西区","東区","中央区"],"answer":3,"explanation":"学校は新潟市中央区の関屋下川原町にあります。","category":"新潟高校"},
+  {"id":"nii-034","question":"新潟高校の公式サイトが、鉄道でのアクセス先として案内している駅は？","choices":["青山駅","新潟駅","関屋駅","白山駅"],"answer":3,"explanation":"アクセス欄は、JR越後線の白山駅から徒歩15分と案内しています。","category":"新潟高校"},
+  {"id":"nii-035","question":"学校図書館が本格的に本をそろえるきっかけとなった、1929年創設の文庫は？","choices":["青陵文庫","越後文庫","関屋文庫","白山文庫"],"answer":0,"explanation":"1929年、昭和天皇の即位を記念して青陵文庫が設けられました。","category":"新潟高校"},
+  {"id":"nii-036","question":"戦時中の図書館沿革で、学校の疎開先として挙げられている村は？","choices":["巻村","山古志村","味方村","村松村"],"answer":2,"explanation":"図書館の沿革では、戦争による学校疎開先として味方村が挙げられています。","category":"新潟高校"},
+  {"id":"nii-037","question":"1954年の火災後、臨時の学校図書館に改造されたのは？","choices":["旧音楽室","旧家庭科室","旧職員室","旧工作室"],"answer":3,"explanation":"学校公式の図書館沿革によると、旧工作室を改造して約5年間、臨時の図書館として運用しました。","category":"新潟高校"},
+  {"id":"nii-038","question":"1999年に移った図書館は、視聴覚棟のどの階にまたがっている？","choices":["2階と3階","3階と4階","4階と5階","1階と2階"],"answer":0,"explanation":"1999年2月、新校舎視聴覚棟の2・3階に図書館が完成しました。","category":"新潟高校"},
+  {"id":"nii-039","question":"新潟高校の普通科では、何年次から文系・理系に分かれる？","choices":["3年次","1年次","2年次","入学前"],"answer":2,"explanation":"普通科では入学後に共通教科を学び、2年次から進路などに応じて文系と理系に分かれます。","category":"新潟高校"},
+  {"id":"nii-040","question":"普通科1年の芸術で、学校概要に掲載されている選択の組み合わせは？","choices":["書道・写真・デザイン","音楽・美術・書道","美術・工芸・写真","音楽・演劇・映画"],"answer":1,"explanation":"普通科1年の芸術では、音楽・美術・書道の中から1科目を選びます。","category":"新潟高校"},
+  {"id":"nii-041","question":"新潟高校の学校概要にある学期の区切り方は？","choices":["4〜9月の前期と10〜3月の後期","春・秋・冬の3学期","4〜8月の前期と9〜3月の後期","春・夏・秋・冬の4学期"],"answer":0,"explanation":"新潟高校は2学期制で、公式説明では10月に後期が始まります。","category":"新潟高校"},
+  {"id":"nii-042","question":"理数科の2年次から分かれる二つのコースは？","choices":["サイエンスとデザイン","エンジニアと総合政策","サイエンスとメディカル","メディカルと国際教養"],"answer":2,"explanation":"理数科は2年次からサイエンスコースとメディカルコースに分かれて課題研究を行います。","category":"新潟高校"},
+  {"id":"nii-043","question":"新潟高校の理数科1年が生物の野外実習をする場所は？","choices":["瓢湖","苗場山","尾瀬","佐渡島"],"answer":2,"explanation":"理数科の学習の一環として、1年次に尾瀬で生物の野外実習を行います。","category":"新潟高校"},
+  {"id":"nii-044","question":"理数科の教育課程で、2年次の訪問・見学先に挙げられるのは？","choices":["新潟大学の教育学部","上越教育大学","長岡技術科学大学","新潟大学の医歯学部"],"answer":3,"explanation":"学校概要では、2年次の活動例として筑波での実習や新潟大学の医歯学部見学を紹介しています。","category":"新潟高校"},
+  {"id":"nii-045","question":"令和7年度の学校案内で「青陵祭」と呼ばれている行事は？","choices":["球技大会","体育祭","文化祭","卒業式"],"answer":1,"explanation":"新潟高校の体育祭は青陵祭と呼ばれ、文化祭には別の名前があります。","category":"新潟高校"},
+  {"id":"nii-046","question":"令和7年度の学校案内で、文化祭の名前は？","choices":["新緑祭","白山祭","青陵祭","青山祭"],"answer":3,"explanation":"新潟高校の文化祭の名称は青山祭です。青陵祭は体育祭を指します。","category":"新潟高校"},
+  {"id":"nii-047","question":"令和7年度の学校案内で、理数科2年のサイエンスコースの研修先は？","choices":["仙台","名古屋","金沢","つくば"],"answer":3,"explanation":"理数科サイエンスコースの2年生を対象に、つくば研修が掲載されています。","category":"新潟高校"},
+  {"id":"nii-048","question":"令和7年度の学校案内で紹介されたSTEAMアメリカ研修の行き先は？","choices":["サンディエゴ","ボストン","ピッツバーグ","シアトル"],"answer":2,"explanation":"学校案内には、ピッツバーグでの10日間の研修が紹介されています。","category":"新潟高校"},
+  {"id":"nii-049","question":"学校案内によると、講演会に使われる視聴覚ホールの収容人数は？","choices":["200人","800人","400人","100人"],"answer":2,"explanation":"令和7年度の学校案内では、視聴覚ホールは400人を収容できると案内しています。","category":"新潟高校"},
+  {"id":"nii-050","question":"令和7年度の学校案内で紹介されている同好会の一つは？","choices":["鉄道模型同好会","クイズ同好会","将棋AI同好会","落語同好会"],"answer":1,"explanation":"部活動などの紹介には、クイズ同好会が掲載されています。","category":"新潟高校"},
+  {"id":"des-001","question":"リビングとキッチンの位置関係を上から確かめたい。最初に見る図面は？","choices":["平面図","立面図","基礎伏図","断面図"],"answer":0,"explanation":"平面図は階ごとに部屋や壁、出入口の並びを見る図です。横方向の動線もたどれます。","category":"設計"},
+  {"id":"des-002","question":"道路側から見た外壁や窓の配置を確認するのに向いている図面は？","choices":["平面図","立面図","配置図","建具表"],"answer":1,"explanation":"立面図は建物を外から見たときの形を描きます。外観の窓の高さや並びも読み取れます。","category":"設計"},
+  {"id":"des-003","question":"吹き抜けが上の階とどうつながるか、上下の関係を確認しやすい図面は？","choices":["建具表","配置図","断面図","仕上表"],"answer":2,"explanation":"建物を縦に切った断面図なら、階の高さや上下に続く空間が分かります。","category":"設計"},
+  {"id":"des-004","question":"敷地の境界と建物の間にどれだけ空きがあるか。敷地全体を上から見るときに使うのは？","choices":["立面図","配置図","建具表","室内展開図"],"answer":1,"explanation":"配置図には敷地の境界と、その中に建物がどう置かれるかが描かれます。","category":"設計"},
+  {"id":"des-005","question":"床はフローリング、壁はクロスなど、各室の仕上げ材を一覧で確かめる資料は？","choices":["求積図","建具表","仕上表","工程表"],"answer":2,"explanation":"仕上表を見ると、床・壁・天井の仕上げに何を使うかをまとめて確認できます。","category":"設計"},
+  {"id":"des-006","question":"窓やドアの種類・寸法・仕様を記号ごとに整理した図書は？","choices":["建具表","仕上表","敷地測量図","求積図"],"answer":0,"explanation":"建具表は出入口や窓の建具をまとめた一覧です。形や寸法、仕様が記載されます。","category":"設計"},
+  {"id":"des-007","question":"室内の壁を正面から見て、棚とコンセントの上下関係を確かめるのに向いている図は？","choices":["室内展開図","配置図","屋根伏図","求積図"],"answer":0,"explanation":"室内展開図は部屋の壁を1面ずつ正面から描きます。棚や電気設備の取り付け高さも示せます。","category":"設計"},
+  {"id":"des-008","question":"屋根から基礎までを縦に切り、壁や床の重なりや材料まで詳しく描く図は？","choices":["矩計図（かなばかりず）","配置図","建具表","求積図"],"answer":0,"explanation":"矩計図は詳細な断面図です。部材の厚さや納まりなど、構成を確認するのに使います。","category":"設計"},
+  {"id":"des-009","question":"オープンキッチンの作業台がどの壁にも触れず、島のように独立する配置は？","choices":["アイランド型","壁付I型","独立した調理室型","ペニンシュラ型"],"answer":0,"explanation":"アイランド型は作業台の四方が開いた配置です。カウンターを周囲から回り込めます。","category":"設計"},
+  {"id":"des-010","question":"対面キッチンにしたいが、作業台の一端だけ壁につける計画。何型に当たる？","choices":["アイランド型","ペニンシュラ型","独立した調理室型","壁付U型"],"answer":1,"explanation":"ペニンシュラは半島のこと。一端を壁につけ、ほかの側を開いたレイアウトです。","category":"設計"},
+  {"id":"des-011","question":"2面の壁が直角に交わる角に沿って、作業台をひと続きに配置する形は？","choices":["アイランド型","L型","I型","II列型"],"answer":1,"explanation":"L型は2辺が直角につながる形です。部屋の角を作業台として使えます。","category":"設計"},
+  {"id":"des-012","question":"キッチンの「ワークトライアングル」を確認するとき、シンク・加熱機器と結ぶもう1か所は？","choices":["テレビ","洗濯機","冷蔵庫","下駄箱"],"answer":2,"explanation":"冷蔵庫・シンク・加熱機器の3点を結ぶと、調理中によく行き来する経路が見えてきます。","category":"設計"},
+  {"id":"des-013","question":"キッチンから洗面所へ抜け、廊下経由でキッチンに戻れる。行き止まりのない移動経路の呼び名は？","choices":["回遊動線","避難階段","直列動線","垂直動線"],"answer":0,"explanation":"回遊動線は家の中を一周できる経路です。同じ場所へ別のルートで行けるのが特徴です。","category":"設計"},
+  {"id":"des-014","question":"買い置きの食品や飲料をまとめてしまうため、キッチンの近くにつくる収納は？","choices":["ワークスペース","リネン庫","シューズクローク","パントリー"],"answer":3,"explanation":"パントリーは食品などのストックを置く収納です。キッチンの近くにあると取り出しやすくなります。","category":"設計"},
+  {"id":"des-015","question":"玄関のすぐ横に設け、靴・傘・外遊び道具をまとめて収納する場所は？","choices":["シューズクローク","ランドリールーム","リネン庫","パントリー"],"answer":0,"explanation":"シューズクロークは玄関周りの収納です。靴と一緒に外出用の道具も片付けられます。","category":"設計"},
+  {"id":"des-016","question":"扉の前だけでなく、人が中に入って服を選べる収納は？","choices":["オープン棚","パントリー","ウォークインクローゼット","吊り戸棚"],"answer":2,"explanation":"ウォークインクローゼットは人が入れる広さを備えた衣類収納です。中にハンガーや棚を組み合わせられます。","category":"設計"},
+  {"id":"des-017","question":"通路に飾り棚が出っ張らないよう、壁の一部をへこませて小物を飾る。このくぼみは？","choices":["ニッチ","カーテンボックス","巾木","間柱"],"answer":0,"explanation":"ニッチは壁につくるくぼみです。小物やアートの置き場にも利用されます。","category":"設計"},
+  {"id":"des-018","question":"額縁のように庭を見せたい。ガラスが固定されて開閉しない窓は？","choices":["引違い窓","FIX窓","内倒し窓","たてすべり出し窓"],"answer":1,"explanation":"FIX窓はガラスが固定された窓です。開けて換気はできませんが、眺望や採光に使えます。","category":"設計"},
+  {"id":"des-019","question":"2枚の窓を横に動かして、互いに重なるように開ける方式は？","choices":["内倒し窓","引違い窓","FIX窓","上げ下げ窓"],"answer":1,"explanation":"引違い窓はガラスの入った部分を左右にスライドさせる窓です。開閉のために手前へ大きく張り出しません。","category":"設計"},
+  {"id":"des-020","question":"窓の外を壁沿いに流れる風を取り込みたい。縦方向を軸に外へ開くタイプは？","choices":["たてすべり出し窓","引違い窓","FIX窓","片上げ下げ窓"],"answer":0,"explanation":"たてすべり出し窓は外へ開いたガラス戸が壁沿いの風を受け止め、室内に取り込めます。","category":"設計"},
+  {"id":"des-021","question":"外壁に窓を取りにくい場所に、勾配屋根から自然光を入れる。屋根面の窓の呼び名は？","choices":["連窓","地窓","天窓","腰窓"],"answer":2,"explanation":"天窓は屋根面に設ける窓です。室内に上から光を取り込めます。","category":"設計"},
+  {"id":"des-022","question":"合板の上に薄い木材を貼ったタイプと区別して、板そのものが天然木の一枚材でできた床は？","choices":["無垢フローリング","タイルカーペット","クッションフロア","複合フローリング"],"answer":0,"explanation":"無垢フローリングは天然木の一枚材を使う床です。複合タイプは複数の材料を組み合わせます。","category":"設計"},
+  {"id":"des-023","question":"掃除機などで壁の根元を傷つけにくくする、床と壁の境目の細長い部材は？","choices":["鴨居（かもい）","巾木（はばき）","垂木（たるき）","方立（ほうだて）"],"answer":1,"explanation":"巾木は壁の最下部を保護し、壁と床の取り合いを目立ちにくくする横材です。","category":"設計"},
+  {"id":"des-024","question":"美術館の壁で、塗装や壁紙で覆わずコンクリートの表情をそのまま見せる仕上げは？","choices":["クロス貼り","漆喰仕上げ","コンクリート打放し","サイディング張り"],"answer":2,"explanation":"打放しは型枠を外したコンクリート面を仕上げとして見せる工法です。","category":"設計"},
+  {"id":"des-025","question":"和室で柱を壁の中に隠さず、壁の表面に見せるつくり方は？","choices":["組積造","コンクリート打放し","大壁造り","真壁造り"],"answer":3,"explanation":"真壁造りでは柱などが表面に見えます。柱を壁の中に隠す大壁造りと対照的です。","category":"設計"},
+  {"id":"des-026","question":"外壁に工場で作った板状のパネルを張る。窯業系・金属系などがあるこの外装材は？","choices":["無垢フローリング","透湿防水シート","タイルカーペット","サイディングボード"],"answer":3,"explanation":"サイディングボードは外壁の表面に張るパネルです。材質によって窯業系や金属系などに分かれます。","category":"設計"},
+  {"id":"des-027","question":"ダイニングテーブルの上に、コードなどで天井から吊り下げる一般的な照明は？","choices":["ダウンライト","ブラケットライト","フロアスタンド","ペンダントライト"],"answer":3,"explanation":"ペンダントライトは吊り下げ型です。食卓の上や吹き抜けなどのアクセントにも使われます。","category":"設計"},
+  {"id":"des-028","question":"器具を目立たせないように、天井の穴に埋め込む小型の照明は？","choices":["ブラケットライト","ダウンライト","ペンダントライト","フロアスタンド"],"answer":1,"explanation":"ダウンライトは天井に埋め込まれ、主に下方向を照らします。","category":"設計"},
+  {"id":"des-029","question":"ベッドの両脇で床やサイドテーブルをふさがず、器具を壁に固定したい。代表的な照明は？","choices":["フロアスタンド","ペンダントライト","ダウンライト","ブラケットライト"],"answer":3,"explanation":"ブラケットライトは壁面に取り付ける照明です。壁面に表情をつけたいときにも使います。","category":"設計"},
+  {"id":"des-030","question":"部屋全体ではなく、壁に掛けた1枚の絵を狭い範囲だけ強調したい。向いている照明は？","choices":["間接照明用の幅広いライン照明","スポットライト","全般照明用シーリングライト","フットライト"],"answer":1,"explanation":"スポットライトは光を狭い範囲に集中させるのが得意で、絵や置物の強調に使われます。","category":"設計"},
+  {"id":"des-031","question":"天井の段差に光源を隠し、天井に当たって跳ね返った光で部屋を照らす方法は？","choices":["直接照明","スポット照明","間接照明","非常照明"],"answer":2,"explanation":"間接照明では壁や天井、床などに光を当て、その反射光を利用します。","category":"設計"},
+  {"id":"des-032","question":"机の作業面にどれだけ光が届いているかを測る。照度を表す単位は？","choices":["ケルビン（K）","ワット（W）","ルクス（lx）","ルーメン（lm）"],"answer":2,"explanation":"ルクスは面に届く光を表す照度の単位です。ランプの全光束を示すルーメンとは別です。","category":"設計"},
+  {"id":"des-033","question":"LED電球が全方向に出す光の量（全光束）を、パッケージで比べるときに見る単位は？","choices":["ケルビン（K）","ワット（W）","ルクス（lx）","ルーメン（lm）"],"answer":3,"explanation":"ルーメンは光源が出す光束の単位です。ワットは消費電力を表します。","category":"設計"},
+  {"id":"des-034","question":"照明の2700Kと5000Kを比べたとき、一般に黄みや赤みが強いのはどちら？","choices":["Kの数値は消費電力だけを表す","2700K","5000K","どちらも必ず同じ光色"],"answer":1,"explanation":"色温度が低い照明ほど、光色は黄みや赤みを帯びる傾向があります。電球色はその代表例です。","category":"設計"},
+  {"id":"des-035","question":"展示物を照らしたときに、光が物の色の見え方に及ぼす性質は？","choices":["色温度","演色性","配光","消費電力"],"answer":1,"explanation":"照明の演色性は、照らされた物の色の見え方に関わる性質です。平均演色評価数Raなどで表します。","category":"設計"},
+  {"id":"des-036","question":"同じくらいの明るさと鮮やかさの赤い壁と青い壁。赤と青の「色合い」の違いを指す言葉は？","choices":["照度","彩度","色相","明度"],"answer":2,"explanation":"色相は赤・黄・青のような色の系統の違いを表します。","category":"設計"},
+  {"id":"des-037","question":"同じグレーを、もっと白に近い明るいグレーへ変えたい。見直したのは色の何？","choices":["色相","明度","照度","彩度"],"answer":1,"explanation":"明度は色そのものの明るさです。白に近いグレーは、黒に近いグレーより明度が高くなります。","category":"設計"},
+  {"id":"des-038","question":"クッションの鮮やかな赤を、くすんだ赤に変える。鮮やかさを示すどの属性を下げる？","choices":["色温度","色相","明度","彩度"],"answer":3,"explanation":"彩度は色の鮮やかさの度合いです。赤の系統を残しつつ、鮮やかさを抑えるなら彩度を下げます。","category":"設計"},
+  {"id":"des-039","question":"日本色研配色体系（PCCS）の「トーン」は、色のどの2属性を組み合わせたもの？","choices":["色相と照度","色相と色温度","明度と彩度","光束と照度"],"answer":2,"explanation":"トーンは、明るさと鮮やかさを組み合わせた色の調子です。色相が違っても「淡い」などの印象をそろえられます。","category":"設計"},
+  {"id":"des-040","question":"窓全体の熱貫流率Uwが1.0と2.0。同じ条件で断熱性がより高いと読めるのは？","choices":["Uwでは日差しの色しか比較できない","Uwが2.0の窓","2つは同じ","Uwが1.0の窓"],"answer":3,"explanation":"熱貫流率が小さいほど、温度差に対して通過する熱が少なくなり、断熱性が高くなります。","category":"設計"},
+  {"id":"des-041","question":"夏の強い日差しによる室内の温度上昇を抑えたい。2種類のLow-E複層ガラスのうち目的に合うのは？","choices":["日射取得型","どちらも日射の通り方は同じ","日射遮蔽型","どちらも可視光と日射を完全に遮る"],"answer":2,"explanation":"日射遮蔽型は外から入る日射熱を抑えることを重視したタイプです。","category":"設計"},
+  {"id":"des-042","question":"強い風雨でも窓まわりから雨水が入りにくい性質を示す言葉は？","choices":["防露性","断熱性","遮音性","水密性"],"answer":3,"explanation":"水密性は窓などから雨水が入りにくい性能です。室内側などで結露が生じにくい性能は防露性と呼びます。","category":"設計"},
+  {"id":"des-043","question":"低い窓から外気を入れ、吹き抜け上部の窓から暖まった空気を出す。主に何を利用する換気？","choices":["暖かい空気が必ず下に沈む性質","暖かい空気が上に移動する性質","床材が光を反射する性質","色の明度による見え方の違い"],"answer":1,"explanation":"暖まった室内の空気は上へ移動します。高低差をつけた開口は、その動きを利用する換気に使われます。","category":"設計"},
+  {"id":"des-044","question":"玄関の段差を、車いすで連続して移動できる傾斜面でつなぐ。その傾斜面の名称は？","choices":["踊り場","踏面","前室","スロープ"],"answer":3,"explanation":"スロープは高さの違う場所を連続した傾斜でつなぎます。資料には玄関段差を解消した事例があります。","category":"設計"},
+  {"id":"des-045","question":"階段の1段ごとの「高さ」を示す言葉は？","choices":["踏面","幅員","踊り場","蹴上げ"],"answer":3,"explanation":"蹴上げは階段の垂直方向の1段分です。足を置く部分の奥行きは踏面と呼びます。","category":"設計"},
+  {"id":"des-046","question":"洗面台の下にある曲がった排水管。内部に水をためて主に何を防いでいる？","choices":["蛇口の水流が速くなりすぎること","壁のクロスが日焼けすること","水道水が冷たくなること","下水の臭いが上がってくること"],"answer":3,"explanation":"排水トラップにたまった水がふたになり、排水管の臭いが室内へ上がりにくくなります。","category":"設計"},
+  {"id":"des-047","question":"引違い窓の中央で、回して窓を締める三日月形に由来する金物は？","choices":["クレセント","丁番","ドアクローザー","戸当たり"],"answer":0,"explanation":"クレセントは引違い窓などを締める回転式の金物です。名前は形が三日月に似ることに由来します。","category":"設計"},
+  {"id":"des-048","question":"体育館の屋根で、三角形が連なる骨組みを見かけた。この構造の呼び名は？","choices":["トラス","ドーム","スラブ","アーチ"],"answer":0,"explanation":"トラスは三角形を組み合わせた骨組みです。木造や鉄骨造の屋根などに利用されます。","category":"設計"},
+  {"id":"des-049","question":"地下室の外壁のすぐ外に掘り下げた空間をつくり、窓から光や風を入れる。この屋外の空間は？","choices":["ドライエリア","屋上庭園","小屋裏","パントリー"],"answer":0,"explanation":"ドライエリアは地下外壁の周囲に設ける屋外の空間です。地下室の採光や換気に使われます。","category":"設計"},
+  {"id":"des-050","question":"ル・コルビュジエの近代建築の５原則に挙がる、横一列に長く続く窓は？","choices":["地窓","高窓","水平連続窓","回転窓"],"answer":2,"explanation":"水平連続窓は壁面を横に長く延びる窓です。自由な平面や屋上庭園などとともに五原則に含まれます。","category":"設計"},
+  {"id":"set-001","question":"世田谷区が、当時の東京市の区として発足した年は？","choices":["1923年","1950年","1932年","1964年"],"answer":2,"explanation":"1932年10月1日に世田谷区が発足しました。2022年に区制施行90周年を迎えています。","category":"世田谷"},
+  {"id":"set-002","question":"頭が黒く、淡い青色の長い尾が目印の「世田谷区の鳥」は？","choices":["オナガ","カワセミ","メジロ","ヒヨドリ"],"answer":0,"explanation":"オナガはカラス科の鳥。区の資料では頭の黒さと、淡い青の長い尾が特徴とされています。","category":"世田谷"},
+  {"id":"set-003","question":"白い鳥が羽を広げたような花をつける、世田谷区の花は？","choices":["シラユリ","ヤマボウシ","コブシ","サギソウ"],"answer":3,"explanation":"サギソウはランの仲間。白い花びらの姿が、白サギが飛ぶところに似ています。","category":"世田谷"},
+  {"id":"set-004","question":"世田谷美術館の本館が、公園の緑の中に建っている。その公園は？","choices":["駒沢オリンピック公園","砧公園","羽根木公園","世田谷公園"],"answer":1,"explanation":"世田谷美術館の本館は砧公園にあります。美術館では、周囲の緑を生かした建築も楽しめます。","category":"世田谷"},
+  {"id":"set-005","question":"世田谷のボロ市のルーツとなる楽市を、1578年に開いたと区が紹介する人物は？","choices":["北条氏政","徳川家康","豊臣秀吉","太田道灌"],"answer":0,"explanation":"小田原城主の北条氏政が世田谷新宿で楽市を開いたことが、ボロ市の始まりとされています。","category":"世田谷"},
+  {"id":"set-006","question":"世田谷代官屋敷に住み、彦根藩の世田谷領で代官を代々務めた家は？","choices":["井伊家","吉良家","大場家","水野家"],"answer":2,"explanation":"大場家は彦根藩世田谷領で代官を世襲しました。その役宅だったため、大場代官屋敷とも呼ばれます。","category":"世田谷"},
+  {"id":"set-007","question":"世田谷の松陰神社が祭神としてまつる人物は？","choices":["高杉晋作","勝海舟","緒方洪庵","吉田松陰"],"answer":3,"explanation":"祭神は吉田松陰です。世田谷の松陰神社には松陰の墓所もあります。","category":"世田谷"},
+  {"id":"set-008","question":"豪徳寺の「招福猫児（まねきねこ）」には、よく見る招き猫と違って、手元に何がない？","choices":["小判","鈴","扇子","竹の杖"],"answer":0,"explanation":"豪徳寺の招き猫は小判を持たないのが特徴。寺では「縁を招く猫」と説明しています。","category":"世田谷"},
+  {"id":"set-009","question":"東京都の解説で、1480年に世田谷城内に庵を建てたとされる世田谷城主は？","choices":["井伊直孝","吉良政忠","北条早雲","伊達政宗"],"answer":1,"explanation":"吉良政忠は伯母を弔うために小さな庵を建てました。東京都の解説では、この庵が豪徳寺の前身とされています。","category":"世田谷"},
+  {"id":"set-010","question":"粕谷の蘆花恒春園に旧宅が保存されている、作家は？","choices":["島崎藤村","森鷗外","徳冨蘆花","泉鏡花"],"answer":2,"explanation":"蘆花恒春園には作家の徳冨蘆花が暮らした旧宅と、蘆花記念館があります。","category":"世田谷"},
+  {"id":"set-011","question":"世田谷文学館が、電車で来る人向けに徒歩でのアクセスを案内している京王線の駅は？","choices":["下高井戸","桜上水","明大前","芦花公園"],"answer":3,"explanation":"世田谷文学館へは、京王線の芦花公園駅から徒歩で行けます。","category":"世田谷"},
+  {"id":"set-012","question":"1964年の東京オリンピックで、馬場馬術が行われた世田谷の会場は？","choices":["馬事公苑","大蔵運動公園","駒沢屋内球技場","世田谷公園"],"answer":0,"explanation":"馬場馬術の会場は馬事公苑でした。JRAの年表に記録されています。","category":"世田谷"},
+  {"id":"set-013","question":"1964年の東京オリンピックで第2会場となり、レスリングやバレーボールが行われた公園は？","choices":["代々木公園","上野恩賜公園","駒沢オリンピック公園","日比谷公園"],"answer":2,"explanation":"駒沢オリンピック公園は東京オリンピックの第2会場で、複数の競技が行われました。","category":"世田谷"},
+  {"id":"set-014","question":"『サザエさん』の作者・長谷川町子の名を冠した美術館は、世田谷のどの町にある？","choices":["桜新町","松原","経堂","三宿"],"answer":0,"explanation":"桜新町に長谷川町子美術館があります。作者とその家族の美術コレクションを展示しています。","category":"世田谷"},
+  {"id":"set-015","question":"三軒茶屋の地名の由来とされる三軒の茶屋は、何の分岐点付近にあった？","choices":["多摩川本流と支流の合流点","東急の2本の鉄道路線","大山道の本道と近道","甲州街道と青梅街道"],"answer":2,"explanation":"地元町会によると、大山道の本道（今の世田谷通り）と近道（今の玉川通り）の分かれ目付近に三軒の茶屋がありました。","category":"世田谷"},
+  {"id":"set-016","question":"かつての農家の建物を見学できる「次大夫堀公園民家園」は、世田谷のどの町にある？","choices":["上北沢","喜多見","下馬","弦巻"],"answer":1,"explanation":"次大夫堀公園民家園は喜多見にあります。園には移築・復元された古民家があります。","category":"世田谷"},
+  {"id":"set-017","question":"成城五丁目猪股庭園に残る、数寄屋造りの旧猪股邸を手がけた建築家は？","choices":["黒川紀章","前川國男","丹下健三","吉田五十八"],"answer":3,"explanation":"吉田五十八（よしだ いそや）が猪股夫妻の邸宅を手がけました。主屋と回遊式の庭園が残っています。","category":"世田谷"},
+  {"id":"set-018","question":"烏山寺町が形づくられるきっかけとなった出来事は？","choices":["関東大震災","阪神・淡路大震災","東京オリンピック","東海道新幹線の開業"],"answer":0,"explanation":"1923年の関東大震災の後、浅草や築地などから寺院が移転して集まり、烏山寺町が形づくられました。","category":"世田谷"},
+  {"id":"set-019","question":"早春に花を楽しむ催しで知られ、「白加賀」や「紅千鳥」などの品種が植えられている羽根木公園。園内にあるのは？","choices":["ツツジ園","竹林","梅林","桜並木"],"answer":2,"explanation":"羽根木公園には紅梅や白梅の梅林があり、早春に梅の花が楽しめます。","category":"世田谷"},
+  {"id":"set-020","question":"本多劇場やザ・スズナリがある、演劇の街として知られるエリアは？","choices":["成城学園前","下北沢","二子玉川","尾山台"],"answer":1,"explanation":"本多劇場とザ・スズナリはいずれも北沢にあり、最寄り駅は下北沢です。","category":"世田谷"},
+  {"id":"rte-001","question":"二子玉川公園の中にある、旧清水邸書院を復元した日本庭園の名前は？","choices":["等々力庭園","帰真園","向島百花園","殿ヶ谷戸庭園"],"answer":1,"explanation":"帰真園（きしんえん）は二子玉川公園の日本庭園。旧清水邸書院が復元されています。","category":"二子玉川駅から大岡山までの地理・歴史"},
+  {"id":"rte-002","question":"二子玉川園跡地を再開発するまでの間、1992年に開業したテーマパークは？","choices":["ナムコ・ワンダーエッグ","よこはまコスモワールド","東京ドームシティ アトラクションズ","サンリオピューロランド"],"answer":0,"explanation":"二子玉川タイムスパークの施設の一つとして、ナムコ・ワンダーエッグが開業しました。","category":"二子玉川駅から大岡山までの地理・歴史"},
+  {"id":"rte-003","question":"今の二子玉川駅が、1954年から2000年まで名乗っていた駅名は？","choices":["玉川学園前","二子新地","二子玉川園","二子読売園"],"answer":2,"explanation":"1954年に二子玉川園駅に改称し、2000年に二子玉川駅の名に戻りました。二子読売園と呼ばれたのはそれより前です。","category":"二子玉川駅から大岡山までの地理・歴史"},
+  {"id":"rte-004","question":"上野毛の五島美術館をつくる構想を立てた、東急グループゆかりの実業家は？","choices":["渋沢栄一","小林一三","根津嘉一郎","五島慶太"],"answer":3,"explanation":"美術館の開館は1960年。設立を構想したのは、東急グループの発展に関わった五島慶太です。","category":"二子玉川駅から大岡山までの地理・歴史"},
+  {"id":"rte-005","question":"五島美術館が3帖分を所蔵する、光源氏を主人公とする物語を絵にした国宝は？","choices":["伴大納言絵巻","源氏物語絵巻","鳥獣人物戯画","信貴山縁起絵巻"],"answer":1,"explanation":"五島美術館には「鈴虫」「夕霧」「御法」の場面を描いた源氏物語絵巻が伝わっています。","category":"二子玉川駅から大岡山までの地理・歴史"},
+  {"id":"rte-006","question":"遊歩道を歩きながら、春には桜を楽しめる上野毛駅近くの公園は？","choices":["戸越公園","林試の森公園","上野毛自然公園","洗足池公園"],"answer":2,"explanation":"上野毛自然公園には遊歩道があり、春の桜が見どころです。","category":"二子玉川駅から大岡山までの地理・歴史"},
+  {"id":"rte-007","question":"等々力渓谷の谷底を流れ、多摩川へ向かう川は？","choices":["谷沢川","善福寺川","目黒川","渋谷川"],"answer":0,"explanation":"谷沢川（やざわがわ）が流れる谷が等々力渓谷です。世田谷区の公園紹介では多摩川へ向かう流れと説明されています。","category":"二子玉川駅から大岡山までの地理・歴史"},
+  {"id":"rte-008","question":"等々力渓谷への入口近くに架かる「ゴルフ橋」。その名前は何にちなむ？","choices":["橋を設計した人のあだ名","近くの競馬場","橋の形がゴルフクラブに似ていること","かつて近くにあったゴルフ場"],"answer":3,"explanation":"昭和初め、旧下野毛・等々力村にゴルフ場があったことにちなんだ名前です。","category":"二子玉川駅から大岡山までの地理・歴史"},
+  {"id":"rte-009","question":"等々力渓谷の斜面で発見された「3号横穴」は、何のための施設だった？","choices":["湧き水を貯める水槽","人を葬る墓","物資を運ぶトンネル","狩りの見張り台"],"answer":1,"explanation":"3号横穴は斜面を掘ってつくられた横穴墓です。中から人骨や副葬品が見つかりました。","category":"二子玉川駅から大岡山までの地理・歴史"},
+  {"id":"rte-010","question":"石畳の商店街「ハッピーロード尾山台」が、尾山台駅から結ぶ幹線道路は？","choices":["環状七号線","明治通り","環状八号線","青梅街道"],"answer":2,"explanation":"街路樹と石畳の商店街が、尾山台駅から環状八号線まで続いています。","category":"二子玉川駅から大岡山までの地理・歴史"},
+  {"id":"rte-011","question":"世田谷区の地名案内によると、近世末期まで現在の尾山台の辺りは何村と呼ばれた？","choices":["小山（おやま）村","馬込村","碑文谷村","調布村"],"answer":0,"explanation":"区の資料では荏原郡小山（おやま）村と呼ばれていたとしています。「尾山」は「小山」からの変化と考えられています。","category":"二子玉川駅から大岡山までの地理・歴史"},
+  {"id":"rte-012","question":"九品仏浄真寺の三つの仏堂に安置されている九体の仏像は、何如来？","choices":["薬師如来","大日如来","釈迦如来","阿弥陀如来"],"answer":3,"explanation":"九体はそれぞれ九つの往生のあり方に対応する阿弥陀如来像です。本堂の本尊とは別に安置されています。","category":"二子玉川駅から大岡山までの地理・歴史"},
+  {"id":"rte-013","question":"江戸時代に浄真寺が建てられたのは、どの城の跡地？","choices":["江戸城","奥沢城","世田谷城","小机城"],"answer":1,"explanation":"浄真寺の縁起では、珂碩上人が1678年に奥沢城跡を与えられ、この地に寺を開いたとされています。","category":"二子玉川駅から大岡山までの地理・歴史"},
+  {"id":"rte-014","question":"目黒区によると、「自由が丘」の地名の由来とされる学校は？","choices":["成城学園","田園調布学園","自由ヶ丘学園","玉川学園"],"answer":2,"explanation":"手塚岸衛が1927年に創設した自由ヶ丘学園が地名の由来とされています。","category":"二子玉川駅から大岡山までの地理・歴史"},
+  {"id":"rte-015","question":"自由が丘の商業施設「JIYUGAOKA de aone」の場所にかつてあった、『窓ぎわのトットちゃん』の舞台となった学園は？","choices":["トモエ学園","和光学園","成蹊学園","玉川学園"],"answer":0,"explanation":"黒柳徹子が通ったトモエ学園です。跡地の商業施設の入口には記念碑があります。","category":"二子玉川駅から大岡山までの地理・歴史"},
+  {"id":"rte-016","question":"目黒区が紹介する「緑が丘」の地名の由来は？","choices":["駅舎が緑色だったこと","緑色の橋が架かっていたこと","村長が「緑」という名字だったこと","木立が豊かな高台だったこと"],"answer":3,"explanation":"緑が丘の一帯は自然林に覆われた丘陵地でした。その景観が地名の由来とされています。","category":"二子玉川駅から大岡山までの地理・歴史"},
+  {"id":"rte-017","question":"緑が丘三丁目から八雲三丁目にかけて目黒区が案内する緑道は？","choices":["九品仏川緑道","呑川本流緑道","蛇崩川緑道","立会川緑道"],"answer":1,"explanation":"目黒区の一覧では、呑川本流緑道が緑が丘三丁目から八雲三丁目にわたっています。","category":"二子玉川駅から大岡山までの地理・歴史"},
+  {"id":"rte-018","question":"地名としての大岡山は目黒区にもありますが、東急の大岡山駅の住所はどの区？","choices":["世田谷区","品川区","大田区","渋谷区"],"answer":2,"explanation":"駅の所在地は大田区北千束です。周辺地域は大田区と目黒区にまたがります。","category":"二子玉川駅から大岡山までの地理・歴史"},
+  {"id":"rte-019","question":"1924年に大岡山へ移転した東京高等工業学校は、関東大震災の前はどこにあった？","choices":["台東区の蔵前","中央区の築地","文京区の本郷","北区の王子"],"answer":0,"explanation":"東京工業大学の前身は蔵前の隅田川沿いにありました。1923年の震災で被害を受け、翌年に大岡山へ移りました。","category":"二子玉川駅から大岡山までの地理・歴史"},
+  {"id":"rte-020","question":"太平洋戦争中、大岡山キャンパスの本館前のスロープでは何を育てていた？","choices":["大麦","綿花","菜の花","さつまいも"],"answer":3,"explanation":"戦時中には本館が迷彩色で塗られ、本館前の傾斜地はさつまいも畑として利用されました。","category":"二子玉川駅から大岡山までの地理・歴史"},
+  {"id":"lang-001","question":"フランス語で「りんご」は？","choices":["poire","pomme","fraise","orange"],"answer":1,"explanation":"「pomme」は「りんご」です。 冠詞をつけると「une pomme」と表せます。","category":"フランス語・イタリア語の単語","lang":"fr-FR","foreignChoices":true},
+  {"id":"lang-002","question":"フランス語で「犬」は？","choices":["chat","lapin","cheval","chien"],"answer":3,"explanation":"「chien」は「犬」です。 冠詞をつけると「un chien」と表せます。","category":"フランス語・イタリア語の単語","lang":"fr-FR","foreignChoices":true},
+  {"id":"lang-003","question":"フランス語で「牛乳」は？","choices":["eau","jus","lait","soupe"],"answer":2,"explanation":"「lait」は「乳・ミルク」のこと。牛の乳だとはっきり言うときは「lait de vache」と言います。","category":"フランス語・イタリア語の単語","lang":"fr-FR","foreignChoices":true},
+  {"id":"lang-004","question":"フランス語で「月曜日」は？","choices":["lundi","mardi","vendredi","dimanche"],"answer":0,"explanation":"「lundi」は「月曜日」です。","category":"フランス語・イタリア語の単語","lang":"fr-FR","foreignChoices":true},
+  {"id":"lang-005","question":"フランス語で「窓」は？","choices":["porte","fenêtre","mur","toit"],"answer":1,"explanation":"「fenêtre」は「窓」です。 冠詞をつけると「une fenêtre」と表せます。","category":"フランス語・イタリア語の単語","lang":"fr-FR","foreignChoices":true},
+  {"id":"lang-006","question":"フランス語で「うさぎ」は？","choices":["chien","souris","chat","lapin"],"answer":3,"explanation":"「lapin」は「うさぎ」です。 冠詞をつけると「un lapin」と表せます。","category":"フランス語・イタリア語の単語","lang":"fr-FR","foreignChoices":true},
+  {"id":"lang-007","question":"フランス語で「家」は？","choices":["maison","jardin","école","magasin"],"answer":0,"explanation":"「maison」は「家」です。 冠詞をつけると「une maison」と表せます。","category":"フランス語・イタリア語の単語","lang":"fr-FR","foreignChoices":true},
+  {"id":"lang-008","question":"フランス語で「太陽」は？","choices":["lune","étoile","soleil","nuage"],"answer":2,"explanation":"「soleil」は「太陽」です。 冠詞をつけると「le soleil」と表せます。","category":"フランス語・イタリア語の単語","lang":"fr-FR","foreignChoices":true},
+  {"id":"lang-009","question":"フランス語で「月（空に見える天体）」は？","choices":["soleil","nuage","étoile","lune"],"answer":3,"explanation":"「lune」は「月（空に見える天体）」です。 冠詞をつけると「la lune」と表せます。","category":"フランス語・イタリア語の単語","lang":"fr-FR","foreignChoices":true},
+  {"id":"lang-010","question":"フランス語で「星」は？","choices":["nuage","étoile","lune","soleil"],"answer":1,"explanation":"「étoile」は「星」です。 冠詞をつけると「une étoile」と表せます。","category":"フランス語・イタリア語の単語","lang":"fr-FR","foreignChoices":true},
+  {"id":"lang-011","question":"フランス語で「テーブル」は？","choices":["chaise","lit","table","tapis"],"answer":2,"explanation":"「table」は「テーブル」です。 冠詞をつけると「une table」と表せます。","category":"フランス語・イタリア語の単語","lang":"fr-FR","foreignChoices":true},
+  {"id":"lang-012","question":"フランス語で「椅子」は？","choices":["chaise","table","lampe","lit"],"answer":0,"explanation":"「chaise」は「椅子」です。 冠詞をつけると「une chaise」と表せます。","category":"フランス語・イタリア語の単語","lang":"fr-FR","foreignChoices":true},
+  {"id":"lang-013","question":"フランス語で「学校」は？","choices":["parc","maison","école","zoo"],"answer":2,"explanation":"「école」は「学校」です。 冠詞をつけると「une école」と表せます。","category":"フランス語・イタリア語の単語","lang":"fr-FR","foreignChoices":true},
+  {"id":"lang-014","question":"フランス語で「お母さん」は？","choices":["papa","papi","mamie","maman"],"answer":3,"explanation":"「maman」は「お母さん」です。","category":"フランス語・イタリア語の単語","lang":"fr-FR","foreignChoices":true},
+  {"id":"lang-015","question":"フランス語で「お父さん」は？","choices":["papa","maman","papi","mamie"],"answer":0,"explanation":"「papa」は「お父さん」です。","category":"フランス語・イタリア語の単語","lang":"fr-FR","foreignChoices":true},
+  {"id":"lang-016","question":"フランス語で「鼻」は？","choices":["bouche","nez","main","pied"],"answer":1,"explanation":"「nez」は「鼻」です。 冠詞をつけると「un nez」と表せます。","category":"フランス語・イタリア語の単語","lang":"fr-FR","foreignChoices":true},
+  {"id":"lang-017","question":"フランス語で「手」は？","choices":["nez","bras","tête","main"],"answer":3,"explanation":"「main」は「手」です。 冠詞をつけると「une main」と表せます。","category":"フランス語・イタリア語の単語","lang":"fr-FR","foreignChoices":true},
+  {"id":"lang-018","question":"フランス語で「足（くるぶしより先）」は？","choices":["main","pied","genou","doigt"],"answer":1,"explanation":"「pied」は「足（くるぶしより先）」です。 冠詞をつけると「un pied」と表せます。","category":"フランス語・イタリア語の単語","lang":"fr-FR","foreignChoices":true},
+  {"id":"lang-019","question":"フランス語で「靴」は？","choices":["chaussure","chapeau","chemise","gant"],"answer":0,"explanation":"「chaussure」は「靴」です。 冠詞をつけると「une chaussure」と表せます。","category":"フランス語・イタリア語の単語","lang":"fr-FR","foreignChoices":true},
+  {"id":"lang-020","question":"フランス語で「木（植物）」は？","choices":["fleur","feuille","arbre","herbe"],"answer":2,"explanation":"「arbre」は「木（植物）」です。 冠詞をつけると「un arbre」と表せます。","category":"フランス語・イタリア語の単語","lang":"fr-FR","foreignChoices":true},
+  {"id":"lang-021","question":"イタリア語で「猫」は？","choices":["cane","orso","gatto","uccello"],"answer":2,"explanation":"「gatto」は「猫」です。 冠詞をつけると「un gatto」と表せます。","category":"フランス語・イタリア語の単語","lang":"it-IT","foreignChoices":true},
+  {"id":"lang-022","question":"イタリア語で「パン」は？","choices":["pane","pasta","riso","formaggio"],"answer":0,"explanation":"「pane」は「パン」です。 冠詞をつけると「il pane」と表せます。","category":"フランス語・イタリア語の単語","lang":"it-IT","foreignChoices":true},
+  {"id":"lang-023","question":"イタリア語で「水」は？","choices":["latte","tè","succo","acqua"],"answer":3,"explanation":"「acqua」は「水」です。 冠詞をつけると「l’acqua」と表せます。","category":"フランス語・イタリア語の単語","lang":"it-IT","foreignChoices":true},
+  {"id":"lang-024","question":"イタリア語で「本」は？","choices":["matita","libro","foglio","zaino"],"answer":1,"explanation":"「libro」は「本」です。 冠詞をつけると「un libro」と表せます。","category":"フランス語・イタリア語の単語","lang":"it-IT","foreignChoices":true},
+  {"id":"lang-025","question":"イタリア語で「花」は？","choices":["albero","fiore","foglia","erba"],"answer":1,"explanation":"「fiore」は「花」です。 冠詞をつけると「un fiore」と表せます。","category":"フランス語・イタリア語の単語","lang":"it-IT","foreignChoices":true},
+  {"id":"lang-026","question":"イタリア語で「鳥」は？","choices":["pesce","cane","uccello","farfalla"],"answer":2,"explanation":"「uccello」は「鳥」です。 冠詞をつけると「un uccello」と表せます。","category":"フランス語・イタリア語の単語","lang":"it-IT","foreignChoices":true},
+  {"id":"lang-027","question":"イタリア語で「魚」は？","choices":["gatto","topo","cavallo","pesce"],"answer":3,"explanation":"「pesce」は「魚」です。 冠詞をつけると「un pesce」と表せます。","category":"フランス語・イタリア語の単語","lang":"it-IT","foreignChoices":true},
+  {"id":"lang-028","question":"イタリア語で「ボール（遊びやスポーツに使う球）」は？","choices":["palla","bambola","corda","cubo"],"answer":0,"explanation":"「palla」は「ボール（遊びやスポーツに使う球）」です。 冠詞をつけると「una palla」と表せます。","category":"フランス語・イタリア語の単語","lang":"it-IT","foreignChoices":true},
+  {"id":"lang-029","question":"イタリア語で「ドア」は？","choices":["finestra","muro","porta","tetto"],"answer":2,"explanation":"「porta」は「ドア」です。 冠詞をつけると「una porta」と表せます。","category":"フランス語・イタリア語の単語","lang":"it-IT","foreignChoices":true},
+  {"id":"lang-030","question":"イタリア語で「ベッド」は？","choices":["letto","sedia","tavolo","porta"],"answer":0,"explanation":"「letto」は「ベッド」です。 冠詞をつけると「un letto」と表せます。","category":"フランス語・イタリア語の単語","lang":"it-IT","foreignChoices":true},
+  {"id":"lang-031","question":"イタリア語で「バナナ」は？","choices":["mela","banana","pera","arancia"],"answer":1,"explanation":"「banana」は「バナナ」です。 冠詞をつけると「una banana」と表せます。","category":"フランス語・イタリア語の単語","lang":"it-IT","foreignChoices":true},
+  {"id":"lang-032","question":"イタリア語で「クマ」は？","choices":["cane","gatto","cavallo","orso"],"answer":3,"explanation":"「orso」は「クマ」です。 冠詞をつけると「un orso」と表せます。","category":"フランス語・イタリア語の単語","lang":"it-IT","foreignChoices":true},
+  {"id":"lang-033","question":"イタリア語で「ネズミ」は？","choices":["topo","gatto","orso","cavallo"],"answer":0,"explanation":"「topo」は「ネズミ」です。 冠詞をつけると「un topo」と表せます。","category":"フランス語・イタリア語の単語","lang":"it-IT","foreignChoices":true},
+  {"id":"lang-034","question":"イタリア語で「チョウ（昆虫）」は？","choices":["ape","formica","mosca","farfalla"],"answer":3,"explanation":"「farfalla」は「チョウ（昆虫）」です。 冠詞をつけると「una farfalla」と表せます。","category":"フランス語・イタリア語の単語","lang":"it-IT","foreignChoices":true},
+  {"id":"lang-035","question":"イタリア語で「馬」は？","choices":["gatto","topo","cavallo","cane"],"answer":2,"explanation":"「cavallo」は「馬」です。 冠詞をつけると「un cavallo」と表せます。","category":"フランス語・イタリア語の単語","lang":"it-IT","foreignChoices":true},
+  {"id":"lang-036","question":"イタリア語で「鉛筆」は？","choices":["penna","matita","gomma","righello"],"answer":1,"explanation":"「matita」は「鉛筆」です。 冠詞をつけると「una matita」と表せます。","category":"フランス語・イタリア語の単語","lang":"it-IT","foreignChoices":true},
+  {"id":"lang-037","question":"イタリア語で「スプーン」は？","choices":["forchetta","coltello","piatto","cucchiaio"],"answer":3,"explanation":"「cucchiaio」は「スプーン」です。 冠詞をつけると「un cucchiaio」と表せます。","category":"フランス語・イタリア語の単語","lang":"it-IT","foreignChoices":true},
+  {"id":"lang-038","question":"イタリア語で「帽子」は？","choices":["guanto","cappello","scarpa","maglietta"],"answer":1,"explanation":"「cappello」は「帽子」です。 冠詞をつけると「un cappello」と表せます。","category":"フランス語・イタリア語の単語","lang":"it-IT","foreignChoices":true},
+  {"id":"lang-039","question":"イタリア語で「耳」は？","choices":["orecchio","occhio","naso","bocca"],"answer":0,"explanation":"「orecchio」は「耳」です。 冠詞をつけると「un orecchio」と表せます。","category":"フランス語・イタリア語の単語","lang":"it-IT","foreignChoices":true},
+  {"id":"lang-040","question":"イタリア語で「目」は？","choices":["naso","mano","occhio","orecchio"],"answer":2,"explanation":"「occhio」は「目」です。 冠詞をつけると「un occhio」と表せます。","category":"フランス語・イタリア語の単語","lang":"it-IT","foreignChoices":true}
+];
+const SOURCES = /* SOURCES */ {
+  "select-043": {"title":"国立公文書館「廃藩置県が断行される」","url":"https://www.archives.go.jp/ayumi/kobetsu/m04_1871_04.html","note":"1871年の詔と、政府による府県の長官の任命について。"},
+  "select-045": {"title":"国立公文書館「内閣制度が創始される」","url":"https://www.archives.go.jp/ayumi/kobetsu/m18_1885_01.html","note":"1885年の制度発足と伊藤博文の任命。裁可書の写真も掲載。"},
+  "select-048": {"title":"大英博物館「バビロン」展の解説資料","url":"https://www.britishmuseum.org/sites/default/files/2019-10/Babylon_Teachers_Resource.pdf","note":"英語PDF。5ページの「WRITING」に、シュメール語と粘土板への書き方の解説があります。"},
+  "select-050": {"title":"英国議会「1215年のマグナ・カルタ」","url":"https://www.parliament.uk/about/living-heritage/evolutionofparliament/2015-parliament-in-the-making/get-involved1/2015-banners-exhibition/ruth-ewan/1215-magna-carta-gallery/","note":"英語。ジョン王と貴族たちの対立、王権を制限する条項について。"},
+  "select-118": {"title":"ユネスコ世界遺産センター「秦の始皇帝陵」","url":"https://whc.unesco.org/en/list/441","note":"英語。秦の始皇帝による中国統一と、陵墓の兵士・馬の陶像について。"},
+  "hist-001": {"title":"奈良市「奈良町の成立」","url":"https://www.city.nara.lg.jp/site/bunkazai/2331.html","note":"年表の「710年 平城京に遷都」。"},
+  "hist-002": {"title":"京都市「京都市のあゆみ」","url":"https://www.city.kyoto.lg.jp/sogo/page/0000015599.html","note":"「京都市のあゆみ」年表の794年。"},
+  "hist-003": {"title":"ユネスコ世界遺産センター「法隆寺地域の仏教建造物」","url":"https://whc.unesco.org/en/list/660/","note":"法隆寺地域の仏教建築とその歴史。英語。"},
+  "hist-004": {"title":"鎌倉市「源頼朝ゆかりの寺社」","url":"https://www.city.kamakura.kanagawa.jp/kouhou/kamakura/21/t220101-2-3.html","note":"鶴岡八幡宮と源頼朝の紹介。"},
+  "hist-005": {"title":"福岡市「史跡元寇防塁」","url":"https://www.city.fukuoka.lg.jp/keizai/ds-suishin/life/genkoborui_hakozaki.html","note":"文永の役と弘安の役の説明。"},
+  "hist-006": {"title":"福岡市「史跡元寇防塁」","url":"https://www.city.fukuoka.lg.jp/keizai/ds-suishin/life/genkoborui_hakozaki.html","note":"元寇防塁の位置と建設の経緯。"},
+  "hist-007": {"title":"国立公文書館「関ヶ原の戦い」","url":"https://www.archives.go.jp/exhibition/digital/ieyasu/contents3_01/","note":"冒頭の1600年の戦い。"},
+  "hist-008": {"title":"国立公文書館「関ヶ原の戦い」","url":"https://www.archives.go.jp/exhibition/digital/ieyasu/contents3_01/","note":"冒頭の1603年の将軍任官の説明。"},
+  "hist-009": {"title":"国立公文書館「御触書（寛保集成）」","url":"https://www.archives.go.jp/exhibition/digital/ieyasu/contents3_02/03/","note":"「御触書（寛保集成）」の資料解説。"},
+  "hist-010": {"title":"国立公文書館「禁中並公家中諸法度」","url":"https://www.archives.go.jp/exhibition/digital/ieyasu/contents3_02/04/","note":"資料解説の制定年と対象。"},
+  "hist-011": {"title":"国立公文書館「家康の内政・外交」","url":"https://www.archives.go.jp/exhibition/digital/ieyasu/contents3_02/","note":"冒頭と「異国渡海御朱印帳」の説明。"},
+  "hist-012": {"title":"国立公文書館「黒船と開国」","url":"https://www.archives.go.jp/exhibition/digital/bakumatsu/contents/category03.html","note":"黒船来航とフィルモア大統領の国書。"},
+  "hist-013": {"title":"国立公文書館「五ヶ国条約并税則」","url":"https://www.archives.go.jp/exhibition/digital/bakumatsu/contents/20.html","note":"1854年と1858年の条約の解説。"},
+  "hist-014": {"title":"国立公文書館「大久保利通の大坂遷都論」","url":"https://www.archives.go.jp/exhibition/digital/henbou/contents/01.html","note":"解説冒頭の1867年の記述。"},
+  "hist-015": {"title":"国立公文書館「版籍奉還と廃藩置県」","url":"https://www.archives.go.jp/exhibition/digital/modean_state/contents/return/index.html","note":"「版籍奉還」の意味と4藩の上表。"},
+  "hist-016": {"title":"国立公文書館「新貨条例が制定される」","url":"https://www.archives.go.jp/ayumi/kobetsu/m04_1871_03.html","note":"解説にある円・銭・厘の換算。"},
+  "hist-017": {"title":"国立公文書館「岩倉使節団」","url":"https://www.archives.go.jp/ayumi/kobetsu/m04_1871_05.html","note":"解説の大使・副使の人選。"},
+  "hist-018": {"title":"国立公文書館「学制が公布される」","url":"https://www.archives.go.jp/ayumi/kobetsu/m05_1872_02.html","note":"解説の学区の構成。"},
+  "hist-019": {"title":"国立公文書館「明治の産業」","url":"https://www.archives.go.jp/exhibition/digital/modean_state/contents/meiji-industry/index.html","note":"官営模範工場と富岡製糸場の記述。"},
+  "hist-020": {"title":"国立公文書館「西南の役」","url":"https://www.archives.go.jp/ayumi/kobetsu/m10_1877_01.html","note":"1877年「西南の役」と関係資料。"},
+  "hist-021": {"title":"国立公文書館「琉球藩を廃し沖縄県を設置する」","url":"https://www.archives.go.jp/ayumi/kobetsu/m12_1879_01.html","note":"1879年の沖縄県設置と公文書。"},
+  "hist-022": {"title":"国立公文書館「大日本帝国憲法が発布される」","url":"https://www.archives.go.jp/ayumi/kobetsu/m22_1889_01.html","note":"1889年の発布と関係文書。"},
+  "hist-023": {"title":"国立公文書館「第1回帝国議会が開会する」","url":"https://www.archives.go.jp/ayumi/kobetsu/m23_1890_03.html","note":"1890年の「第1回帝国議会」。"},
+  "hist-024": {"title":"国立公文書館「関東大震災」","url":"https://www.archives.go.jp/ayumi/kobetsu/t12_1923_01.html","note":"1923年の震災と政府の対応。"},
+  "hist-025": {"title":"英国議会「1689年の権利の章典」","url":"https://www.parliament.uk/about/living-heritage/evolutionofparliament/parliamentaryauthority/revolution/collections1/collections-glorious-revolution/billofrights/","note":"英語。原本と、課税・請願に関する説明。"},
+  "hist-026": {"title":"英国議会「1707年合同法の年表」","url":"https://www.parliament.uk/about/living-heritage/evolutionofparliament/legislativescrutiny/act-of-union-1707/key-dates/","note":"英語。1707年に合同が発効した経緯。"},
+  "hist-027": {"title":"英国議会「選挙改革の年表」","url":"https://www.parliament.uk/about/living-heritage/evolutionofparliament/houseofcommons/reformacts/keydates/","note":"英語。年表の「1872 – Ballot Act」。"},
+  "hist-028": {"title":"英国議会「1928年選挙権平等法」","url":"https://www.parliament.uk/about/living-heritage/transformingsociety/electionsvoting/womenvote/case-study-the-right-to-vote/the-right-to-vote/birmingham-and-the-equal-franchise/1928-equal-franchise-act/","note":"英語。1928年の選挙権平等法。"},
+  "hist-029": {"title":"米国国立公文書館「1776年の独立宣言」","url":"https://www.archives.gov/milestone-documents/declaration-of-independence","note":"英語。末尾の本文と、13植民地の解説。"},
+  "hist-030": {"title":"米国国立公文書館「奴隷解放宣言」","url":"https://www.archives.gov/milestone-documents/emancipation-proclamation","note":"英語。奴隷解放宣言の対象を示す解説と本文。"},
+  "hist-031": {"title":"米国国立公文書館「ルイジアナ購入条約」","url":"https://www.archives.gov/milestone-documents/louisiana-purchase-treaty","note":"英語。1803年の購入条約と原文。"},
+  "hist-032": {"title":"米国国立公文書館「合衆国憲法修正第19条」","url":"https://www.archives.gov/milestone-documents/19th-amendment","note":"英語。第19修正の解説と本文。"},
+  "hist-033": {"title":"ナポレオン財団「1769〜1793年の年表」","url":"https://www.napoleon.org/en/history-of-the-two-empires/timelines/1769-1793-napoleon-bonapartes-early-years/","note":"英語。年表の「1789 – 14 JULY」。"},
+  "hist-034": {"title":"フランス大統領府「人間と市民の権利の宣言」","url":"https://www.elysee.fr/la-presidence/la-declaration-des-droits-de-l-homme-et-du-citoyen","note":"仏語。1789年の宣言の経緯と第1条。"},
+  "hist-035": {"title":"ルーヴル美術館「ナポレオン1世の戴冠式」","url":"https://collections.louvre.fr/ark:/53355/cl010065720","note":"仏語。作品名と解説に式典の場所と日付。"},
+  "hist-036": {"title":"メトロポリタン美術館「エジプト古王国展」","url":"https://www.metmuseum.org/it/press-releases/landmark-exhibition-of-egyptian-art-opens-at-metropolitan-museum-on-september-16-1999-exhibitions","note":"英語。「Chronology」のギザと第4王朝の説明。"},
+  "hist-037": {"title":"メトロポリタン美術館「女性ファラオ、ハトシェプスト」","url":"https://www.metmuseum.org/art/collection/search/544849","note":"英語。「女性ファラオ、ハトシェプスト」の作品情報。"},
+  "hist-038": {"title":"大英博物館「第4展示室ガイド」","url":"https://www.britishmuseum.org/sites/default/files/2023-11/Room-4-Touch-Tour-Guide.pdf","note":"英語PDF。「The Rosetta Stone」の説明。"},
+  "hist-039": {"title":"ユネスコ世界遺産センター「万里の長城」","url":"https://whc.unesco.org/en/list/438","note":"英語。建設の歴史を説明する冒頭。"},
+  "hist-040": {"title":"ユネスコ世界遺産センター「北京と瀋陽の明・清朝の皇宮」","url":"https://whc.unesco.org/en/list/439","note":"英語。北京の故宮を説明する冒頭。"},
+  "hist-041": {"title":"ユネスコ世界遺産センター「タージ・マハル」","url":"https://whc.unesco.org/en/list/252","note":"英語。発注した皇帝とムムターズ・マハル。"},
+  "hist-042": {"title":"ユネスコ世界遺産センター「アンコール」","url":"https://whc.unesco.org/en/list/668","note":"英語。遺跡群とクメール帝国を説明する冒頭。"},
+  "hist-043": {"title":"NASA「宇宙時代の幕開け」","url":"https://www.nasa.gov/history/dawn-of-the-space-age/","note":"英語。冒頭の1957年10月4日の説明。"},
+  "hist-044": {"title":"NASA『アポロ月探査』第2章","url":"https://www.nasa.gov/wp-content/uploads/static/history/SP-350/ch-2-2.html","note":"英語。ガガーリンの初の地球周回について。"},
+  "hist-045": {"title":"NASA「アポロ11号の概要」","url":"https://www.nasa.gov/history/apollo-11-mission-overview/","note":"英語。アポロ11号のミッション概要。"},
+  "select-062": {"title":"外務省「オーストラリア基礎データ」","url":"https://www.mofa.go.jp/mofaj/area/australia/data.html","note":"「一般事情」の「3 首都」にキャンベラと記載されています。"},
+  "select-069": {"title":"ブラジル連邦上院「ブラジル連邦共和国憲法」","url":"https://legis.senado.leg.br/norma/579494/publicacao/16434817","note":"第13条（Art. 13）でポルトガル語を公用語と定めています。原文はポルトガル語です。"},
+  "select-122": {"title":"スエズ運河庁「スエズ運河について」","url":"https://www.suezcanal.gov.eg/English/About/SuezCanal/Pages/AboutSuezCanal.aspx","note":"冒頭に地中海と紅海を結ぶ運河と記載されています。原文は英語です。"},
+  "geo-001": {"title":"外務省「カナダ基礎データ」","url":"https://www.mofa.go.jp/mofaj/area/canada/data.html","note":"「一般事情」の「3 首都」を参照。"},
+  "geo-002": {"title":"外務省「ニュージーランド基礎データ」","url":"https://www.mofa.go.jp/mofaj/area/nz/data.html","note":"「一般事情」の「3 首都」を参照。"},
+  "geo-003": {"title":"外務省「モンゴル基礎データ」","url":"https://www.mofa.go.jp/mofaj/area/mongolia/data.html","note":"「一般事情」の「3 首都」を参照。"},
+  "geo-004": {"title":"外務省「ケニア基礎データ」","url":"https://www.mofa.go.jp/mofaj/area/kenya/data.html","note":"「一般事情」の「3 首都」を参照。"},
+  "geo-005": {"title":"外務省「モロッコ基礎データ」","url":"https://www.mofa.go.jp/mofaj/area/morocco/data.html","note":"「一般事情」の「3 首都」を参照。"},
+  "geo-006": {"title":"外務省「ポルトガル基礎データ」","url":"https://www.mofa.go.jp/mofaj/area/portugal/data.html","note":"「一般事情」の「3 首都」を参照。"},
+  "geo-007": {"title":"外務省「ペルー基礎データ」","url":"https://www.mofa.go.jp/mofaj/area/peru/data.html","note":"「一般事情」の「3 首都」を参照。"},
+  "geo-008": {"title":"外務省「アイスランド基礎データ」","url":"https://www.mofa.go.jp/mofaj/area/iceland/data.html","note":"「一般事情」の「3 首都」を参照。"},
+  "geo-009": {"title":"国連統計部「統計用地理区分 M49」","url":"https://unstats.un.org/unsd/methodology/m49/overview","note":"英語表の「Fiji」の行。区分は統計用です。"},
+  "geo-010": {"title":"国連統計部「統計用地理区分 M49」","url":"https://unstats.un.org/unsd/methodology/m49/overview","note":"英語表の「Belize」の行。区分は統計用です。"},
+  "geo-011": {"title":"国連統計部「統計用地理区分 M49」","url":"https://unstats.un.org/unsd/methodology/m49/overview","note":"英語表の「Uganda」の行。区分は統計用です。"},
+  "geo-012": {"title":"国連統計部「統計用地理区分 M49」","url":"https://unstats.un.org/unsd/methodology/m49/overview","note":"英語表の「Kazakhstan」の行。区分は統計用です。"},
+  "geo-013": {"title":"国連統計部「統計用地理区分 M49」","url":"https://unstats.un.org/unsd/methodology/m49/overview","note":"英語表の「Maldives」の行。区分は統計用です。"},
+  "geo-014": {"title":"国連統計部「統計用地理区分 M49」","url":"https://unstats.un.org/unsd/methodology/m49/overview","note":"英語表の「Estonia」の行。区分は統計用です。"},
+  "geo-015": {"title":"国連統計部「統計用地理区分 M49」","url":"https://unstats.un.org/unsd/methodology/m49/overview","note":"英語表の「Ghana」の行。区分は統計用です。"},
+  "geo-016": {"title":"国連統計部「統計用地理区分 M49」","url":"https://unstats.un.org/unsd/methodology/m49/overview","note":"英語表の「Tunisia」の行。区分は統計用です。"},
+  "geo-017": {"title":"国連統計部「統計用地理区分 M49」","url":"https://unstats.un.org/unsd/methodology/m49/overview","note":"英語表の「Uruguay」の行。区分は統計用です。"},
+  "geo-018": {"title":"環境省「国立公園一覧」","url":"https://www.env.go.jp/nature/nationalparks/list/","note":"「知床国立公園」の紹介。"},
+  "geo-019": {"title":"環境省「国立公園一覧」","url":"https://www.env.go.jp/nature/nationalparks/list/","note":"「釧路湿原国立公園」の紹介。"},
+  "geo-020": {"title":"環境省「国立公園一覧」","url":"https://www.env.go.jp/nature/nationalparks/list/","note":"「尾瀬国立公園」の紹介。"},
+  "geo-021": {"title":"環境省「国立公園一覧」","url":"https://www.env.go.jp/nature/nationalparks/list/","note":"「小笠原国立公園」の紹介。"},
+  "geo-022": {"title":"環境省「日本の国立公園一覧」","url":"https://www.env.go.jp/park/parks/","note":"「山陰海岸国立公園」の指定・区域。"},
+  "geo-023": {"title":"環境省「国立公園一覧」","url":"https://www.env.go.jp/nature/nationalparks/list/","note":"「霧島錦江湾国立公園」の紹介。"},
+  "geo-024": {"title":"環境省「日本の国立公園一覧」","url":"https://www.env.go.jp/park/parks/","note":"「三陸復興国立公園」の指定・区域。"},
+  "geo-025": {"title":"環境省「日本の国立公園一覧」","url":"https://www.env.go.jp/park/parks/","note":"「吉野熊野国立公園」の指定・区域。"},
+  "geo-026": {"title":"環境省「国立公園一覧」","url":"https://www.env.go.jp/nature/nationalparks/list/","note":"「慶良間諸島国立公園」の紹介。"},
+  "geo-027": {"title":"環境省「日本の国立公園一覧」","url":"https://www.env.go.jp/park/parks/","note":"「足摺宇和海国立公園」の指定・区域。"},
+  "geo-028": {"title":"国土地理院「都道府県の最高地点」","url":"https://www.gsi.go.jp/KOKUJYOHO/MOUNTAIN/todofuken.pdf","note":"「東京都」の行。PDF資料です。"},
+  "geo-029": {"title":"国土地理院「都道府県の最高地点」","url":"https://www.gsi.go.jp/KOKUJYOHO/MOUNTAIN/todofuken.pdf","note":"「千葉県」の行。PDF資料です。"},
+  "geo-030": {"title":"国土地理院「都道府県の最高地点」","url":"https://www.gsi.go.jp/KOKUJYOHO/MOUNTAIN/todofuken.pdf","note":"「北海道」の行。PDF資料です。"},
+  "geo-031": {"title":"国土地理院「都道府県の最高地点」","url":"https://www.gsi.go.jp/KOKUJYOHO/MOUNTAIN/todofuken.pdf","note":"「愛媛県」の行。PDF資料です。"},
+  "geo-032": {"title":"国土地理院「都道府県の最高地点」","url":"https://www.gsi.go.jp/KOKUJYOHO/MOUNTAIN/todofuken.pdf","note":"「長崎県」の行。PDF資料です。"},
+  "geo-033": {"title":"国土地理院「都道府県の最高地点」","url":"https://www.gsi.go.jp/KOKUJYOHO/MOUNTAIN/todofuken.pdf","note":"「鹿児島県」の行。PDF資料です。"},
+  "geo-034": {"title":"国土地理院「都道府県の最高地点」","url":"https://www.gsi.go.jp/KOKUJYOHO/MOUNTAIN/todofuken.pdf","note":"「山梨県・静岡県」の行。PDF資料です。"},
+  "geo-035": {"title":"国土交通省「日本の川：信濃川」","url":"https://www.mlit.go.jp/river/toukei_chousa/kasen/jiten/nihon_kawa/0405_shinano/0405_shinano_00.html","note":"信濃川の概要に、名前が変わる地点を記載。"},
+  "geo-036": {"title":"国土交通省・阿賀野川河川事務所「各河川との比較」","url":"https://www.hrr.mlit.go.jp/agano/aganogawa/hikaku/index.html","note":"「日本の川の流域面積比較表」を参照。"},
+  "geo-037": {"title":"国土交通省・阿賀野川河川事務所「各河川との比較」","url":"https://www.hrr.mlit.go.jp/agano/aganogawa/hikaku/index.html","note":"「日本の川の長さ比較表」を参照。"},
+  "geo-038": {"title":"国土交通省・阿賀野川河川事務所「各河川との比較」","url":"https://www.hrr.mlit.go.jp/agano/aganogawa/hikaku/index.html","note":"「日本の川の長さ比較表」を参照。"},
+  "geo-039": {"title":"国土交通省・阿賀野川河川事務所「各河川との比較」","url":"https://www.hrr.mlit.go.jp/agano/aganogawa/hikaku/index.html","note":"「日本の川の長さ比較表」を参照。"},
+  "geo-040": {"title":"国土交通省・阿賀野川河川事務所「各河川との比較」","url":"https://www.hrr.mlit.go.jp/agano/aganogawa/hikaku/index.html","note":"「流域・流域面積」を参照。"},
+  "geo-041": {"title":"国土地理院「全国都道府県市区町村別面積調」","url":"https://www.gsi.go.jp/KOKUJYOHO/MENCHO/backnumber/GSI-menseki20240401.pdf","note":"2024年4月1日付・付2の「湖沼面積20傑」。PDF資料です。"},
+  "geo-042": {"title":"国土地理院「全国都道府県市区町村別面積調」","url":"https://www.gsi.go.jp/KOKUJYOHO/MENCHO/backnumber/GSI-menseki20240401.pdf","note":"2024年4月1日付・付2の「サロマ湖」。PDF資料です。"},
+  "geo-043": {"title":"国土地理院「調査実施湖沼一覧」","url":"https://web2.gsi.go.jp/kankyochiri/koshouchousa-list.html","note":"一覧の「十和田湖」を参照。"},
+  "geo-044": {"title":"国土地理院「調査実施湖沼一覧」","url":"https://web2.gsi.go.jp/kankyochiri/koshouchousa-list.html","note":"一覧の「支笏湖・洞爺湖」を参照。"},
+  "geo-045": {"title":"国土地理院「調査実施湖沼一覧」","url":"https://web2.gsi.go.jp/kankyochiri/koshouchousa-list.html","note":"一覧の「中禅寺湖」を参照。"},
+  "geo-046": {"title":"国土地理院「調査実施湖沼一覧」","url":"https://web2.gsi.go.jp/kankyochiri/koshouchousa-list.html","note":"一覧の「芦ノ湖」を参照。"},
+  "geo-047": {"title":"国土地理院「調査実施湖沼一覧」","url":"https://web2.gsi.go.jp/kankyochiri/koshouchousa-list.html","note":"一覧の「猪苗代湖」を参照。"},
+  "geo-048": {"title":"ユネスコ世界遺産センター「ガラパゴス諸島」","url":"https://whc.unesco.org/en/list/1","note":"ページ冒頭の登録地解説を参照。原文は英語です。"},
+  "geo-049": {"title":"ユネスコ世界遺産センター「バイカル湖」","url":"https://whc.unesco.org/en/list/754","note":"ページ冒頭の登録地解説を参照。原文は英語です。"},
+  "geo-050": {"title":"ユネスコ世界遺産センター「グレート・バリア・リーフ」","url":"https://whc.unesco.org/en/list/154","note":"ページ冒頭の登録地解説を参照。原文は英語です。"},
+  "geo-051": {"title":"ユネスコ世界遺産センター「グランド・キャニオン国立公園」","url":"https://whc.unesco.org/en/list/75","note":"ページ冒頭の登録地解説を参照。原文は英語です。"},
+  "geo-052": {"title":"ユネスコ世界遺産センター「イエローストーン国立公園」","url":"https://whc.unesco.org/en/list/28","note":"ページ冒頭の登録地解説を参照。原文は英語です。"},
+  "geo-053": {"title":"ユネスコ世界遺産センター「ヨセミテ国立公園」","url":"https://whc.unesco.org/en/list/308","note":"ページ冒頭の登録地解説を参照。原文は英語です。"},
+  "geo-054": {"title":"ユネスコ世界遺産センター「カナディアン・ロッキー山脈自然公園群」","url":"https://whc.unesco.org/en/list/304","note":"ページ冒頭の登録地解説を参照。原文は英語です。"},
+  "geo-055": {"title":"ユネスコ世界遺産センター「モシ・オ・トゥニャ／ビクトリアの滝」","url":"https://whc.unesco.org/en/list/509","note":"ページ冒頭の登録地解説を参照。原文は英語です。"},
+  "geo-056": {"title":"ユネスコ世界遺産センター「イグアス国立公園」","url":"https://whc.unesco.org/en/list/303","note":"ページ冒頭の登録地解説を参照。原文は英語です。"},
+  "geo-057": {"title":"ユネスコ世界遺産センター「ロス・グラシアレス国立公園」","url":"https://whc.unesco.org/en/list/145","note":"ページ冒頭の登録地解説を参照。原文は英語です。"},
+  "geo-058": {"title":"ユネスコ世界遺産センター「テ・ワヒポウナム」","url":"https://whc.unesco.org/en/list/551","note":"ページ冒頭の登録地解説を参照。原文は英語です。"},
+  "geo-059": {"title":"ユネスコ世界遺産センター「コモド国立公園」","url":"https://whc.unesco.org/en/list/609","note":"ページ冒頭の登録地解説を参照。原文は英語です。"},
+  "geo-060": {"title":"ユネスコ世界遺産センター「トゥバタハ岩礁自然公園」","url":"https://whc.unesco.org/en/list/653","note":"ページ冒頭の登録地解説を参照。原文は英語です。"},
+  "geo-061": {"title":"ユネスコ世界遺産センター「ハロン湾・カットバー諸島」","url":"https://whc.unesco.org/en/list/672","note":"ページ冒頭の登録地解説を参照。原文は英語です。"},
+  "geo-062": {"title":"ユネスコ世界遺産センター「フォンニャ・ケバン国立公園とヒンナムノー国立公園」","url":"https://whc.unesco.org/en/list/951","note":"ページ冒頭の登録地解説を参照。原文は英語です。"},
+  "geo-063": {"title":"ユネスコ世界遺産センター「スイス・アルプス ユングフラウ・アレッチ」","url":"https://whc.unesco.org/en/list/1037","note":"ページ冒頭の登録地解説を参照。原文は英語です。"},
+  "geo-064": {"title":"ユネスコ世界遺産センター「西ノルウェーフィヨルド群」","url":"https://whc.unesco.org/en/list/1195","note":"ページ冒頭の登録地解説を参照。原文は英語です。"},
+  "geo-065": {"title":"ユネスコ世界遺産センター「プリトヴィツェ湖群国立公園」","url":"https://whc.unesco.org/en/list/98","note":"ページ冒頭の登録地解説を参照。原文は英語です。"},
+  "geo-066": {"title":"ユネスコ世界遺産センター「ドナウ・デルタ」","url":"https://whc.unesco.org/en/list/588","note":"ページ冒頭の登録地解説を参照。原文は英語です。"},
+  "geo-067": {"title":"ユネスコ世界遺産センター「ヴァトナヨークトル国立公園」","url":"https://whc.unesco.org/en/list/1604","note":"ページ冒頭の登録地解説を参照。原文は英語です。"},
+  "geo-068": {"title":"ユネスコ世界遺産センター「ワッデン海」","url":"https://whc.unesco.org/en/list/1314","note":"ページ冒頭の登録地解説を参照。原文は英語です。"},
+  "geo-069": {"title":"ユネスコ世界遺産センター「ナミブ砂海」","url":"https://whc.unesco.org/en/list/1430","note":"ページ冒頭の登録地解説を参照。原文は英語です。"},
+  "geo-070": {"title":"ユネスコ世界遺産センター「オカバンゴ・デルタ」","url":"https://whc.unesco.org/en/list/1432","note":"ページ冒頭の登録地解説を参照。原文は英語です。"},
+  "geo-071": {"title":"ユネスコ世界遺産センター「ワディ・ラム保護地域」","url":"https://whc.unesco.org/en/list/1377","note":"ページ冒頭の登録地解説を参照。原文は英語です。"},
+  "geo-072": {"title":"ユネスコ世界遺産センター「ソコトラ諸島」","url":"https://whc.unesco.org/en/list/1263","note":"ページ冒頭の登録地解説を参照。原文は英語です。"},
+  "geo-073": {"title":"ユネスコ世界遺産センター「九寨溝の渓谷」","url":"https://whc.unesco.org/en/list/637","note":"ページ冒頭の登録地解説を参照。原文は英語です。"},
+  "geo-074": {"title":"国土地理院「地図に関するQ&A」","url":"https://www.gsi.go.jp/kohokocho/FAQ3.html","note":"Q3.3「地図の等高線間隔」を参照。"},
+  "geo-075": {"title":"国土地理院「地図をつかって距離・面積・傾斜を求めよう」","url":"https://www.gsi.go.jp/common/000076095.pdf","note":"PDFの「地図をつかって距離を求めよう」を参照。"},
+  "geo-076": {"title":"国土地理院「地図に関するQ&A」","url":"https://www.gsi.go.jp/kohokocho/FAQ3.html","note":"Q3.12「海岸線は，干潮時か満潮時，いずれを表示しているのですか？」を参照。"},
+  "geo-077": {"title":"国土地理院「国土の情報に関するQ&A」","url":"https://www.gsi.go.jp/kohokocho/FAQ2.html","note":"Q2.1「標高と海抜の違い」を参照。"},
+  "geo-078": {"title":"国土地理院「世界測地系移行に関する質問集」","url":"https://www.gsi.go.jp/LAW/G2000-g2000faq-6.htm","note":"中央標準時に関する説明を参照。"},
+  "geo-079": {"title":"国土地理院「日本経緯度原点」","url":"https://web1.gsi.go.jp/sokuchikijun/sankaku-genten.html","note":"冒頭の経緯度原点の概要を参照。"},
+  "geo-080": {"title":"米国海洋大気庁「海はどのくらい深い？」","url":"https://oceanservice.noaa.gov/facts/oceandepth.html","note":"Challenger Deepの説明。原文は英語です。"},
+  "geo-081": {"title":"米国海洋大気庁「中央海嶺とは」","url":"https://oceanexplorer.noaa.gov/ocean-fact/mid-ocean-ridge/","note":"プレートが開く境界についての説明。原文は英語です。"},
+  "geo-082": {"title":"米国海洋大気庁「エスチュアリーとは」","url":"https://oceanservice.noaa.gov/education/tutorial_estuaries/est01_whatis.html","note":"冒頭の汽水（brackish water）の説明。原文は英語です。"},
+  "geo-083": {"title":"米国海洋大気庁「潮汐と月の位置」","url":"https://oceanservice.noaa.gov/facts/moon-tide.html","note":"月・太陽と潮汐に関する説明。原文は英語です。"},
+  "geo-084": {"title":"米国海洋大気庁「海洋はいくつある？」","url":"https://oceanservice.noaa.gov/facts/howmanyoceans.html","note":"Southern Oceanについての段落。原文は英語です。"},
+  "geo-085": {"title":"米国海洋大気庁「海流とは」","url":"https://oceanservice.noaa.gov/facts/current.html","note":"3. Thermohaline circulation を参照。原文は英語です。"},
+  "geo-086": {"title":"パナマ運河庁「パナマ運河の歴史」","url":"https://pancanal.com/en/history-of-the-panama-canal/","note":"How does it work の節。原文は英語です。"},
+  "geo-087": {"title":"米国地質調査所「地すべり関係用語集」","url":"https://www.usgs.gov/glossary/landslides-glossary","note":"Alluvial fan の項。原文は英語です。"},
+  "geo-088": {"title":"国土地理院「河川の作用による地形」","url":"https://www.gsi.go.jp/kikaku/tenkei_kasen.html","note":"4-35「三角州」を参照。"},
+  "geo-089": {"title":"米国地質調査所「ロッキー山脈国立公園の地質」","url":"https://www.usgs.gov/geology-and-ecology-of-national-parks/geology-rocky-mountain-national-park","note":"氷河とモレーン（moraines）の説明。原文は英語です。"},
+  "geo-090": {"title":"米国地質調査所「カルデラとクレーターの違い」","url":"https://www.usgs.gov/observatories/yvo/news/caldera-or-craterwhats-difference","note":"カルデラの特徴と崩壊の説明。原文は英語です。"},
+  "geo-091": {"title":"米国地質調査所「シンクホールとは」","url":"https://www.usgs.gov/faqs/what-a-sinkhole","note":"石灰岩などの溶解と地表の陥没について。原文は英語です。"},
+  "geo-092": {"title":"国土地理院「氷河・周氷河作用による地形」","url":"https://www.gsi.go.jp/kikaku/tenkei_hyoga.html","note":"6-01「カール」を参照。"},
+  "geo-093": {"title":"国土地理院「海の作用による地形」","url":"https://www.gsi.go.jp/kikaku/tenkei_umi.html","note":"5-02「リアス式海岸（溺れ谷）」を参照。"},
+  "geo-094": {"title":"メコン川委員会「メコン川流域」","url":"https://www.mrcmekong.org/mekong-river-basin/","note":"源流と流域の概要。原文は英語です。"},
+  "geo-095": {"title":"国土交通省「日本の川：淀川」","url":"https://www.mlit.go.jp/river/toukei_chousa/kasen/jiten/nihon_kawa/0616_yodogawa/0616_yodogawa_00.html","note":"「淀川の流れ」を参照。"},
+  "geo-096": {"title":"国土交通省「日本の川：北上川」","url":"https://www.mlit.go.jp/river/toukei_chousa/kasen/jiten/nihon_kawa/0204_kitakami/0204_kitakami_00.html","note":"源流から河口までの説明を参照。"},
+  "geo-097": {"title":"国土交通省・筑後川河川事務所「筑後川について」","url":"https://www.qsr.mlit.go.jp/chikugo/gaiyou/chikugo/","note":"冒頭の「筑後川について」を参照。"},
+  "select-163": {"title":"東急「東急100年史」","url":"https://www.tokyu.co.jp/history/chapter05_2_2/","note":"「世代交代が続く鉄道車両」の項に、初代5000系の外形・緑の塗装と愛称の由来があります。"},
+  "select-165": {"title":"東急電鉄「中央林間駅」","url":"https://www.tokyu.co.jp/area/chuo-rinkan/station/","note":"田園都市線の駅情報と、「乗り換え案内」の小田急江ノ島線を確認できます。"},
+  "rail-001": {"title":"JR東日本「高輪築堤跡 整備基本計画書」第2章","url":"https://www.jreast.co.jp/takanawachikutei/seibikihon/pdf/seibikihon_keikakusho02.pdf","note":"PDF。「新橋・横浜間鉄道開通後の変遷」の直前に、仮開業と正式開業の記録があります。"},
+  "rail-002": {"title":"JR東海「新幹線の歩み」","url":"https://recommend.jr-central.co.jp/gooddayexpress/history/","note":"「日帰りになるまでの変遷」の1964年の欄に、0系と開業時の所要時間が記されています。"},
+  "rail-003": {"title":"東京メトロ「地下鉄建設の歴史展」","url":"https://www.tokyometro.jp/news/2015/767.html","note":"本文冒頭に、浅草〜上野間の開業と現在の銀座線につながる経緯があります。"},
+  "rail-004": {"title":"JR北海道「北海道新幹線の概要」","url":"https://www.jrhokkaido.co.jp/corporate/shinkansen/","note":"「北海道新幹線とは」に、開業区間と日付が掲載されています。"},
+  "rail-005": {"title":"箱根ナビ「登山電車・ケーブルカー」","url":"https://www.hakonenavi.jp/hakone-tozan/cablecar/","note":"「スイッチバック」と「乗務員の車両移動」の項に、方法と3か所の名称があります。"},
+  "rail-006": {"title":"JR九州「九州新幹線・西九州新幹線」","url":"https://www.jrkyushu.co.jp/company/info/business/project01.html","note":"「新幹線」の節で、武雄温泉駅の同一ホームでの乗り換えが説明されています。"},
+  "rail-007": {"title":"JR東海「成長を支える技術開発」","url":"https://company.jr-central.co.jp/company/technology/growth/","note":"「技術開発事例1」の冒頭で、ドクターイエローによる軌道・電気設備の測定を確認できます。"},
+  "rail-008": {"title":"JR東海「発見！リニア未来シティ」","url":"https://linear-chuo-shinkansen.jr-central.co.jp/linearfuturecity/mechanism/","note":"「浮いて走るしくみ」に、車上の超電導磁石と浮上・案内コイルの図があります。"},
+  "select-082": {"title":"ルーヴル美術館｜《モナ・リザ》","url":"https://collections.louvre.fr/ark:/53355/cl010062370","note":"所蔵作品データベースの作者欄で確認できます（フランス語）。"},
+  "select-083": {"title":"国立西洋美術館｜クロード・モネ《睡蓮》","url":"https://collection.nmwa.go.jp/P.1959-0151.html","note":"作品解説に、自宅の庭の池の睡蓮を繰り返し描いた経緯が記されています。"},
+  "select-084": {"title":"千葉市美術館｜《冨嶽三十六景 神奈川沖浪裏》","url":"https://www.ccma-net.jp/collection/works/5191/","note":"作家名・シリーズ名と、大波と富士山の構図を確認できます。"},
+  "select-251": {"title":"マウリッツハイス美術館｜《真珠の耳飾りの少女》","url":"https://www.mauritshuis.nl/jp/%E3%82%B3%E3%83%AC%E3%82%AF%E3%82%B7%E3%83%A7%E3%83%B3%E3%82%92%E6%8E%A2%E3%81%99/%E3%82%A2%E3%83%BC%E3%83%88%E3%83%AF%E3%83%BC%E3%82%AF/670-%E7%9C%9F%E7%8F%A0%E3%81%AE%E8%80%B3%E9%A3%BE%E3%82%8A%E3%81%AE%E5%B0%91%E5%A5%B3","note":"所蔵館の日本語解説で、作者と作品の特徴を確認できます。"},
+  "select-317": {"title":"横浜美術館｜《ガルダンヌから見たサント＝ヴィクトワール山》","url":"https://inventory.yokohama.art.museum/2661","note":"エクスとガルダンヌなど、異なる場所から見た山を描いたことが解説されています。"},
+  "art-001": {"title":"アムステルダム国立美術館｜レンブラントの《夜警》","url":"https://www.rijksmuseum.nl/en/story/10-things-about-rembrandt-s-night-watch","note":"作品の正式名称と自警団についての解説（英語）。"},
+  "art-002": {"title":"ニューヨーク近代美術館（MoMA）｜《星月夜》","url":"https://www.moma.org/collection/works/79802?locale=en","note":"作者名と、窓からの眺めや糸杉についての作品解説（英語）。"},
+  "art-003": {"title":"ニューヨーク近代美術館（MoMA）｜《記憶の固執》","url":"https://www.moma.org/collection/works/79018","note":"柔らかく垂れた時計についての作品解説（英語）。"},
+  "art-004": {"title":"オルセー美術館｜《ムーラン・ド・ラ・ギャレットの舞踏会》","url":"https://www.musee-orsay.fr/fr/oeuvres/bal-du-moulin-de-la-galette-497","note":"モンマルトルの店と、そこで踊る群衆についての作品解説（フランス語）。"},
+  "art-005": {"title":"国立西洋美術館｜《考える人（拡大作）》","url":"https://collection.nmwa.go.jp/S.1959-0040.html","note":"作者欄と、《地獄の門》から独立した経緯の解説。"},
+  "art-006": {"title":"ルーヴル美術館｜《サモトラケのニケ》","url":"https://collections.louvre.fr/en/ark:/53355/cl010252531","note":"作品記録の「Description」に、女神と船のへさき形の台座が記載されています（フランス語）。"},
+  "art-007": {"title":"ヴァチカン美術館｜《アテネの学堂》","url":"https://www.museivaticani.va/content/museivaticani/en/collezioni/musei/stanze-di-raffaello/stanza-della-segnatura/scuola-di-atene.html","note":"中央の二人と、それぞれが手にする本についての壁画解説（英語）。"},
+  "art-008": {"title":"ウフィツィ美術館｜《ヴィーナスの誕生》","url":"https://www.uffizi.it/en/artworks/birth-of-venus","note":"貝殻に立つヴィーナスについての公式作品解説（英語）。"},
+  "art-009": {"title":"ソフィア王妃芸術センター｜《ゲルニカ》","url":"https://www.museoreinasofia.es/en/collections/artwork/guernica-0/","note":"1937年の空爆報道が制作のきっかけだったことを記した作品解説（英語）。"},
+  "art-010": {"title":"ムンク美術館｜《叫び》","url":"https://www.munch.no/en/The-Scream/","note":"ムンクによる絵画・素描・版画の各バージョンの紹介（英語）。"},
+  "art-011": {"title":"京都国立博物館｜《風神雷神図屏風》","url":"https://www.kyohaku.go.jp/jp/collection/meihin/kinsei/item10/","note":"建仁寺所蔵本の作者と、尾形光琳の別作についての名品解説。"},
+  "art-012": {"title":"根津美術館｜《燕子花図》","url":"https://www.nezu-muse.or.jp/jp/collection/detail.php?id=10301","note":"『伊勢物語』第9段と、八つ橋で詠まれた歌についての作品解説。"},
+  "art-013": {"title":"国立文化財機構 e国宝｜《三代目大谷鬼次の奴江戸兵衛》","url":"https://emuseum.nich.go.jp/detail?content_base_id=100297&content_part_id=026&content_pict_id=001&langId=","note":"東京国立博物館所蔵品の作者と役柄を確認できます。"},
+  "art-014": {"title":"国立文化財機構 e国宝｜《松林図屏風》","url":"https://emuseum.nich.go.jp/detail?content_base_id=100151&content_part_id=1&content_pict_id=0&langId=ja","note":"東京国立博物館所蔵品の作者や、墨で描かれた松林についての解説。"},
+  "art-015": {"title":"ヴァチカン美術館｜システィーナ礼拝堂天井画の中央主題","url":"https://www.museivaticani.va/content/museivaticani/en/collezioni/musei/cappella-sistina/volta/storie-centrali.html","note":"天井中央の九つの場面として《アダムの創造》を紹介（英語）。"},
+  "nii-001": {"title":"新潟県立新潟高等学校｜沿革","url":"https://niigata-h.nein.ed.jp/img/enkaku.pdf#page=1","note":"PDF 1ページ：明治25年7月1日。"},
+  "nii-002": {"title":"新潟県立新潟高等学校｜沿革","url":"https://niigata-h.nein.ed.jp/img/enkaku.pdf#page=1","note":"PDF 1ページ：明治25年7月1日・仮校舎。"},
+  "nii-003": {"title":"新潟県立新潟高等学校｜沿革","url":"https://niigata-h.nein.ed.jp/img/enkaku.pdf#page=1","note":"PDF 1ページ：明治25年・34年の記録。"},
+  "nii-004": {"title":"新潟県立新潟高等学校｜沿革","url":"https://niigata-h.nein.ed.jp/img/enkaku.pdf#page=1","note":"PDF 1ページ：明治26年3月12日。"},
+  "nii-005": {"title":"新潟県立新潟高等学校｜沿革","url":"https://niigata-h.nein.ed.jp/img/enkaku.pdf#page=1","note":"PDF 1ページ：明治25年と27年の記録。"},
+  "nii-006": {"title":"新潟県立新潟高等学校｜沿革","url":"https://niigata-h.nein.ed.jp/img/enkaku.pdf#page=1","note":"PDF 1ページ：明治35年7月1日。"},
+  "nii-007": {"title":"新潟県立新潟高等学校｜沿革","url":"https://niigata-h.nein.ed.jp/img/enkaku.pdf#page=1","note":"PDF 1ページ：大正9年・11年の記録。"},
+  "nii-008": {"title":"新潟県立新潟高等学校｜沿革","url":"https://niigata-h.nein.ed.jp/img/enkaku.pdf#page=1","note":"PDF 1ページ：昭和23年4月1日。"},
+  "nii-009": {"title":"新潟県立新潟高等学校｜沿革","url":"https://niigata-h.nein.ed.jp/img/enkaku.pdf#page=1","note":"PDF 1ページ：昭和25年4月。"},
+  "nii-010": {"title":"新潟県立新潟高等学校｜沿革","url":"https://niigata-h.nein.ed.jp/img/enkaku.pdf#page=1","note":"PDF 1ページ：昭和27年10月12日。"},
+  "nii-011": {"title":"新潟県立新潟高等学校｜沿革","url":"https://niigata-h.nein.ed.jp/img/enkaku.pdf#page=1","note":"PDF 1ページ：昭和29年4月13日。"},
+  "nii-012": {"title":"新潟県立新潟高等学校｜沿革","url":"https://niigata-h.nein.ed.jp/img/enkaku.pdf#page=1","note":"PDF 1ページ：昭和29年11月22日。"},
+  "nii-013": {"title":"新潟県立新潟高等学校｜沿革","url":"https://niigata-h.nein.ed.jp/img/enkaku.pdf#page=1","note":"PDF 1ページ：昭和30年4月18日。"},
+  "nii-014": {"title":"新潟県立新潟高等学校｜沿革","url":"https://niigata-h.nein.ed.jp/img/enkaku.pdf#page=1","note":"PDF 1〜2ページ：昭和37年1月20日の記録。"},
+  "nii-015": {"title":"新潟県立新潟高等学校｜沿革","url":"https://niigata-h.nein.ed.jp/img/enkaku.pdf#page=2","note":"PDF 2ページ：昭和39年6月6日。"},
+  "nii-016": {"title":"新潟県立新潟高等学校｜沿革","url":"https://niigata-h.nein.ed.jp/img/enkaku.pdf#page=2","note":"PDF 2ページ：昭和39年6月16日。"},
+  "nii-017": {"title":"新潟県立新潟高等学校｜沿革","url":"https://niigata-h.nein.ed.jp/img/enkaku.pdf#page=2","note":"PDF 2ページ：昭和43年7月4日。"},
+  "nii-018": {"title":"新潟県立新潟高等学校｜沿革","url":"https://niigata-h.nein.ed.jp/img/enkaku.pdf#page=2","note":"PDF 2ページ：昭和47年10月。"},
+  "nii-019": {"title":"新潟県立新潟高等学校｜沿革","url":"https://niigata-h.nein.ed.jp/img/enkaku.pdf#page=2","note":"PDF 2ページ：昭和60年・61年12月。"},
+  "nii-020": {"title":"新潟県立新潟高等学校｜沿革","url":"https://niigata-h.nein.ed.jp/img/enkaku.pdf#page=2","note":"PDF 2ページ：昭和63年6月2日。"},
+  "nii-021": {"title":"新潟県立新潟高等学校｜沿革","url":"https://niigata-h.nein.ed.jp/img/enkaku.pdf#page=2","note":"PDF 2ページ：平成4年10月17日。"},
+  "nii-022": {"title":"新潟県立新潟高等学校｜沿革","url":"https://niigata-h.nein.ed.jp/img/enkaku.pdf#page=2","note":"PDF 2ページ：平成7年4月。"},
+  "nii-023": {"title":"新潟県立新潟高等学校｜沿革","url":"https://niigata-h.nein.ed.jp/img/enkaku.pdf#page=3","note":"PDF 3ページ：平成10年3月20日。"},
+  "nii-024": {"title":"新潟県立新潟高等学校｜沿革","url":"https://niigata-h.nein.ed.jp/img/enkaku.pdf#page=3","note":"PDF 3ページ：平成9年・11年の記録。"},
+  "nii-025": {"title":"新潟県立新潟高等学校｜沿革","url":"https://niigata-h.nein.ed.jp/img/enkaku.pdf#page=3","note":"PDF 3ページ：平成17年・18年の記録。"},
+  "nii-026": {"title":"新潟翠江高校｜学校の沿革・校歌","url":"https://niigatasuikou-h.nein.ed.jp/guide03.html","note":"学校の沿革・校歌の「校名の由来」。"},
+  "nii-027": {"title":"新潟県立新潟高等学校｜校歌・応援歌","url":"https://niigata-h.nein.ed.jp/koukaouenka.html","note":"校歌の作詞・作曲欄。"},
+  "nii-028": {"title":"新潟県立新潟高等学校｜校歌・応援歌","url":"https://niigata-h.nein.ed.jp/koukaouenka.html","note":"校歌の作曲欄。"},
+  "nii-029": {"title":"新潟県立新潟高等学校｜校歌・応援歌","url":"https://niigata-h.nein.ed.jp/koukaouenka.html","note":"校歌の2番。"},
+  "nii-030": {"title":"新潟県立新潟高等学校｜校歌・応援歌","url":"https://niigata-h.nein.ed.jp/koukaouenka.html","note":"校歌の1番。"},
+  "nii-031": {"title":"新潟県立新潟高等学校｜校歌・応援歌","url":"https://niigata-h.nein.ed.jp/koukaouenka.html","note":"応援歌の題名。"},
+  "nii-032": {"title":"新潟県立新潟高等学校｜学校概要","url":"https://niigata-h.nein.ed.jp/gakkougaiyou.html","note":"「学校の特色」。"},
+  "nii-033": {"title":"新潟県立新潟高等学校｜アクセス","url":"https://niigata-h.nein.ed.jp/akusesu.html","note":"所在地。"},
+  "nii-034": {"title":"新潟県立新潟高等学校｜アクセス","url":"https://niigata-h.nein.ed.jp/akusesu.html","note":"公共交通機関。"},
+  "nii-035": {"title":"新潟県立新潟高等学校｜図書館","url":"https://niigata-h.nein.ed.jp/toshokan.html","note":"沿革・昭和4年。"},
+  "nii-036": {"title":"新潟県立新潟高等学校｜図書館","url":"https://niigata-h.nein.ed.jp/toshokan.html","note":"沿革・昭和20年。"},
+  "nii-037": {"title":"新潟県立新潟高等学校｜図書館","url":"https://niigata-h.nein.ed.jp/toshokan.html","note":"沿革・昭和29年。"},
+  "nii-038": {"title":"新潟県立新潟高等学校｜図書館","url":"https://niigata-h.nein.ed.jp/toshokan.html","note":"概要および沿革・平成11年。"},
+  "nii-039": {"title":"新潟県立新潟高等学校｜学校概要","url":"https://niigata-h.nein.ed.jp/gakkougaiyou.html","note":"「学科および教育課程の特色」。"},
+  "nii-040": {"title":"新潟県立新潟高等学校｜学校概要","url":"https://niigata-h.nein.ed.jp/gakkougaiyou.html","note":"「学科および教育課程の特色」。"},
+  "nii-041": {"title":"新潟県立新潟高等学校｜学校概要","url":"https://niigata-h.nein.ed.jp/gakkougaiyou.html","note":"「学科および教育課程の特色」。"},
+  "nii-042": {"title":"新潟県立新潟高等学校｜学校概要","url":"https://niigata-h.nein.ed.jp/gakkougaiyou.html","note":"「学科および教育課程の特色」。"},
+  "nii-043": {"title":"新潟県立新潟高等学校｜学校概要","url":"https://niigata-h.nein.ed.jp/gakkougaiyou.html","note":"理数科の教育課程。"},
+  "nii-044": {"title":"新潟県立新潟高等学校｜学校概要","url":"https://niigata-h.nein.ed.jp/gakkougaiyou.html","note":"理数科の教育課程。"},
+  "nii-045": {"title":"新潟県立新潟高等学校｜令和7年度 学校案内","url":"https://niigata-h.nein.ed.jp/img/file117.pdf#page=3","note":"PDF 3ページ：学校年間行事（令和7年度）。"},
+  "nii-046": {"title":"新潟県立新潟高等学校｜令和7年度 学校案内","url":"https://niigata-h.nein.ed.jp/img/file117.pdf#page=3","note":"PDF 3ページ：学校年間行事（令和7年度）。"},
+  "nii-047": {"title":"新潟県立新潟高等学校｜令和7年度 学校案内","url":"https://niigata-h.nein.ed.jp/img/file117.pdf#page=3","note":"PDF 3ページ：学校年間行事（令和7年度）。"},
+  "nii-048": {"title":"新潟県立新潟高等学校｜令和7年度 学校案内","url":"https://niigata-h.nein.ed.jp/img/file117.pdf#page=2","note":"PDF 2ページ：グローバル人材育成プログラム。"},
+  "nii-049": {"title":"新潟県立新潟高等学校｜令和7年度 学校案内","url":"https://niigata-h.nein.ed.jp/img/file117.pdf#page=3","note":"PDF 3ページ：各種講演会・視聴覚ホール紹介。"},
+  "nii-050": {"title":"新潟県立新潟高等学校｜令和7年度 学校案内","url":"https://niigata-h.nein.ed.jp/img/file117.pdf#page=4","note":"PDF 4ページ：部活動・各種活動。"},
+  "des-001": {"title":"国土交通省｜改正建築物省エネ法オンライン講座「設計図書」","url":"https://www.shoenehou-online.mlit.go.jp/wp-content/themes/shoenehou202210/doc/s12/01.pdf","note":"4-1「建築図」中段の平面図見本。"},
+  "des-002": {"title":"国土交通省｜改正建築物省エネ法オンライン講座「設計図書」","url":"https://www.shoenehou-online.mlit.go.jp/wp-content/themes/shoenehou202210/doc/s12/01.pdf","note":"4-1「建築図」下段の立面図見本。"},
+  "des-003": {"title":"国土交通省｜改正建築物省エネ法オンライン講座「設計図書」","url":"https://www.shoenehou-online.mlit.go.jp/wp-content/themes/shoenehou202210/doc/s12/01.pdf","note":"4-1「建築図」下段の断面図見本。"},
+  "des-004": {"title":"国土交通省｜改正建築物省エネ法オンライン講座「設計図書」","url":"https://www.shoenehou-online.mlit.go.jp/wp-content/themes/shoenehou202210/doc/s12/01.pdf","note":"4-1「建築図」中段の配置図見本。"},
+  "des-005": {"title":"国土交通省｜改正建築物省エネ法オンライン講座「設計図書」","url":"https://www.shoenehou-online.mlit.go.jp/wp-content/themes/shoenehou202210/doc/s12/01.pdf","note":"4-1「建築図」上段の仕上表見本。"},
+  "des-006": {"title":"国土交通省｜改正建築物省エネ法オンライン講座「設計図書」","url":"https://www.shoenehou-online.mlit.go.jp/wp-content/themes/shoenehou202210/doc/s12/01.pdf","note":"4-1「建築図」下段の建具表見本。"},
+  "des-007": {"title":"DAIKEN 建築用語集｜建築展開図","url":"https://www.daiken.jp/buildingmaterials/glossary/planning/interiorelevations/","note":"本文の「造作家具や照明・スイッチ・コンセントの配置」付近。"},
+  "des-008": {"title":"DAIKEN 建築用語集｜矩計図","url":"https://www.daiken.jp/buildingmaterials/glossary/planning/sectional-detail/","note":"本文冒頭の断面図との違い、屋根・基礎の記載例。"},
+  "des-009": {"title":"LIXIL｜キッチンの間取り・レイアウト","url":"https://www.lixil.co.jp/lineup/kitchen/hint/layout/","note":"「キッチンを見せる」のアイランドレイアウト図。"},
+  "des-010": {"title":"LIXIL｜キッチンの間取り・レイアウト","url":"https://www.lixil.co.jp/lineup/kitchen/hint/layout/","note":"「キッチンを見せる」のペニンシュラレイアウト図。"},
+  "des-011": {"title":"LIXIL｜キッチンの間取り・レイアウト","url":"https://www.lixil.co.jp/lineup/kitchen/hint/layout/","note":"「キッチンを見せる」のL型の図。"},
+  "des-012": {"title":"LIXIL｜キッチンの間取り・レイアウト","url":"https://www.lixil.co.jp/lineup/kitchen/hint/layout/","note":"「作業導線の距離」と三角形の図。"},
+  "des-013": {"title":"LIXIL｜パントリーや収納を回遊動線につないだ事例","url":"https://www.lixil.co.jp/lineup/livingroom_bedroom/s/livingdeli/style_handbag/13178/","note":"キッチンとランドリールーム、洗面所、収納を回遊させた間取り例。"},
+  "des-014": {"title":"LIXIL｜家事の動線と収納を考えた設計事例","url":"https://www.lixil.co.jp/lineup/livingroom_bedroom/s/livingdeli/style_handbag/13951/","note":"「パントリー収納」の棚とキッチンとの位置関係。"},
+  "des-015": {"title":"LIXIL｜家事の動線と収納を考えた設計事例","url":"https://www.lixil.co.jp/lineup/livingroom_bedroom/s/livingdeli/style_handbag/13951/","note":"「シューズクローク」の収納例。"},
+  "des-016": {"title":"DAIKEN 建築用語集｜ウォークインクローゼット","url":"https://www.daiken.jp/buildingmaterials/glossary/structure/walkincloset/","note":"本文冒頭の「収納スペースに人が入る」説明。"},
+  "des-017": {"title":"LIXIL リフォーム用語集｜ニッチ","url":"https://www.lixil.co.jp/reform/yougo/sekou/naiheki/25.htm","note":"冒頭のニッチの定義。"},
+  "des-018": {"title":"YKK AP「窓の教科書」｜窓の開き方","url":"https://www.ykkap.co.jp/consumer/satellite/products/articles/mado_textbook/open/","note":"08「開かない窓」のFIX窓。"},
+  "des-019": {"title":"YKK AP「窓の教科書」｜窓の開き方","url":"https://www.ykkap.co.jp/consumer/satellite/products/articles/mado_textbook/open/","note":"01「横にスライドして開く窓」の引違い窓。"},
+  "des-020": {"title":"YKK AP「窓の教科書」｜窓の開き方","url":"https://www.ykkap.co.jp/consumer/satellite/products/articles/mado_textbook/open/","note":"04「すべり出して開く窓」のたてすべり出し窓。"},
+  "des-021": {"title":"YKK AP「窓の教科書」｜窓の開き方","url":"https://www.ykkap.co.jp/consumer/satellite/products/articles/mado_textbook/open/","note":"07「高所につける窓」の天窓。"},
+  "des-022": {"title":"DAIKEN 建築用語集｜フローリング","url":"https://www.daiken.jp/buildingmaterials/glossary/construction/flooring/","note":"冒頭にある単層タイプと複合タイプの違い。"},
+  "des-023": {"title":"DAIKEN 建築用語集｜巾木","url":"https://www.daiken.jp/buildingmaterials/glossary/structure/habaki/","note":"冒頭の位置と壁下部の保護に関する説明。"},
+  "des-024": {"title":"DAIKEN 建築用語集｜コンクリート打放し","url":"https://www.daiken.jp/buildingmaterials/glossary/structure/fairfacedconcrete/","note":"冒頭の、型枠を外したコンクリートを見せる工法。"},
+  "des-025": {"title":"DAIKEN 建築用語集｜真壁造り","url":"https://www.daiken.jp/buildingmaterials/glossary/structure/shinkabehousingmethod/","note":"冒頭の真壁と大壁の比較。"},
+  "des-026": {"title":"DAIKEN 建築用語集｜サイディングボード","url":"https://www.daiken.jp/buildingmaterials/glossary/materials/sidingboard/","note":"冒頭のパネル型外壁材の説明と材質分類。"},
+  "des-027": {"title":"Panasonic｜照明器具の種類と特長","url":"https://panasonic.jp/life/housework/100092.html","note":"「ペンダントライト」の取り付け方と使用例。"},
+  "des-028": {"title":"Panasonic｜照明器具の種類と特長","url":"https://panasonic.jp/life/housework/100092.html","note":"「ダウンライト」の設置方法。"},
+  "des-029": {"title":"Panasonic｜照明器具の種類と特長","url":"https://panasonic.jp/life/housework/100092.html","note":"「ブラケットライト」の説明と使用例。"},
+  "des-030": {"title":"Panasonic｜照明器具の種類と特長","url":"https://panasonic.jp/life/housework/100092.html","note":"「スポットライト」の照らし方。"},
+  "des-031": {"title":"Panasonic｜照明器具の種類と特長","url":"https://panasonic.jp/life/housework/100092.html","note":"「間接照明」の光源と反射光の説明。"},
+  "des-032": {"title":"Panasonic｜ルーメン・ワット・ルクスの違い","url":"https://panasonic.jp/life/housework/100088.html","note":"「ルーメンとルクスの違い」。"},
+  "des-033": {"title":"Panasonic｜ルーメン・ワット・ルクスの違い","url":"https://panasonic.jp/life/housework/100088.html","note":"「ルーメン（lm）とは明るさの単位のこと」。"},
+  "des-034": {"title":"Panasonic 照明設計サポート｜光源の光色と演色性","url":"https://www2.panasonic.biz/jp/lighting/plam/manual/basic/light-color-rendering/","note":"「光色」の色温度の図と代表的光源の表。"},
+  "des-035": {"title":"Panasonic 照明設計サポート｜光源の光色と演色性","url":"https://www2.panasonic.biz/jp/lighting/plam/manual/basic/light-color-rendering/","note":"「演色性」の定義と平均演色評価数（Ra）の説明。"},
+  "des-036": {"title":"三重県｜色彩の基礎知識","url":"https://www.pref.mie.lg.jp/common/content/000069346.pdf","note":"「色彩の基礎知識」の「色相」。"},
+  "des-037": {"title":"三重県｜色彩の基礎知識","url":"https://www.pref.mie.lg.jp/common/content/000069346.pdf","note":"「色彩の基礎知識」の「明度」。"},
+  "des-038": {"title":"三重県｜色彩の基礎知識","url":"https://www.pref.mie.lg.jp/common/content/000069346.pdf","note":"「色彩の基礎知識」の「彩度」。"},
+  "des-039": {"title":"日本色彩研究所｜PCCS（日本色研配色体系）","url":"https://www.jcri.jp/achievement_1","note":"「(2) PCCSのTone」のトーン分類とインテリアの例。"},
+  "des-040": {"title":"国土技術政策総合研究所｜サッシの種類と特徴","url":"https://www.nilim.go.jp/lab/hcg/jyutakuqa/booklet.html","note":"「1）断熱性」の熱貫流率（窓全体のUw値）の説明。"},
+  "des-041": {"title":"国土技術政策総合研究所｜サッシの種類と特徴","url":"https://www.nilim.go.jp/lab/hcg/jyutakuqa/booklet.html","note":"「1）断熱性」の日射取得型と日射遮蔽型の比較。"},
+  "des-042": {"title":"国土技術政策総合研究所｜サッシの種類と特徴","url":"https://www.nilim.go.jp/lab/hcg/jyutakuqa/booklet.html","note":"「1）断熱性」「2）防露性」「3）水密性」の比較。"},
+  "des-043": {"title":"YKK AP「窓の教科書」｜窓の開き方","url":"https://www.ykkap.co.jp/consumer/satellite/products/articles/mado_textbook/open/","note":"07「高所用すべり出し窓」の重力換気の説明。"},
+  "des-044": {"title":"国土交通省｜円滑な移動に配慮した建築設計標準","url":"https://www.mlit.go.jp/jutakukentiku/build/content/001327471.pdf","note":"「応急仮設住宅におけるバリアフリー対応の事例」(2) スロープの設置。"},
+  "des-045": {"title":"国土交通省 九州地方整備局 営繕部｜建物の用語","url":"https://www.qsr.mlit.go.jp/n-tatemono/hozen_word.html","note":"用語集の「蹴上げ」。"},
+  "des-046": {"title":"国土交通省 九州地方整備局 営繕部｜建物の用語","url":"https://www.qsr.mlit.go.jp/n-tatemono/hozen_word.html","note":"用語集の「トラップ」の説明。"},
+  "des-047": {"title":"国土交通省 九州地方整備局 営繕部｜建物の用語","url":"https://www.qsr.mlit.go.jp/n-tatemono/hozen_word.html","note":"用語集の「クレセント」。"},
+  "des-048": {"title":"国土交通省 九州地方整備局 営繕部｜建物の用語","url":"https://www.qsr.mlit.go.jp/n-tatemono/hozen_word.html","note":"用語集の「トラス」。"},
+  "des-049": {"title":"国土交通省 九州地方整備局 営繕部｜建物の用語","url":"https://www.qsr.mlit.go.jp/n-tatemono/hozen_word.html","note":"用語集の「ドライエリア」。"},
+  "des-050": {"title":"台東区｜国立西洋美術館を設計した建築家ル・コルビュジエ","url":"https://www.city.taito.lg.jp/other/sekaiisan/le_3lecorbusier.html","note":"「新しい建築のための５つの要点」の用語。"},
+  "set-001": {"title":"世田谷区｜区のおしらせ 2023年1月1日号（区制90周年）","url":"https://www.city.setagaya.lg.jp/documents/14121/p06-07_1.pdf","note":"PDFの「ごあいさつ」に発足年月日。"},
+  "set-002": {"title":"世田谷区｜みどりの事業概要 2024年","url":"https://www.city.setagaya.lg.jp/documents/4696/22216_1.pdf","note":"PDF巻末の「区の鳥」。"},
+  "set-003": {"title":"世田谷区｜みどりの事業概要 2024年","url":"https://www.city.setagaya.lg.jp/documents/4696/22216_1.pdf","note":"PDF巻末の「区の花」に花の見た目と指定。"},
+  "set-004": {"title":"世田谷美術館｜美術館概要","url":"https://www.setagayaartmuseum.or.jp/about/museum/","note":"概要の所在地と建築についての説明。"},
+  "set-005": {"title":"世田谷区｜世田谷のボロ市","url":"https://www.city.setagaya.lg.jp/02072/10108.html","note":"「ボロ市の由来」に北条氏政と1578年の楽市。"},
+  "set-006": {"title":"東京都｜東京観光バリアフリー情報ガイド「世田谷」","url":"https://www.sangyo-rodo1.metro.tokyo.lg.jp/tourism/accessible/course18_08.html","note":"スポット2「世田谷代官屋敷」の紹介。"},
+  "set-007": {"title":"松陰神社｜公式サイト","url":"https://www.shoinjinja.org/","note":"「吉田松陰先生留魂の地」の祭神案内。"},
+  "set-008": {"title":"豪徳寺｜豪徳寺と招き猫","url":"https://www.gotokuji.jp/manekineko/","note":"「小判を持たない招福猫児」の項。"},
+  "set-009": {"title":"東京都｜地域資源「豪徳寺（井伊直弼墓）」","url":"https://www.chiikishigen.metro.tokyo.lg.jp/introduction/details/introduction_88.html","note":"豪徳寺の成り立ちと、吉良政忠が設けた弘徳院。"},
+  "set-010": {"title":"東京都公園協会｜蘆花恒春園","url":"https://www.tokyo-park.or.jp/park/rokakoshun-en/","note":"園内マップと徳冨蘆花旧宅・蘆花記念館の案内。"},
+  "set-011": {"title":"世田谷文学館｜ご利用案内","url":"https://setabun.or.jp/outline/","note":"アクセス欄の電車での来館案内。"},
+  "set-012": {"title":"JRA｜JRAのあゆみ","url":"https://jra.jp/company/about/outline/history/","note":"1964年の東京オリンピックに関する項目。"},
+  "set-013": {"title":"東京都スポーツ文化事業団｜駒沢オリンピック公園総合運動場の歴史・沿革","url":"https://www.tef.or.jp/kopgp/history.html","note":"沿革の1964年欄に大会第2会場と、施設ごとの競技種目。"},
+  "set-014": {"title":"東京観光財団 GO TOKYO｜長谷川町子美術館","url":"https://www.gotokyo.org/jp/spot/994/index.html","note":"館の紹介と住所欄。"},
+  "set-015": {"title":"世田谷区町会総連合会｜三軒茶屋町会","url":"https://setagayaku-chosoren.com/sangendyaya/","note":"冒頭の三軒茶屋の地名の由来。"},
+  "set-016": {"title":"世田谷区｜みどりの事業概要 2025年","url":"https://www.city.setagaya.lg.jp/documents/4696/midorinojigyougaiyou2025.pdf","note":"「Ⅳ 世田谷区の公園・緑地」の歴史的・文化的な主な公園一覧。"},
+  "set-017": {"title":"世田谷トラストまちづくり｜成城五丁目猪股庭園","url":"https://www.setagayatm.or.jp/spot/1007","note":"「成城五丁目猪股庭園のご案内」に設計者と建物の特徴。"},
+  "set-018": {"title":"世田谷まちなか観光交流協会｜秋の世田谷、文化と本と寺町めぐり","url":"https://www.kanko-setagaya.jp/course/46","note":"「烏山寺町」の寺院移転の説明。"},
+  "set-019": {"title":"世田谷区｜せたがや梅まつり案内（羽根木公園）","url":"https://www.city.setagaya.lg.jp/documents/22391/47panfu.pdf","note":"PDFの羽根木公園案内図と「梅林案内」に花の品種。"},
+  "set-020": {"title":"本多劇場グループ｜アクセス","url":"https://www.honda-geki.com/access/","note":"「下北沢」の劇場一覧に本多劇場とザ・スズナリ。"},
+  "rte-001": {"title":"世田谷区立二子玉川公園ビジターセンター｜園内マップ・施設案内","url":"https://futako-tamagawa-park.ces-net.jp/?page_id=229","note":"「帰真園（きしんえん）」に日本庭園の名前と旧清水邸書院の復元。"},
+  "rte-002": {"title":"東急100年史｜二子玉川の再開発","url":"https://www.tokyu.co.jp/history/chapter08_3_2/","note":"再開発着手前の旧二子玉川園の暫定利用について。"},
+  "rte-003": {"title":"東急電鉄｜田園都市線の歴史","url":"https://www.tokyu.co.jp/railway/train-history/dt/","note":"「田園都市線の停車駅」の二子玉川欄にある駅名の変遷。"},
+  "rte-004": {"title":"五島美術館｜沿革","url":"https://www.gotoh-museum.or.jp/history/","note":"冒頭に開館年・所在地と、設立構想を立てた人物。"},
+  "rte-005": {"title":"五島美術館｜国宝 源氏物語絵巻","url":"https://www.gotoh-museum.or.jp/collection/genji/","note":"作品解説に五島美術館所蔵の3帖分の内訳。"},
+  "rte-006": {"title":"東京観光財団 GO TOKYO｜上野毛自然公園","url":"https://www.gotokyo.org/jp/spot/1089/index.html","note":"施設紹介の遊歩道と春の桜。"},
+  "rte-007": {"title":"世田谷区｜等々力渓谷公園","url":"https://www.city.setagaya.lg.jp/02075/9082.html","note":"等々力駅からゴルフ橋のたもとを下りる散策路の紹介。"},
+  "rte-008": {"title":"世田谷区｜等々力渓谷公園","url":"https://www.city.setagaya.lg.jp/02075/9082.html","note":"「ゴルフ橋」に名前の由来。"},
+  "rte-009": {"title":"世田谷区｜等々力渓谷公園","url":"https://www.city.setagaya.lg.jp/02075/9082.html","note":"「横穴古墳（東京都指定史跡等々力渓谷3号横穴）」の説明。"},
+  "rte-010": {"title":"ハッピーロード尾山台商店街｜公式サイト","url":"https://oyamadai.com/","note":"冒頭の、駅と道路を結ぶ商店街の説明。"},
+  "rte-011": {"title":"世田谷区｜地名の由来（等々力・玉堤・尾山台）","url":"https://www.city.setagaya.lg.jp/02212/10497.html","note":"「尾山台」に旧村名と表記の変化。"},
+  "rte-012": {"title":"九品仏浄真寺｜九品の阿弥陀如来","url":"https://kuhombutsu.jp/about/amidanyorai/","note":"本文中の九体の像の説明。"},
+  "rte-013": {"title":"九品仏浄真寺｜歴史・縁起","url":"https://kuhombutsu.jp/about/history/","note":"開山と創建の説明。"},
+  "rte-014": {"title":"目黒区｜再発見！変わる自由が丘の変わらないまちの魅力","url":"https://www.city.meguro.tokyo.jp/meguroplus/special_20240315.html","note":"冒頭の地名と駅名の由来。"},
+  "rte-015": {"title":"目黒区｜再発見！変わる自由が丘の変わらないまちの魅力","url":"https://www.city.meguro.tokyo.jp/meguroplus/special_20240315.html","note":"「魅力1」の商業施設とトモエ学園跡地の紹介。"},
+  "rte-016": {"title":"目黒区｜目黒の地名 緑が丘","url":"https://www.city.meguro.tokyo.jp/shougaigakushuu/bunkasports/areanavi/midorigaoka.html","note":"地名の説明と丘陵の地形。"},
+  "rte-017": {"title":"目黒区｜緑道","url":"https://www.city.meguro.tokyo.jp/douro/shigoto/kouen/ryokudo.html","note":"「呑川本流緑道」の所在地欄。"},
+  "rte-018": {"title":"東急電鉄｜大岡山駅","url":"https://www.tokyu.co.jp/area/ookayama/station/","note":"駅情報の住所欄。周辺の地理は「構内図・駅周辺情報」も参照。"},
+  "rte-019": {"title":"東京科学大学（旧・東京工業大学）｜大岡山キャンパスの本館","url":"https://www.titech.ac.jp/public-relations/about/campus-maps/campus-highlights/main","note":"「関東大震災と大岡山キャンパスへの移転」に旧校地の場所。"},
+  "rte-020": {"title":"東京科学大学（旧・東京工業大学）｜大岡山キャンパスの本館","url":"https://www.titech.ac.jp/public-relations/about/campus-maps/campus-highlights/main","note":"「戦時中の本館」の説明と、1947年撮影の写真。"},
+  "lang-001": {"title":"CNRTL（フランス語辞典）｜pomme","url":"https://www.cnrtl.fr/definition/pomme","note":"フランス語の辞典で、名詞の意味を確認できます。"},
+  "lang-002": {"title":"CNRTL（フランス語辞典）｜chien","url":"https://www.cnrtl.fr/definition/chien","note":"フランス語の辞典で、名詞の意味を確認できます。"},
+  "lang-003": {"title":"CNRTL（フランス語辞典）｜lait","url":"https://www.cnrtl.fr/definition/lait","note":"フランス語の辞典で、名詞の意味を確認できます。"},
+  "lang-004": {"title":"CNRTL（フランス語辞典）｜lundi","url":"https://www.cnrtl.fr/definition/lundi","note":"フランス語の辞典で、名詞の意味を確認できます。"},
+  "lang-005": {"title":"CNRTL（フランス語辞典）｜fenêtre","url":"https://www.cnrtl.fr/definition/fen%C3%AAtre","note":"フランス語の辞典で、名詞の意味を確認できます。"},
+  "lang-006": {"title":"CNRTL（フランス語辞典）｜lapin","url":"https://www.cnrtl.fr/definition/lapin","note":"フランス語の辞典で、名詞の意味を確認できます。"},
+  "lang-007": {"title":"CNRTL（フランス語辞典）｜maison","url":"https://www.cnrtl.fr/definition/maison","note":"フランス語の辞典で、名詞の意味を確認できます。"},
+  "lang-008": {"title":"CNRTL（フランス語辞典）｜soleil","url":"https://www.cnrtl.fr/definition/soleil","note":"フランス語の辞典で、名詞の意味を確認できます。"},
+  "lang-009": {"title":"CNRTL（フランス語辞典）｜lune","url":"https://www.cnrtl.fr/definition/lune","note":"フランス語の辞典で、名詞の意味を確認できます。"},
+  "lang-010": {"title":"CNRTL（フランス語辞典）｜étoile","url":"https://www.cnrtl.fr/definition/%C3%A9toile","note":"フランス語の辞典で、名詞の意味を確認できます。"},
+  "lang-011": {"title":"CNRTL（フランス語辞典）｜table","url":"https://www.cnrtl.fr/definition/table","note":"フランス語の辞典で、名詞の意味を確認できます。"},
+  "lang-012": {"title":"CNRTL（フランス語辞典）｜chaise","url":"https://www.cnrtl.fr/definition/chaise","note":"フランス語の辞典で、名詞の意味を確認できます。"},
+  "lang-013": {"title":"CNRTL（フランス語辞典）｜école","url":"https://www.cnrtl.fr/definition/%C3%A9cole","note":"フランス語の辞典で、名詞の意味を確認できます。"},
+  "lang-014": {"title":"CNRTL（フランス語辞典）｜maman","url":"https://www.cnrtl.fr/definition/maman","note":"フランス語の辞典で、名詞の意味を確認できます。"},
+  "lang-015": {"title":"CNRTL（フランス語辞典）｜papa","url":"https://www.cnrtl.fr/definition/papa","note":"フランス語の辞典で、名詞の意味を確認できます。"},
+  "lang-016": {"title":"CNRTL（フランス語辞典）｜nez","url":"https://www.cnrtl.fr/definition/nez","note":"フランス語の辞典で、名詞の意味を確認できます。"},
+  "lang-017": {"title":"CNRTL（フランス語辞典）｜main","url":"https://www.cnrtl.fr/definition/main","note":"フランス語の辞典で、名詞の意味を確認できます。"},
+  "lang-018": {"title":"CNRTL（フランス語辞典）｜pied","url":"https://www.cnrtl.fr/definition/pied","note":"フランス語の辞典で、名詞の意味を確認できます。"},
+  "lang-019": {"title":"CNRTL（フランス語辞典）｜chaussure","url":"https://www.cnrtl.fr/definition/chaussure","note":"フランス語の辞典で、名詞の意味を確認できます。"},
+  "lang-020": {"title":"CNRTL（フランス語辞典）｜arbre","url":"https://www.cnrtl.fr/definition/arbre","note":"フランス語の辞典で、名詞の意味を確認できます。"},
+  "lang-021": {"title":"トレッカーニ辞典｜gatto","url":"https://www.treccani.it/vocabolario/gatto/","note":"イタリア語の辞典で、名詞の意味を確認できます。"},
+  "lang-022": {"title":"トレッカーニ辞典｜pane","url":"https://www.treccani.it/vocabolario/pane/","note":"イタリア語の辞典で、名詞の意味を確認できます。"},
+  "lang-023": {"title":"トレッカーニ辞典｜acqua","url":"https://www.treccani.it/vocabolario/acqua/","note":"イタリア語の辞典で、名詞の意味を確認できます。"},
+  "lang-024": {"title":"トレッカーニ辞典｜libro","url":"https://www.treccani.it/vocabolario/libro/","note":"イタリア語の辞典で、名詞の意味を確認できます。"},
+  "lang-025": {"title":"トレッカーニ辞典｜fiore","url":"https://www.treccani.it/vocabolario/fiore/","note":"イタリア語の辞典で、名詞の意味を確認できます。"},
+  "lang-026": {"title":"トレッカーニ辞典｜uccello","url":"https://www.treccani.it/vocabolario/uccello/","note":"イタリア語の辞典で、名詞の意味を確認できます。"},
+  "lang-027": {"title":"トレッカーニ辞典｜pesce","url":"https://www.treccani.it/vocabolario/pesce/","note":"イタリア語の辞典で、名詞の意味を確認できます。"},
+  "lang-028": {"title":"トレッカーニ辞典｜palla","url":"https://www.treccani.it/vocabolario/palla1/","note":"イタリア語の辞典で、名詞の意味を確認できます。"},
+  "lang-029": {"title":"トレッカーニ辞典｜porta","url":"https://www.treccani.it/vocabolario/porta/","note":"イタリア語の辞典で、名詞の意味を確認できます。"},
+  "lang-030": {"title":"トレッカーニ辞典｜letto","url":"https://www.treccani.it/vocabolario/letto2/","note":"イタリア語の辞典で、名詞の意味を確認できます。"},
+  "lang-031": {"title":"トレッカーニ辞典｜banana","url":"https://www.treccani.it/vocabolario/banana/","note":"イタリア語の辞典で、名詞の意味を確認できます。"},
+  "lang-032": {"title":"トレッカーニ辞典｜orso","url":"https://www.treccani.it/vocabolario/orso/","note":"イタリア語の辞典で、名詞の意味を確認できます。"},
+  "lang-033": {"title":"トレッカーニ辞典｜topo","url":"https://www.treccani.it/vocabolario/topo/","note":"イタリア語の辞典で、名詞の意味を確認できます。"},
+  "lang-034": {"title":"トレッカーニ辞典｜farfalla","url":"https://www.treccani.it/vocabolario/farfalla/","note":"イタリア語の辞典で、名詞の意味を確認できます。"},
+  "lang-035": {"title":"トレッカーニ辞典｜cavallo","url":"https://www.treccani.it/vocabolario/cavallo/","note":"イタリア語の辞典で、名詞の意味を確認できます。"},
+  "lang-036": {"title":"トレッカーニ辞典｜matita","url":"https://www.treccani.it/vocabolario/matita/","note":"イタリア語の辞典で、名詞の意味を確認できます。"},
+  "lang-037": {"title":"トレッカーニ辞典｜cucchiaio","url":"https://www.treccani.it/vocabolario/cucchiaio/","note":"イタリア語の辞典で、名詞の意味を確認できます。"},
+  "lang-038": {"title":"トレッカーニ辞典｜cappello","url":"https://www.treccani.it/vocabolario/cappello/","note":"イタリア語の辞典で、名詞の意味を確認できます。"},
+  "lang-039": {"title":"トレッカーニ辞典｜orecchio","url":"https://www.treccani.it/vocabolario/orecchio/","note":"イタリア語の辞典で、名詞の意味を確認できます。"},
+  "lang-040": {"title":"トレッカーニ辞典｜occhio","url":"https://www.treccani.it/vocabolario/occhio/","note":"イタリア語の辞典で、名詞の意味を確認できます。"}
+};
+const $ = id => document.getElementById(id);
+const alphabet = ['A', 'B', 'C', 'D'];
+const validQuestions = QUESTIONS.filter(q => q && typeof q.id === 'string' && typeof q.question === 'string'
+  && typeof q.category === 'string' && typeof q.explanation === 'string'
+  && Array.isArray(q.choices) && q.choices.length === 4 && q.choices.every(c => typeof c === 'string')
+  && Number.isInteger(q.answer) && q.answer >= 0 && q.answer < q.choices.length);
+const queryById = new Map(validQuestions.map(q => [q.id, q]));
+const deck = [...queryById.values()];
+const fs = $('choice-field');
+const form = $('answer-form');
+const go = $('submit-answer');
+const progress = $('progress');
+const feedback = $('feedback');
+const next = $('next');
+const listen = $('listen');
+const listenExplanation = $('listen-explanation');
+const sourcePanel = $('source-ref');
+const sourceLink = $('source-link');
+const sourceName = $('source-name');
+const sourceNote = $('source-note');
+const category = $('category');
+const roundSize = $('round-size');
+let desiredRoundSize = '10';
+const homeButton = $('retry-home');
+const synth = typeof window.speechSynthesis === 'object' && typeof window.SpeechSynthesisUtterance === 'function'
+  ? window.speechSynthesis : null;
+const prefsKey = 'hirameki-solo-v1:prefs';
+const missesKey = 'hirameki-solo-v1:misses';
+let storageNotice = false;
+const configHint = $('settings').querySelector('.hint');
+function warnStorage() {
+  if (!storageNotice) {
+    storageNotice = true;
+    configHint.textContent = 'ブラウザーの拡大操作も使えます。このブラウザーでは保存できないため、設定や間違えた問題は、この画面を開いている間だけ保持されます。';
+  }
+}
+function read(key, fallback) {
+  try { return JSON.parse(window.localStorage.getItem(key)) ?? fallback; } catch (e) { warnStorage(); return fallback; }
+}
+function write(key, val) {
+  try { window.localStorage.setItem(key, JSON.stringify(val)); } catch (e) { warnStorage(); }
+}
+const savedPrefs = read(prefsKey, {});
+const prefs = savedPrefs && typeof savedPrefs === 'object' && !Array.isArray(savedPrefs) ? savedPrefs : {};
+const storedMisses = read(missesKey, []);
+const misses = new Set(Array.isArray(storedMisses) ? storedMisses.filter(id => queryById.has(id)) : []);
+let shown = 'home', queue = [], pos = 0, correct = 0, selected = null, committed = false, roundMisses = [], choiceControls = [], mode = 'normal', speaking = null, speechId = 0;
+function applyPrefs() {
+  const sizes = ['normal','large','xlarge','max'];
+  const text = sizes.includes(prefs.text) ? prefs.text : 'normal';
+  const contrast = prefs.contrast === 'high' ? 'high' : 'default';
+  $('text-size').value = text;
+  $('contrast').checked = contrast === 'high';
+  document.documentElement.dataset.text = text;
+  document.documentElement.dataset.contrast = contrast;
+}
+$('text-size').addEventListener('change', e => {
+  prefs.text = e.target.value; applyPrefs(); write(prefsKey, prefs);
+});
+$('contrast').addEventListener('change', e => {
+  prefs.contrast = e.target.checked ? 'high' : 'default'; applyPrefs(); write(prefsKey, prefs);
+});
+function settingsOpen(yes, moveFocus = false) {
+  $('settings-toggle').setAttribute('aria-expanded', String(yes));
+  $('settings').hidden = !yes;
+  if (moveFocus) (yes ? $('text-size') : $('settings-toggle')).focus();
+}
+$('settings-toggle').addEventListener('click', () => settingsOpen($('settings').hidden, $('settings').hidden));
+$('settings-close').addEventListener('click', () => settingsOpen(false, true));
+
+const listenLabel = '問題と選択肢を読み上げる';
+const explanationLabel = '正解と解説を読み上げる';
+function stopSpeech() {
+  speechId++;
+  if (synth && speaking) synth.cancel();
+  speaking = null;
+  listen.textContent = listenLabel;
+  listenExplanation.textContent = explanationLabel;
+}
+listen.hidden = !synth;
+listenExplanation.hidden = !synth;
+function say(button, line, label, parts = null) {
+  if (!synth) return;
+  if (button === speaking) return stopSpeech();
+  stopSpeech();
+  const phrases = parts || [[line,'ja-JP']];
+  const voices = synth.getVoices();
+  const token = speechId;
+  speaking = button;
+  button.textContent = '読み上げを止める';
+  function speakAt(i) {
+    if (token !== speechId) return;
+    if (i >= phrases.length) { speaking = null; button.textContent = label; return; }
+    const [text,lang] = phrases[i];
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = lang;
+    utterance.rate = 0.88;
+    const voice = voices.find(v => v.localService && v.lang.toLowerCase().split(/[-_]/)[0] === lang.toLowerCase().split('-')[0]);
+    if (voice) utterance.voice = voice;
+    utterance.onend = () => speakAt(i + 1);
+    utterance.onerror = () => {
+      if (token === speechId) { speaking = null; button.textContent = '読み上げをもう一度試す'; }
+    };
+    try { synth.speak(utterance); } catch (e) { utterance.onerror(); }
+  }
+  speakAt(0);
+}
+listen.addEventListener('click', () => {
+  if (!queue[pos]) return;
+  const q = queue[pos].q;
+  const line = q.question + '。' + queue[pos].items.map((a, i) => '選択肢 ' + alphabet[i] + '。' + a.label).join('。');
+  const parts = q.foreignChoices && ['fr-FR','it-IT'].includes(q.lang)
+    ? [[q.question,'ja-JP'], ...queue[pos].items.flatMap((a,i) => [['選択肢 ' + alphabet[i],'ja-JP'],[a.label,q.lang]])]
+    : null;
+  say(listen, line, listenLabel, parts);
+});
+listenExplanation.addEventListener('click', () => {
+  const citation = sourcePanel.hidden ? '' : '。根拠資料。' + sourceName.textContent;
+  const q = queue[pos]?.q;
+  const explanation = $('explanation').textContent + citation;
+  const parts = q?.foreignChoices && ['fr-FR','it-IT'].includes(q.lang)
+    ? [['正解は','ja-JP'],[q.choices[q.answer],q.lang],[explanation,'ja-JP']]
+    : null;
+  say(listenExplanation, $('correct-answer').textContent + '。' + explanation, explanationLabel, parts);
+});
+function showSource(id) {
+  const entry = SOURCES[id];
+  let link = null;
+  if (entry && typeof entry.title === 'string' && entry.title.trim() && typeof entry.url === 'string') {
+    try {
+      const candidate = new URL(entry.url);
+      if (candidate.protocol === 'https:' && candidate.hostname && !candidate.username && !candidate.password) link = candidate;
+    } catch (e) {}
+  }
+  sourcePanel.hidden = !link;
+  sourceName.textContent = link ? entry.title : '';
+  sourceNote.textContent = link && typeof entry.note === 'string' ? entry.note : '';
+  sourceNote.hidden = !sourceNote.textContent;
+  if (link) sourceLink.setAttribute('href', link.href);
+  else sourceLink.removeAttribute('href');
+}
+function display(view, heading) {
+  for (const id of ['home','play','result']) $(id).hidden = id !== view;
+  shown = view;
+  if (heading) $(heading).focus();
+}
+function shuffled(items) {
+  const copy = [...items];
+  for(let i = copy.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i+1)); [copy[i],copy[j]] = [copy[j],copy[i]]; }
+  return copy;
+}
+function activeDeck() {
+  return category.value === '' ? deck : deck.filter(q => q.category === category.value);
+}
+function selectedCount(count) {
+  return roundSize.value === 'all' ? count : Math.min(count, Number(roundSize.value) || 10);
+}
+function describeSelection() {
+  const count = activeDeck().length;
+  const label = category.value || '全ジャンル';
+  $('pool-summary').textContent = count
+    ? label + '：全' + count + '問' + (selectedCount(count) === count ? 'を出題。' : 'から、' + selectedCount(count) + '問を出題。')
+    : '遊べる問題がありません。';
+}
+function syncRoundSizes(count) {
+  const preferred = desiredRoundSize;
+  const values = [10,20,50,100].filter(n => n < count).map(String);
+  if (count) values.push('all');
+  roundSize.replaceChildren(...values.map(v => new Option(v === 'all' ? '全' + count + '問' : v + '問',v)));
+  roundSize.value = values.includes(preferred) ? preferred : (values[0] || '');
+  roundSize.disabled = !count;
+}
+function refreshHome() {
+  const count = activeDeck().length;
+  syncRoundSizes(count);
+  describeSelection();
+  $('start').disabled = count === 0;
+  homeButton.hidden = misses.size === 0;
+  homeButton.textContent = '間違えた問題を解き直す（' + misses.size + '問）';
+}
+function openHome() {
+  stopSpeech(); refreshHome(); display('home','home-title');
+}
+function initCategory() {
+  category.append(new Option('すべて（' + deck.length + '問）',''));
+  const counts = new Map();
+  deck.forEach(q => counts.set(q.category,(counts.get(q.category) || 0) + 1));
+  for (const [label,count] of counts) category.append(new Option(label + '（' + count + '問）',label));
+  category.addEventListener('change', refreshHome);
+  roundSize.addEventListener('change', () => { desiredRoundSize = roundSize.value; describeSelection(); });
+}
+function start(questions, nextMode) {
+  if (!questions.length) return;
+  mode = nextMode; pos = 0; correct = 0; roundMisses = [];
+  const chosen = shuffled(questions);
+  queue = (mode === 'normal' ? chosen.slice(0, selectedCount(chosen.length)) : chosen).map(q => ({q,items:shuffled(q.choices.map((label,i)=>({label,i})))}));
+  display('play');
+  drawQuestion();
+}
+function drawQuestion() {
+  stopSpeech();
+  const {q,items} = queue[pos];
+  const stem = $('question');
+  const list = $('choices');
+  selected = null; committed = false;
+  feedback.hidden = true; next.hidden = true; go.hidden = false; go.disabled = true;
+  showSource(null);
+  fs.disabled = false;
+  stem.textContent = q.question;
+  $('step-caption').textContent = (mode === 'retry' ? '解き直し：' : '') + (pos + 1) + ' / ' + queue.length + ' 問';
+  $('topic').textContent = q.category;
+  progress.max = queue.length; progress.value = pos + 1;
+  list.replaceChildren();
+  choiceControls = items.map(({label},index) => {
+    const row = document.createElement('label');
+    row.className = 'choice';
+    const radio = document.createElement('input');
+    radio.type = 'radio'; radio.name = 'option'; radio.value = String(index);
+    const value = document.createElement('span'); value.className = 'choice-text';
+    const code = document.createElement('span'); code.className = 'choice-code'; code.textContent = alphabet[index] + '：';
+    const tag = document.createElement('span'); tag.className = 'answer-tag'; tag.hidden = true;
+    const word = document.createElement('span');
+    const choiceLanguage = q.foreignChoices && ['fr-FR','it-IT'].includes(q.lang) ? q.lang : null;
+    if (choiceLanguage) word.setAttribute('lang',choiceLanguage);
+    word.textContent = label;
+    value.append(code, word, tag);
+    row.append(radio, value);
+    radio.addEventListener('change', () => {
+      if (committed) return;
+      selected = index; go.disabled = false;
+      choiceControls.forEach(({row:r}, i) => r.classList.toggle('selected', i === selected));
+    });
+    list.append(row);
+    return {row, radio, tag};
+  });
+  stem.focus();
+}
+function commit(event) {
+  event.preventDefault();
+  if (shown !== 'play' || selected === null || committed) return;
+  stopSpeech();
+  committed = true;
+  const {q,items} = queue[pos];
+  const correctIndex = items.findIndex(c => c.i === q.answer);
+  const isCorrect = selected === correctIndex;
+  if(isCorrect) {correct++; misses.delete(q.id);}
+  else {roundMisses.push(q); misses.add(q.id);}
+  write(missesKey, Array.from(misses));
+  choiceControls.forEach(({tag}, i) => {
+    tag.hidden = i !== selected && i !== correctIndex;
+    tag.classList.toggle('user-wrong', i === selected && !isCorrect);
+    tag.textContent = i === correctIndex ? (isCorrect ? '正解・あなたの回答' : '正解') : 'あなたの回答（不正解）';
+  });
+  fs.disabled = true; go.hidden = true;
+  feedback.dataset.result = isCorrect ? 'correct' : 'wrong';
+  $('feedback-title').textContent = isCorrect ? '正解！' : '不正解';
+  const answerText = $('correct-answer');
+  const word = document.createElement('span');
+  if (q.foreignChoices && ['fr-FR','it-IT'].includes(q.lang)) word.setAttribute('lang',q.lang);
+  word.textContent = items[correctIndex].label;
+  answerText.replaceChildren(document.createTextNode('正解：' + alphabet[correctIndex] + '：'),word);
+  $('explanation').textContent = q.explanation;
+  showSource(q.id);
+  feedback.hidden = false;
+  next.textContent = pos + 1 < queue.length ? '次の問題へ' : '結果を見る';
+  next.hidden = false;
+  $('feedback-title').focus();
+}
+function showResult() {
+  const line = $('result-main');
+  const score = document.createElement('strong'); score.textContent = String(correct);
+  line.replaceChildren(score, document.createTextNode(' / ' + queue.length + ' 問 正解'));
+  $('result-summary').textContent = roundMisses.length ? 'この回で間違えた問題を、そのまま解き直せます。' : 'すべて正解です。';
+  $('retry-result').hidden = !roundMisses.length;
+  $('replay').textContent = mode === 'retry' ? '選んだジャンルで遊ぶ' : '同じジャンルでもう一度';
+  $('retry-result').textContent = '間違えた問題を解き直す（' + roundMisses.length + '問）';
+  display('result','result-title');
+}
+form.addEventListener('submit', commit);
+$('start').addEventListener('click', () => start(activeDeck(),'normal'));
+homeButton.addEventListener('click', () => start([...misses].map(id => queryById.get(id)).filter(Boolean),'retry'));
+$('retry-result').addEventListener('click', () => start(roundMisses,'retry'));
+$('replay').addEventListener('click', () => start(activeDeck(),'normal'));
+$('result-home').addEventListener('click', openHome);
+$('leave').addEventListener('click', openHome);
+next.addEventListener('click', () => {
+  if(shown !== 'play' || !committed) return;
+  if(pos + 1 < queue.length) {pos++; drawQuestion();} else {showResult();}
+});
+window.addEventListener('pagehide', stopSpeech);
+$('settings').addEventListener('keydown', e => {
+  if (e.key === 'Escape') { e.preventDefault(); settingsOpen(false,true); }
+});
+applyPrefs();
+initCategory();
+refreshHome();
+</script>
+</body>
+</html>
